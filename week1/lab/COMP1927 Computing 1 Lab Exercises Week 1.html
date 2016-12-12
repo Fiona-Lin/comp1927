@@ -1,0 +1,867 @@
+
+<!-- saved from url=(0064)https://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lab01.html -->
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40" class="gr__cse_unsw_edu_au"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="ProgId" content="Word.Document">
+<meta name="Generator" content="Microsoft Word 14">
+<meta name="Originator" content="Microsoft Word 14">
+<link rel="File-List" href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lab01_files/filelist.xml">
+<title> COMP1927 Computing 1 Lab Exercises Week 1 </title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Aarthi</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Aarthi</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>200</o:TotalTime>
+  <o:Created>2016-11-28T21:51:00Z</o:Created>
+  <o:LastSaved>2016-11-29T01:11:00Z</o:LastSaved>
+  <o:Pages>2</o:Pages>
+  <o:Words>552</o:Words>
+  <o:Characters>3149</o:Characters>
+  <o:Company>UNSW</o:Company>
+  <o:Lines>26</o:Lines>
+  <o:Paragraphs>7</o:Paragraphs>
+  <o:CharactersWithSpaces>3694</o:CharactersWithSpaces>
+  <o:Version>14.00</o:Version>
+ </o:DocumentProperties>
+ <o:OfficeDocumentSettings>
+  <o:AllowPNG/>
+ </o:OfficeDocumentSettings>
+</xml><![endif]-->
+<link rel="themeData" href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lab01_files/themedata.thmx">
+<link rel="colorSchemeMapping" href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lab01_files/colorschememapping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>110</w:Zoom>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>EN-AU</w:LidThemeOther>
+  <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SplitPgBreakAndParaMark/>
+  </w:Compatibility>
+  <m:mathPr>
+   <m:mathFont m:val="Cambria Math"/>
+   <m:brkBin m:val="before"/>
+   <m:brkBinSub m:val="&#45;-"/>
+   <m:smallFrac m:val="off"/>
+   <m:dispDef/>
+   <m:lMargin m:val="0"/>
+   <m:rMargin m:val="0"/>
+   <m:defJc m:val="centerGroup"/>
+   <m:wrapIndent m:val="1440"/>
+   <m:intLim m:val="subSup"/>
+   <m:naryLim m:val="undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" DefUnhideWhenUsed="true"
+  DefSemiHidden="true" DefQFormat="false" DefPriority="99"
+  LatentStyleCount="267">
+  <w:LsdException Locked="false" Priority="0" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Normal"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 1"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 2"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 3"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 4"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 5"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 6"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 7"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 8"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 9"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 1"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 2"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 3"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 4"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 5"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 6"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 7"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 8"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 9"/>
+  <w:LsdException Locked="false" Priority="35" QFormat="true" Name="caption"/>
+  <w:LsdException Locked="false" Priority="10" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Title"/>
+  <w:LsdException Locked="false" Priority="1" Name="Default Paragraph Font"/>
+  <w:LsdException Locked="false" Priority="11" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtitle"/>
+  <w:LsdException Locked="false" Priority="22" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Strong"/>
+  <w:LsdException Locked="false" Priority="20" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Emphasis"/>
+  <w:LsdException Locked="false" Priority="59" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Table Grid"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Placeholder Text"/>
+  <w:LsdException Locked="false" Priority="1" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="No Spacing"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 1"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 1"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Revision"/>
+  <w:LsdException Locked="false" Priority="34" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="List Paragraph"/>
+  <w:LsdException Locked="false" Priority="29" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Quote"/>
+  <w:LsdException Locked="false" Priority="30" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Quote"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 1"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 1"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 2"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 2"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 2"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 3"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 3"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 3"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 4"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 4"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 4"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 5"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 5"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 5"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 6"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 6"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 6"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="19" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Emphasis"/>
+  <w:LsdException Locked="false" Priority="21" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Emphasis"/>
+  <w:LsdException Locked="false" Priority="31" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Reference"/>
+  <w:LsdException Locked="false" Priority="32" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Reference"/>
+  <w:LsdException Locked="false" Priority="33" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Book Title"/>
+  <w:LsdException Locked="false" Priority="37" Name="Bibliography"/>
+  <w:LsdException Locked="false" Priority="39" QFormat="true" Name="TOC Heading"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<link rel="Stylesheet" type="text/css" media="all" href="./COMP1927 Computing 1 Lab Exercises Week 1_files/style.css">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Courier;
+	panose-1:2 7 4 9 2 2 5 2 4 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-520092929 1073806591 9 0 415 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	mso-believe-normal-left:yes;}
+h1
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 1 Char";
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:24.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	font-weight:bold;}
+h2
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 2 Char";
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:18.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	font-weight:bold;}
+p
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+code
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	font-family:"Courier New";
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";}
+pre
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-link:"HTML Preformatted Char";
+	margin-top:3.75pt;
+	margin-right:15.0pt;
+	margin-bottom:3.75pt;
+	margin-left:15.0pt;
+	mso-pagination:widow-orphan;
+	tab-stops:45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt;
+	background:#EEEEFF;
+	border:none;
+	mso-border-alt:solid #9999CC .75pt;
+	padding:0cm;
+	mso-padding-alt:3.0pt 6.0pt 3.0pt 6.0pt;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+tt
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	font-family:"Courier New";
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-noshow:yes;
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 2";
+	mso-ansi-font-size:13.0pt;
+	mso-bidi-font-size:13.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	font-weight:bold;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"HTML Preformatted";
+	font-family:Consolas;
+	mso-ascii-font-family:Consolas;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	mso-hansi-font-family:Consolas;}
+p.red, li.red, div.red
+	{mso-style-name:red;
+	mso-style-unhide:no;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+p.green, li.green, div.green
+	{mso-style-name:green;
+	mso-style-unhide:no;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+p.brown, li.brown, div.brown
+	{mso-style-name:brown;
+	mso-style-unhide:no;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+p.comment, li.comment, div.comment
+	{mso-style-name:comment;
+	mso-style-unhide:no;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 1";
+	mso-ansi-font-size:14.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#365F91;
+	mso-themecolor:accent1;
+	mso-themeshade:191;
+	font-weight:bold;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	font-size:10.0pt;
+	mso-ansi-font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:315181735;
+	mso-list-template-ids:1664525394;}
+@list l1
+	{mso-list-id:890462371;
+	mso-list-template-ids:1010883882;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+@list l1:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l1:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman","serif";}
+</style>
+<![endif]--><!--[if mso 9]-->
+<style>
+p.MsoNormal
+	{margin-left:15.0pt;}
+</style>
+<!--[endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang="EN-AU" link="#3333FF" vlink="#3333FF" style="tab-interval:36.0pt;
+margin-left:15.0pt;margin-top:15.0pt;margin-right:15.0pt;margin-bottom:15.0pt" data-gr-c-s-loaded="true">
+
+<div class="WordSection1">
+
+<h1><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Lab
+Exercises Week 1<o:p></o:p></span></h1>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Objectives<o:p></o:p></span></h2>
+
+<ul type="disc">
+ <li class="MsoNormal" style="mso-list:l1 level1 lfo1;tab-stops:list 36.0pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">To
+     practise programming linked lists <o:p></o:p></span></li>
+ <li class="MsoNormal" style="mso-list:l1 level1 lfo1;tab-stops:list 36.0pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">To
+     practise programming doubly linked lists <o:p></o:p></span></li>
+ <li class="MsoNormal" style="mso-list:l1 level1 lfo1;tab-stops:list 36.0pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">To
+     practise using tools such as <span class="SpellE">gdb</span> and <span class="SpellE">valgrind</span> <o:p></o:p></span></li>
+</ul>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Assessment
+<o:p></o:p></span></h2>
+
+<p><b><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Deadline</span></b><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">: 11:59pm Tue 6 December 2016 <o:p></o:p></span></p>
+
+<p><b><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Total Marks</span></b><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">: 3 <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">You must get your tutor in
+your lab to mark the exercises during the allocated lab time or the following
+week if you submitted your lab on time using give. Try to get them to mark each
+exercise as you complete it in your lab time if possible. In addition to the
+code that the exercise calls for, you will of course have to write some
+additional code to test the correctness of your implementation. Your tutor may
+want to see this testing code, too. Good style requires good tests! <o:p></o:p></span></p>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Exercise
+1 - Linked Lists (0.5 mark)<o:p></o:p></span></h2>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Copy the files <a href="http://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lists.h"><span class="SpellE"><span class="GramE">lists.h</span></span><span class="GramE"> </span></a>,
+<a href="http://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/lists.c"><span class="SpellE">lists.c</span> </a>and <a href="http://www.cse.unsw.edu.au/~cs1927/17x1/week01/lab01/testLists.c"><span class="SpellE">testLists.c</span> </a>into your working directory. The file </span><span class="SpellE"><code><span style="font-size:10.0pt">lists.c</span></code></span><code><span style="font-size:10.0pt"> </span></code><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">contains
+a </span><span class="SpellE"><code><span style="font-size:10.0pt">printList</span></code></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"> function and stubs for other
+functions you need to implement to complete the lab. You can use </span><span class="SpellE"><code><span style="font-size:10.0pt">testLists.c</span></code></span><code><span style="font-size:10.0pt"> </span></code><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">to
+write your tests, but do not edit </span><span class="SpellE"><code><span style="font-size:10.0pt">lists.h</span></code></span><span style="font-family:
+&quot;Arial&quot;,&quot;sans-serif&quot;"> <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Implement the function <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="SpellE"><span class="GramE">int</span></span> <span class="SpellE">sumListItems</span> (link <span class="SpellE">ls</span>);</pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span class="GramE"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">which</span></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">
+adds all the items in a list and returns the resulting integer value, and <span class="SpellE">and</span> tests to </span><span class="SpellE"><code><span style="font-size:10.0pt">testLists.c</span></code></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">.
+Test it for lists with zero, one, and some more elements. <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Compile your program with the
+command <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span style="mso-tab-count:1">&nbsp;&nbsp; </span> <span class="SpellE"><span class="GramE">gcc</span></span> -Wall -<span class="SpellE">Werror</span> -gdwarf-2 -o<span style="mso-spacerun:yes">&nbsp; </span><span class="SpellE">testLists</span> <span class="SpellE">testLists.c</span> <span class="SpellE">lists.c</span></pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">The
+</span><tt><span style="font-size:10.0pt">-gdwarf-2</span></tt><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">
+option makes sure that debug information is generated. <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Execute your program in </span><span class="SpellE"><tt><span style="font-size:10.0pt">gdb</span></tt></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"> or </span><span class="SpellE"><tt><span style="font-size:10.0pt">ddd</span></tt></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">
+and show your tutor that you can: <o:p></o:p></span></p>
+
+<ol start="1" type="1">
+ <li class="MsoNormal" style="mso-list:l0 level1 lfo2;tab-stops:list 36.0pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">set
+     a breakpoint at the beginning of a function and at a given line in the
+     program <o:p></o:p></span></li>
+ <li class="MsoNormal" style="mso-list:l0 level1 lfo2;tab-stops:list 36.0pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">know
+     how to inspect the elements of a list using the </span><tt><span style="font-size:10.0pt">print</span></tt><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+     mso-fareast-font-family:&quot;Times New Roman&quot;"> command<o:p></o:p></span></li>
+ <li class="MsoNormal" style="mso-list:l0 level1 lfo2;tab-stops:list 36.0pt"><span class="GramE"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:
+     &quot;Times New Roman&quot;">inspect</span></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+     mso-fareast-font-family:&quot;Times New Roman&quot;"> the call stack. <o:p></o:p></span></li>
+</ol>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Exercise
+2 - Linked Lists (0.5 mark)<o:p></o:p></span></h2>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Type in the command <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="SpellE"><span class="GramE">valgrind</span></span> ./<span class="SpellE">testLists</span></pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">The
+output should show you that you have some memory leaks - assuming you have
+written some code in <span class="SpellE">testLists</span> that actually adds
+some nodes to your linked list. <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Implement the function <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="GramE">void</span> <span class="SpellE">freeList</span>(link list); </pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span class="GramE"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">that</span></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">
+frees all the memory for each node in your list. Once you have written the
+function, test it in your <span class="SpellE">testLists</span> code. Run <span class="SpellE">valgrind</span> again and check that all the memory leaks have
+gone. You must be able to show this to your tutor. <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>&nbsp;</o:p></span></p>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Exercise
+3 – Circular Linked List (1 mark)<o:p></o:p></span></h2>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Implement the functions <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="GramE">link</span> <span class="SpellE">create_circular_list</span> (<span class="SpellE">int</span> <span class="SpellE">num_nodes</span>);</pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="GramE">void</span> <span class="SpellE">print_nodes</span>(link list);<o:p></o:p></pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">The
+first function creates a circular linked list with the specified number of
+nodes. The second function prints the data in each node in a circular fashion
+starting with the node specified. Test it for lists with zero, one, and some
+more elements.<o:p></o:p></span></p>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Exercise
+4 - Doubly Linked Lists (1 mark)<o:p></o:p></span></h2>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Write a function <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><span class="SpellE"><span class="GramE">dlink</span></span> <span class="SpellE">doublify</span> (link <span class="SpellE">ls</span>)</pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span class="GramE"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">which</span></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">,
+given a linked list, creates a new doubly linked list with the same items as
+elements. You might want to write a <span class="SpellE">printDList</span>
+function to test it. <o:p></o:p></span></p>
+
+<p><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">You must also write a
+function <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF"><span class="GramE">void</span> <span class="SpellE">freeDList</span>(<span class="SpellE">dlink</span> list);</pre></div>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span class="GramE"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">and</span></span><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">
+make sure you can demonstrate that you have freed the memory correctly to your
+tutor. <o:p></o:p></span></p>
+
+<h2><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">Submitting
+your lab<o:p></o:p></span></h2>
+
+<p class="MsoNormal" style="margin:0cm;margin-bottom:.0001pt"><span style="font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Times New Roman&quot;">You
+must get the lab marked by your tutor in your lab. You should also submit your
+solution using give on a CSE machine. To do this, run: <o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:solid #9999CC 1.0pt;mso-border-alt:
+solid #9999CC .75pt;padding:3.0pt 6.0pt 3.0pt 6.0pt;background:#EEEEFF;
+margin-left:15.0pt;margin-right:15.0pt"><pre style="margin-top:3.75pt;
+margin-right:0cm;margin-bottom:3.75pt;margin-left:0cm;background:#EEEEFF"><o:p>&nbsp;</o:p></pre><pre style="margin-top:3.75pt;margin-right:0cm;margin-bottom:3.75pt;margin-left:
+0cm;background:#EEEEFF">1927 <span class="SpellE">classrun</span> 17x1 give lab01 <span class="SpellE">lists.c testLists.c</span></pre></div>
+
+</div>
+
+
+
+	
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

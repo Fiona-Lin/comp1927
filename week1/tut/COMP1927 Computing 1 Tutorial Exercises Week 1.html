@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0058)https://www.cse.unsw.edu.au/~cs1927/17x1/week01/Tut01.html -->
+<html class="gr__cse_unsw_edu_au"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+      <title>
+COMP1927  Computing 1  Tutorial Exercises Week 1
+      </title>
+<link href="./COMP1927 Computing 1 Tutorial Exercises Week 1_files/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body data-gr-c-s-loaded="true">
+
+<h1>Tutorial Exercises Week 1</h1>
+
+ 
+	
+<h2>Exercise 1 - Linked Lists</h2>
+
+<ol>
+  <li> <p>Consider the material on linked lists that we discussed in the 
+lecture with the following definition (<tt>Item</tt> is a <tt>char</tt> now):
+</p> 
+<pre>typedef char Item;
+
+typedef struct node *link;
+
+struct node {
+  Item item;
+  link next;
+};
+</pre>
+<p>
+  Write the following functions:
+</p><ul>
+   <li> A function called length that takes a link to the first element of 
+a list and returns the length of the list</li>
+   <li> A function called duplicate that takes a link to the first element 
+of a list as an 
+argument and returns a copy of the list (ie a new list that contains the same data, in the same order). </li>
+   <li> Here are the prototypes for some functions you may wish to use for this task (you can take the code from the lecture)</li>
+ <pre>// Create a new node, initialised with the item provided. Return
+// pointer to node (link)
+link newNode (Item item);
+
+// Insert a new node into a given non-empty list
+// The node is inserted directly after the head of the list ls
+void insertNext (link ls, link node);
+
+</pre>
+</ul><p></p></li>
+ <li> <p>Assume we have a function <tt>printList</tt> which, given 
+a 
+list of characters, prints each character, and a function `cstrToList` which converts a regular C string (i.e., `\0` terminated array of characters) into a list of characters. What is the output of the following program? (See implementation of <tt>reverse</tt> in Exercise 2.)
+ </p><pre>int main (int argc, const char * argv[]) {
+  link ls = cstrToList ("hello world!");
+  link ls2 = duplicate(ls);
+  printList (ls);
+  printList (ls2);
+  printList (reverse (ls));
+  printList (ls);
+  printList (ls2);
+  return 0;
+}
+</pre>
+<p></p>
+</li>
+</ol>
+
+<h2>Exercise 2 - Linked Lists, an alternative implementation</h2>
+<ul>
+  <li>The following implementation of lists distinguishes between a link to a sequence of items and a list. The list contains additional information, in this case, the length and also a pointer to the last element of the list.
+ <pre>typedef char Item;
+
+typedef struct node *link;
+
+struct node {
+  Item item;
+  link next;
+};
+
+typedef struct listImpl *list;
+
+struct listImpl {
+  int size;
+  link first;
+  link last;    
+};
+
+</pre>
+</li>
+
+<li>Write a function called createList to create a new empty list. Discuss 
+the difference between an empty list in our original implementation and 
+our current implementation.
+
+</li><li>Modify the length function you wrote in excercise 1 to work with our 
+new implementation.
+
+</li><li>How does the prototypes of the following function change as a 
+consequence of the alternative implementation:
+<pre>link reverse (link ls);
+void insertNext(link ls, link node);
+void deleteNext(link ls);
+</pre></li>
+
+
+<li>  Below is the code presented in the lecture for reversing a list, by 
+passing in a pointer to the first element of the list. Adapt this code to work on the list type described above.
+<pre>link reverse (link ls) {
+  link tmp;
+  link curr = ls;
+  link rev  = NULL; 
+  while (curr != NULL) {
+    tmp = curr-&gt;next; 
+    curr-&gt;next = rev; 
+    rev  = curr; 
+    curr = tmp;
+  } 
+  return rev;
+}
+</pre>
+
+
+  What are the advantages and disadvantages of your adapted version over the one discussed in the lecture? Which operations can be implemented more efficiently?
+</li></ul>
+
+<h2>Exercise 3 - Double linked lists</h2>
+<p>
+In the lecture, we briefly discussed doubly linked lists. 
+</p>
+<pre>typedef char Item;
+
+typedef struct dnode *dlink;
+
+struct dnode {
+    Item  item;
+    dlink next;
+    dlink prev;
+};
+</pre>
+<p>	
+Write a function 
+</p>
+<pre>dlink append (dlink list1, dlink2 list2)
+</pre>
+<p>
+which attaches the list <tt>list2</tt> at the end of <tt>list1</tt> and 
+returns the resulting list. 
+</p>
+<p>
+Is it necessary to return the resulting list, or would the following interface work (as <tt>list1</tt> is altered)
+</p>
+<pre>void append (dlink list1, dlink list2)
+</pre>
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

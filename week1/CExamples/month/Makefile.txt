@@ -1,0 +1,2 @@
+mn : mn.c
+	gcc -Wall -Werror -O -o mn mn.c

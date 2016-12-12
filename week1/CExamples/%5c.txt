@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node *link;
+struct node {
+  int i;
+  link next;
+};
+int main() {
+
+   char *charPtr = malloc(sizeof(char));
+   char str[10];
+   charPtr[0] = 'A';
+   charPtr[1] = 'a';
+   charPtr[2] = 'b';
+   charPtr[3] = '\0';
+   charPtr[4] = 'f';
+   printf("char is: %c\n", charPtr[1]);
+   printf("char is: %c\n", charPtr[2]);
+   printf("char is: %c\n", charPtr[0]);
+   printf("str  is: %s\n", charPtr);
+
+   str[0]='w';
+   str[1]='o';
+   str[10]='h';
+   str[20]='h';
+
+   printf("char is: %c\n", str[0]);
+   printf("char is: %c\n", str[1]);
+   printf("char is: %c\n", str[10]);
+   printf("char is: %c\n", str[20]);
+   printf("char is: %s\n", str);
+   link myList = NULL;
+   myList = malloc(sizeof(*myList));
+   myList->i = 3;
+   myList->next = NULL;
+   printf("Val: %d", myList->i);
+   return 0;
+}

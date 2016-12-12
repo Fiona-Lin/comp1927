@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0071)https://www.cse.unsw.edu.au/~cs1927/17x1/week01/Tut01Soln/Tut01Sol.html -->
+<html class="gr__cse_unsw_edu_au"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+      <title>
+COMP1927  Computing 1  Tutorial Solutions Week 1
+      </title>
+<link href="./COMP1927 Computing 1 Tutorial Solutions Week 1_files/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body data-gr-c-s-loaded="true">
+
+<h1>Tutorial Solutions Week 1</h1>
+
+<strong>
+<p>
+A file with all the code solutions for exercise 1 and its helper functions 
+can be found here: <a href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/Tut01Soln/lists_sol.c"> lists_sol.c </a>
+</p><p>
+A file with all the code solutions for exercise 2 and its helper functions 
+can be found here: <a href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/Tut01Soln/listsAlternate_sol.c"> listsAlternate_sol.c </a>
+</p></strong><p><strong>
+A file with all the code solutions for exercise 3 and its helper functions can be found here: <a href="https://www.cse.unsw.edu.au/~cs1927/17x1/week01/Tut01Soln/dlists_sol.c"> dlists_sol.c </a>
+
+</strong>
+	
+</p><h2>Exercise 1 - Linked Lists</h2>
+
+
+
+
+<ol>
+  <li> <p>Consider the material on linked lists that we discussed in the 
+lecture with the following definition (<tt>Item</tt> is a <tt>char</tt> now):
+</p> 
+<pre>typedef char Item;
+
+typedef struct node *link;
+
+struct node {
+  Item item;
+  link next;
+};
+</pre>
+<p>
+  Write the following functions:
+</p><ul>
+   <li> A function called length that takes a link to the first element of 
+a list and returns the length of the list</li>
+<strong>
+<pre>int length (link ls) {
+   link curr;
+   int len = 0;
+   for (curr = ls; curr != NULL; curr = curr-&gt;next) {
+       len++;
+   }
+   return len;
+}
+
+
+</pre>
+
+An alternate recursive solution
+<pre>int length(link ls) {
+&nbsp;&nbsp;&nbsp; if (ls == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return 1 + length(ls-&gt;next);
+}
+</pre>
+
+
+</strong>
+
+   <li> A function called duplicate that takes a link to the first element 
+of a list as an 
+argument and returns a copy of the list (ie a new list that contains the same data, in the same order). </li>
+<strong>
+<pre>link duplicate (link ls) {
+    link new = NULL;
+    link curr;
+
+    if (ls != NULL) {
+        new = newNode (ls-&gt;item);
+        curr = new;
+        ls = ls-&gt;next;
+    }
+    while (ls != NULL) {
+        insertNext (curr, newNode (ls-&gt;item));
+        curr = curr-&gt;next;
+        ls = ls-&gt;next;
+    }
+    return new;
+}
+</pre>
+An alternate recursive solution
+
+<pre>link duplicate(link ls) {
+&nbsp;&nbsp;&nbsp; link new;
+&nbsp;&nbsp;&nbsp; if (ls == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return NULL;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; new = newNode(ls-&gt;item);
+&nbsp;&nbsp;&nbsp; new-&gt;next = duplicate(ls-&gt;next);
+&nbsp;&nbsp;&nbsp; return new;
+}
+
+</pre>
+
+</strong>
+
+   <li> Here are the prototypes for some functions you may wish to use for this task (you can take the code from the lecture)</li>
+ <pre>// Create a new node, initialised with the item provided. Return
+// pointer to node (link)
+link newNode (Item item);
+
+// Insert a new node into a given non-empty list
+// The node is inserted directly after the head of the list ls
+void insertNext (link ls, link node);
+
+</pre>
+</ul><p></p></li>
+ <li> <p>Assume we have a function <tt>printList</tt> which, given 
+a 
+list of characters, prints each character, and a function `cstrToList` which converts a regular C string (i.e., `\0` terminated array of characters) into a list of characters. What is the output of the following program? (See implementation of <tt>reverse</tt> in Exercise 2.)
+ </p><pre>int main (int argc, const char * argv[]) {
+  link ls = cstrToList ("hello world!");
+  link ls2 = duplicate(ls);
+  printList (ls);
+  printList (reverse (ls));
+  printList (ls);
+  printList (ls2);
+  return 0;
+}
+</pre>
+<p></p>
+</li>
+<strong>
+<pre>List elements: hello world!
+List elements: hello world!
+List elements: !dlrow olleh
+List elements: h
+List elements: hello world!
+</pre>
+</strong><p><strong>
+reverse returns a pointer to the beginning of the reversed list, so when we print it out using printList(reverse (ls)); we get the list printed in reverse as we would expect. However, we did not assign the beginning of the reversed list back to our ls variable, so it is still pointing to the original head of the list which has the item 'h' in it. This node has now been modified to point to NULL during the reverse function, so printing out the ls list now results in simply an 'h' being printed out. If we wanted our ls variable to now contain the list in reverse we would have had to have used the return value as such
+<code> ls = reverse(ls) </code>.
+The duplicate list, ls2, as we would hope, has not been changed by calling the reverse function, as it has its own copies of all the nodes.
+</strong>
+
+</p></ol>
+
+<h2>Exercise 2 - Linked Lists, an alternative implementation</h2>
+<ul>
+  <li>The following implementation of lists distinguishes between a link to a sequence of items and a list. The list contains additional information, in this case, the length and also a pointer to the last element of the list.
+ <pre>typedef char Item;
+
+typedef struct node *link;
+
+struct node {
+  Item item;
+  link next;
+};
+
+typedef struct listImpl *list;
+
+struct listImpl {
+  int size;
+  link first;
+  link last;    
+};
+
+</pre>
+</li>
+
+<li>Write a function called createList to create a new empty list. Discuss 
+the difference between an empty list in our original implementation and 
+our current implementation.
+<strong>
+<pre>list createList(void){
+    list newList = malloc(sizeof ( *newList ));
+    newList-&gt;first = NULL;
+    newList-&gt;last = NULL;
+    newList-&gt;size = 0;
+    return newList;
+}
+</pre>
+<p>
+In the original implementation an empty list is simply a list with no nodes, set to NULL with no memory allocated to it. In the new implementation an empty list actually has a piece of memory allocated to it and is a listImpl struct, with a size field set to 0, and first and last pointers set to NULL.
+</p>
+</strong>
+
+
+</li><li>Modify the length function you wrote in excercise 1 to work with our 
+new implementation.
+<strong>
+<pre>int length(list ls){
+   int len = 0; 
+   if(ls != NULL){
+       len = ls-&gt;size;       
+   } 
+   return len;
+}
+</pre>
+</strong>
+
+</li><li>How does the prototypes of the following function change as a 
+consequence of the alternative implementation:
+<pre>link reverse (link ls);
+void insertNext(link ls, link node);
+void deleteNext(link ls);
+</pre></li>
+<strong>
+<p>Note: I have changed the name of the functions too :)
+</p>
+<pre>void reverseList(list ls);
+void insertNextList(list ls, link curr,link node);
+void deleteNextList(list ls, link curr);
+</pre>
+</strong>
+
+
+<li>  Below is the code presented in the lecture for reversing a list, by 
+passing in a pointer to the first element of the list. Adapt this code to work on the list type described above.
+<pre>link reverse (link ls) {
+  link tmp;
+  link curr = ls;
+  link rev  = NULL; 
+  while (curr != NULL) {
+    tmp = curr-&gt;next; 
+    curr-&gt;next = rev; 
+    rev  = curr; 
+    curr = tmp;
+  } 
+  return rev;
+}
+</pre>
+<strong>
+<pre>
+void reverseList(list ls){
+    if(ls != NULL){
+        link originalHead = ls-&gt;first;
+        ls-&gt;first = reverse(ls-&gt;first);
+        ls-&gt;last = originalHead;
+    }
+}
+
+link reverse (link ls) {
+    link tmp;
+    link curr = ls;
+    link rev  = NULL;
+    while (curr != NULL) {
+        tmp = curr-&gt;next;
+        curr-&gt;next = rev;
+        rev  = curr;
+        curr = tmp;
+    }
+    return rev;
+}
+</pre>
+</strong>
+
+  What are the advantages and disadvantages of your adapted version over the one discussed in the lecture? Which operations can be implemented more efficiently?
+</li>
+<strong>
+This version allows us to keep track of the size of the list, making the length function more efficient as we do not need to traverse the whole list. It would make inserting a node at the end of the list more efficient as again, we would not need to traverse the whole list to find the last node, as we have a pointer to it. 
+</strong><p><strong> This implementation requires us to keep track of the size and tail when we add or delete nodes from the list so we need to be careful to consistently do that. The overhead of the extra memory to store the list struct is negligable.
+</strong>
+</p></ul>
+
+
+<h2>Exercise 3 - Double linked lists</h2>
+<p>
+In the lecture, we briefly discussed doubly linked lists. 
+</p>
+<pre>typedef char Item;
+
+typedef struct dnode *dlink;
+
+struct dnode {
+    Item  item;
+    dlink next;
+    dlink prev;
+};
+</pre>
+<p>	
+Write a function 
+</p>
+<pre>dlink append (dlink list1, dlink2 list2)
+</pre>
+<strong>
+<pre>dlink append(dlink list1, dlink list2){
+    dlink curr;
+    dlink newList;
+    if(list1 != NULL){
+        for(curr = list1; curr-&gt;next != NULL; curr = curr-&gt;next){
+        }
+        curr-&gt;next = list2;
+        if(list2 != NULL){
+            list2-&gt;prev = curr;
+        }
+        newList = list1;
+    } else {
+        newList = list2;
+    }
+    return newList;      
+}
+</pre>
+</strong>
+<p>
+which attaches the list <tt>list2</tt> at the end of <tt>list1</tt> and 
+returns the resulting list. 
+</p>
+<p>
+Is it necessary to return the resulting list, or would the following interface work (as <tt>list1</tt> is altered)
+</p>
+<pre>void append (dlink list1, dlink list2)
+</pre>
+<strong>
+<p>
+This will not work. You need to return the resulting list incase the first list is NULL 
+</p>
+</strong>
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
