@@ -157,13 +157,21 @@ void mergeTB (TB tb1, int pos, TB tb2){
     assert(tb1 != NULL && tb2 != NULL);
     if(pos < linesTB(tb1) && pos >= 0) {
         Line l = getLine(tb1, pos);
+        if (l -> prev != NULL) {
+            l -> prev -> next = tb2 -> head;
+            tb2 -> head -> prev = l -> prev;
+        } else {
+            tb1 -> head = tb2 -> head;
+        }
+        l -> prev = tb2 -> tail;
+        tb2 -> tail -> next = l;
+        releaseTB(tb2);
     } else {
         printf("Invalid %d position in text buffer1", pos);
         abort();
     }
-
 }
-/* Copy 'tb2' into 'tb1' at line 'pos'.
+/* Paste 'tb2' into 'tb1' at line 'pos'.
  *
  * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
  * - The old line 'pos' of 'tb1' will follow after the last line of 'tb2'.
@@ -171,7 +179,17 @@ void mergeTB (TB tb1, int pos, TB tb2){
  *   of 'tb1'.
  * - The program is to abort() with an error message if 'pos' is out of range.
  */
-void pasteTB (TB tb1, int pos, TB tb2);
+void pasteTB (TB tb1, int pos, TB tb2) {
+    assert(tb1 != NULL && tb2 != NULL);
+    if(pos < linesTB(tb1) && pos >= 0) {
+        TB new = copy(tb2, 0, (linesTB(tb2)-1));
+        mergeTB(tb1, pos, tb2);
+        tb2 = new;
+   } else {
+        printf("Invalid %d position in text buffer1", pos);
+        abort();
+    }
+}
 
 /* Cut the lines between and including 'from' and 'to' out of the textbuffer
  * 'tb'.
@@ -181,7 +199,32 @@ void pasteTB (TB tb1, int pos, TB tb2);
  * - The program is to abort() with an error message if 'from' or 'to' is out
  *   of range.
  */
-TB cutTB (TB tb, int from, int to);
+TB cutTB (TB tb, int from, int to) {
+    assert(tb != NULL);
+    int total = lines(tb);
+    if (from >= 0 && from <= to && to < total) {
+        TB res = newTB("");
+        char * f = res -> head -> s;
+        free(f);
+        Line lF = getLine(tb, from);
+        res -> head = lF;
+        Line lT = lF;
+        if (from != to) {
+            getLine(tb, to);
+        }
+        res -> tail = lT;
+        if (lF -> prev != NULL)
+            lF -> prev -> next = lT -> next;
+        if (lT -> next != NULL)
+            lT -> next -> prev = lF -> prev;
+        return res;
+    } else if (to >= total) {
+        printf("to:%d is out of tb range %d\n", to, total);
+    } else if(from < 0 || from > to ) {
+        printf("from:%d is not between 0 and %d\n", from, total);
+    }
+    abort();
+}
 
 /* Copy the lines between and including 'from' and 'to' of the textbuffer
  * 'tb'.
@@ -191,7 +234,32 @@ TB cutTB (TB tb, int from, int to);
  * - The program is to abort() with an error message if 'from' or 'to' is out
  *   of range.
  */
-TB copyTB (TB tb, int from, int to);
+TB copyTB (TB tb, int from, int to) {
+    assert(tb != NULL);
+    int total = lines(tb);
+    if (from >= 0 && from <= to && to < total) {
+        Line lF = getLine(tb, from);
+        TB res = newTB(lF -> s);
+        Line lT = lF;
+        Line cur = res -> head;
+        if (from != to)
+            getLine(tb, to);
+        while (lF -> next != NULL && lF != lT) {
+            lF = lF -> next;
+            cur -> next = newTextLine(lF -> s);
+            cur -> next -> prev = cur;
+            cur = cur -> next;
+        }
+        res -> tail = cur;
+        return res;
+    } else if (to >= total) {
+        printf("to:%d is out of tb range %d\n", to, total);
+    } else if(from < 0 || from > to ) {
+        printf("from:%d is not between 0 and %d\n", from, total);
+    }
+    abort();
+}
+
 
 /* Remove the lines between and including 'from' and 'to' from the textbuffer
  * 'tb'.
@@ -199,14 +267,40 @@ TB copyTB (TB tb, int from, int to);
  * - The program is to abort() with an error message if 'from' or 'to' is out
  *   of range.
  */
-void deleteTB (TB tb, int from, int to);
+void deleteTB (TB tb, int from, int to) {
+    assert(tb != NULL);
+    int total = lines(tb);
+    if (from >= 0 && from <= to && to < total) {
+        Line lF = getLine(tb, from);
+        Line lT = lF;
+        if (from != to) {
+            getLine(tb, to);
+        }
+        if (lF -> prev != NULL)
+            lF -> prev -> next = lT -> next;
+        if (lT -> next != NULL)
+            lT -> next -> prev = lF -> prev;
+        while (lF ! = lT) {
+            lF = lF -> next;
+            destroyLine(lF);
+        }
+        destroyLine(lF);
+    } else if (to >= total) {
+        printf("to:%d is out of tb range %d\n", to, total);
+    } else if(from < 0 || from > to ) {
+        printf("from:%d is not between 0 and %d\n", from, total);
+    }
+    abort();
+}
 
 
-/* Search every line of tb for each occurrence of str1 and replaces them 
+
+/* Search every line of tb for each occurrence of str1 and replaces them
  * with str2
  */
-void replaceText (TB tb, char* str1, char* str2) ;
+void replaceText (TB tb, char* str1, char* str2) {
 
+}
 /* Bonus Challenges
 */
 
