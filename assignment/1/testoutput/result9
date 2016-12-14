@@ -1,0 +1,17 @@
+tb2 = cutTB(tb1, 0, 2)
+no. of lines in tb1 = 7
+tb1 = 
+line 04
+line 05
+line 06
+line 07
+line 08
+line 09
+line 10
+
+no. of lines in tb2 = 3
+tb2 = 
+line 01
+line 02
+line 03
+

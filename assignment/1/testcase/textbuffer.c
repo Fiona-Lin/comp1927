@@ -241,10 +241,9 @@ void pasteTB (TB tb1, int pos, TB tb2) {
  */
 TB cutTB (TB tb, int from, int to) {
     assert(tb != NULL);
-    TB res = NULL;
     int total = linesTB(tb);
     if (from >= 0 && from <= to && to < total) {
-        res = newTB("");
+        TB res = newTB("");
         char * f = res -> head -> s;
         free(f);
         Line lF = getLine(tb, from);
@@ -256,18 +255,15 @@ TB cutTB (TB tb, int from, int to) {
         res -> tail = lT;
         if (lF -> prev != NULL)
             lF -> prev -> next = lT -> next;
-        else tb -> head = lT -> next;
         if (lT -> next != NULL)
             lT -> next -> prev = lF -> prev;
-        else tb -> tail = lF -> prev;
-    } else if (to >= total || from >= total) {
-        printf("From:%d or to:%d is out of tb range %d\n", from, to, total);
-        abort();
-    } else if(from < 0 || to < 0) {
-        printf("From:%d or To:%d is less than 0\n", from, to);
-        abort();
+        return res;
+    } else if (to >= total) {
+        printf("to:%d is out of tb range %d\n", to, total);
+    } else if(from < 0 || from > to ) {
+        printf("from:%d is not between 0 and %d\n", from, total);
     }
-    return res;
+    abort();
 }
 
 /* Copy the lines between and including 'from' and 'to' of the textbuffer
@@ -343,21 +339,13 @@ void deleteTB (TB tb, int from, int to) {
  * with str2
  */
 void replaceText (TB tb, char* str1, char* str2) {
-    char * occur = NULL;
-    int len1 = strlen(str1);
-    int len2 = strlen(str2);
-    int diff = len2 - len1;
-    char * s = tb -> head -> s;
-    while (occur = strstr(s, str1) != NULL) {
-        s = realloc(s, sizeof(strlen(s) + diff));
-        char * tem = strdup(occur + len1);
-        strcpy(occur, str2);
-        strcpy(occur + str2, tem);
-        free(tem);
+    char * res = NULL;
+    while (res = strstr(tb->s, str1) != NULL) {
+        
     }
 }
 /* Bonus Challenges
-*/
+ */
 
 char* diffTB (TB tb1, TB tb2) ;
 
