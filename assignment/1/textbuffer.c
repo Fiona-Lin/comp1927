@@ -194,22 +194,8 @@ void swapTB (TB tb, int pos1, int pos2) {
  * - The program is to abort() with an error message if 'pos' is out of range.
  */
 void mergeTB (TB tb1, int pos, TB tb2){
-    assert(tb1 != NULL && tb2 != NULL);
-    if(pos < linesTB(tb1) && pos >= 0) {
-        Line l = getLine(tb1, pos);
-        if (l -> prev != NULL) {
-            l -> prev -> next = tb2 -> head;
-            tb2 -> head -> prev = l -> prev;
-        } else {
-            tb1 -> head = tb2 -> head;
-        }
-        l -> prev = tb2 -> tail;
-        tb2 -> tail -> next = l;
-        releaseTB(tb2);
-    } else {
-        printf("Invalid %d position in text buffer1", pos);
-        abort();
-    }
+    pasteTB(tb1, pos, tb2);
+    releaseTB(tb2);
 }
 /* Paste 'tb2' into 'tb1' at line 'pos'.
  *
@@ -222,9 +208,15 @@ void mergeTB (TB tb1, int pos, TB tb2){
 void pasteTB (TB tb1, int pos, TB tb2) {
     assert(tb1 != NULL && tb2 != NULL);
     if(pos < linesTB(tb1) && pos >= 0) {
-        TB new = copyTB(tb2, 0, (linesTB(tb2)-1));
-        mergeTB(tb1, pos, tb2);
-        tb2 = new;
+        Line l = getLine(tb1, pos);
+        if (l -> prev != NULL) {
+            l -> prev -> next = tb2 -> head;
+            tb2 -> head -> prev = l -> prev;
+        } else {
+            tb1 -> head = tb2 -> head;
+        }
+        l -> prev = tb2 -> tail;
+        tb2 -> tail -> next = l;
     } else {
         printf("Invalid %d position in text buffer1", pos);
         abort();
@@ -279,29 +271,9 @@ TB cutTB (TB tb, int from, int to) {
  *   of range.
  */
 TB copyTB (TB tb, int from, int to) {
-    assert(tb != NULL);
-    int total = linesTB(tb);
-    if (from >= 0 && from <= to && to < total) {
-        Line lF = getLine(tb, from);
-        TB res = newTB(lF -> s);
-        Line lT = lF;
-        Line cur = res -> head;
-        if (from != to)
-            getLine(tb, to);
-        while (lF -> next != NULL && lF != lT) {
-            lF = lF -> next;
-            cur -> next = newTextLine(lF -> s);
-            cur -> next -> prev = cur;
-            cur = cur -> next;
-        }
-        res -> tail = cur;
-        return res;
-    } else if (to >= total) {
-        printf("to:%d is out of tb range %d\n", to, total);
-    } else if(from < 0 || from > to ) {
-        printf("from:%d is not between 0 and %d\n", from, total);
-    }
-    abort();
+    TB res = cutTB(tb, from, to);
+    pasteTB(tb, from, res);
+    return res;
 }
 
 
@@ -312,29 +284,8 @@ TB copyTB (TB tb, int from, int to) {
  *   of range.
  */
 void deleteTB (TB tb, int from, int to) {
-    assert(tb != NULL);
-    int total = linesTB(tb);
-    if (from >= 0 && from <= to && to < total) {
-        Line lF = getLine(tb, from);
-        Line lT = lF;
-        if (from != to) {
-            getLine(tb, to);
-        }
-        if (lF -> prev != NULL)
-            lF -> prev -> next = lT -> next;
-        if (lT -> next != NULL)
-            lT -> next -> prev = lF -> prev;
-        while (lF != lT) {
-            lF = lF -> next;
-            destroyLine(lF);
-        }
-        destroyLine(lF);
-    } else if (to >= total) {
-        printf("to:%d is out of tb range %d\n", to, total);
-    } else if(from < 0 || from > to ) {
-        printf("from:%d is not between 0 and %d\n", from, total);
-    }
-    abort();
+    TB res = cutTB(tb, from, to);
+    releaseTB(res);
 }
 
 

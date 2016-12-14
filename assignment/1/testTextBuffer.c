@@ -96,33 +96,167 @@ void testLinesTB() {
 }
 
 void testSwapTB() {
-// swap line
-// pos1 is out of range
-// pos2 is out of range
-// pos1 and pos2 are out of range
-// pos1 or pos2 is at the beginning of textbuffer
-// pos1 or pos2 is at the end of textbuffer
-// pos1 and pos2 are at the end and beginning of textbuffer
+// Pos1 is out of range
+
+// Pos2 is out of range
+
+// Pos1 and Pos2 are out of range
+
+// Pos1 is at the beginning of textbuffer
+
+// Pos2 is at the beginning of textbuffer
+
+// Pos1 is at the end of textbuffer
+
+// Pos2 is at the end of textbuffer
+
+// Pos1 and Pos2 are at the end and beginning of textbuffer
+
+// Pos1 and Pos2 are in within the range of textbuffer
 }
 
 void testMergeTB() {
+//Pos is 0, which is the beginning of tb1
+
+//Pos is equal to the number of lines of tb1 subtract 1,
+//which is the end of tb1
+
+//Pos is within the range of 0 to number of lines of tb1.
+
+//Pos is less than 0
+
+//Pos is great than and equal to number of lines of tb1
+
 //Merge 2 NULL text buffers
+
 //Merge to NULL text buffer
+
 //Merge from NULL text buffer
-//Merge 2 ordinary text buffers
 }
 
 void testPasteTB() {
+//Pos is 0, which is the beginning of tb1
+
+//Pos is equal to the number of lines of tb1 subtract 1,
+//which is the end of tb1
+
+//Pos is within the range of 0 to number of lines of tb1.
+
+//Pos is less than 0
+
+//Pos is great than and equal to number of lines of tb1
+
+
+//Paste a NULL text buffer to another NULL text buffer
+
+//Paste to NULL text buffer
+
+//Paste from NULL text buffer
+}
+
+void testCutTB() {
+// from is great than and equal to number of lines of tb1
+
+// to is great than and equal to number of lines of tb1
+
+// from and to are great than and equal to number of lines of tb1
+
+// from is less than 0
+
+// to is less than 0
+
+// from and to are less than 0
+
+// from is at the beginning of textbuffer
+
+// to is at the beginning of textbuffer
+
+// from and to are at the beginning of textbuffer
+
+// from is at the end of textbuffer
+
+// to is at the end of textbuffer
+
+// from and to are at the end of textbuffer
+
+// from and to are at the end and beginning of textbuffer
+
+// from and to are within the range of 0 to number of lines of tb1.
 
 }
 
-void testCutTB() { }
+void testCopyTB() {
+// from is great than and equal to number of lines of tb1
 
-void testCopyTB() { }
+// to is great than and equal to number of lines of tb1
 
-void testDeleteTB() { }
+// from and to are great than and equal to number of lines of tb1
 
-void testReplaceText() { }
+// from is less than 0
+
+// to is less than 0
+
+// from and to are less than 0
+
+// from is at the beginning of textbuffer
+
+// to is at the beginning of textbuffer
+
+// from and to are at the beginning of textbuffer
+
+// from is at the end of textbuffer
+
+// to is at the end of textbuffer
+
+// from and to are at the end of textbuffer
+
+// from and to are at the end and beginning of textbuffer
+
+// from and to are within the range of 0 to number of lines of tb1.
+}
+
+
+void testDeleteTB() {
+// from is great than and equal to number of lines of tb1
+
+// to is great than and equal to number of lines of tb1
+
+// from and to are great than and equal to number of lines of tb1
+
+// from is less than 0
+
+// to is less than 0
+
+// from and to are less than 0
+
+// from is at the beginning of textbuffer
+
+// to is at the beginning of textbuffer
+
+// from and to are at the beginning of textbuffer
+
+// from is at the end of textbuffer
+
+// to is at the end of textbuffer
+
+// from and to are at the end of textbuffer
+
+// from and to are at the end and beginning of textbuffer
+
+// from and to are within the range of 0 to number of lines of tb1.
+}
+
+void testReplaceText() {
+//string1 is not in text buffer
+
+//string1 is same length as string2
+
+//string1 is shorter than string2
+
+//string1 is longer than string2
+
+//string1 is replace with empty string2
+}
 
 void testDiffTB() { }
 
