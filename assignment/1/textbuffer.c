@@ -29,7 +29,7 @@ struct textLine{
 static Line newTextLine(char s[]) {
     Line new = malloc(sizeof(struct textLine));
     assert(new != NULL);
-    new -> s = strdup(s);
+    new -> s = s;
     new -> prev = NULL;
     new -> next = NULL;
     return new;
@@ -47,7 +47,7 @@ static Line getLine(TB tb, int pos) {
     if (tb != NULL && pos < linesTB(tb) && pos >= 0) {
         l = tb -> head;
         int i = 0;
-        while (l != NULL && i <= pos) {
+        while (l->next != NULL && i < pos) {
             l = l-> next;
             i++;
         }
@@ -56,51 +56,54 @@ static Line getLine(TB tb, int pos) {
 }
 static char ** splitLines(char * s, int * l) {
     int i;
+    int c = 0;
     char ** lines = NULL;
     int len = strlen(s);
     int lastI  = -1;
     for (i = 0; i < len; i++)
         if(s[i] == '\n')
-            (*l)++;
-    lines = malloc( (*l) * sizeof(char *));
-    *l = 0;
+            c++;
+    lines = malloc( c * sizeof(char *));
+    *l = c;
+    c = 0;
     for (i = 0; i < len; i++) {
         if(s[i] == '\n') {
-            //work out the last index and next
-            lines[*l] = strndup(s+lastI+1, i - lastI);
+            lines[c] = strndup(s+lastI+1, i - lastI);
             lastI = i;
-            (*l)++;
-            //           printf("l:%d\t", *l);
-            //           printf("s[i]:%s\t", s+i);
-            //           printf("i:%d\n", i);
+            c++;
         }
     }
     return lines;
 }
-
+static void appendTB(TB tb, Line l){
+    assert(tb != NULL);
+    if (tb -> head == NULL) {
+        tb -> head = l;
+    } else {
+        tb -> tail -> next = l;
+        l -> prev = tb -> tail;
+    }
+    tb -> tail = l;
+    tb -> size ++;
+}
 /* Allocate a new textbuffer whose contents is initialised with the text given
  * in the array.
  */
 TB newTB (char text[]) {
-    TB new = malloc(sizeof(struct textbuffer));
-    int i;
+    int i, l;
+    char ** lines = NULL;
+    TB new = NULL;
     Line newLine = NULL;
-    Line curr = NULL;
-    assert(new != NULL);
-    char ** lines = splitLines(text, &(new -> size));
-    for (i = 0; i < (new -> size); i++) {
-        newLine = newTextLine(lines[i]);
-        if (i == 0) {
-            new -> head = newLine;
-            curr = newLine;
-        } else {
-            curr -> next = newLine;
-            curr = curr -> next;
-        }
-        if (i == (new -> size - 1)) {
-            new -> tail = curr;
+    if (text != NULL) {
+        new = malloc(sizeof(struct textbuffer));
+        assert(new != NULL);
+        lines = splitLines(text, &l);
+        for (i = 0; i < l; i++) {
+            newLine = newTextLine(lines[i]);
+            appendTB(new, newLine);
         }
     }
+    free(lines);
     return new;
 }
 
@@ -114,8 +117,8 @@ void releaseTB (TB tb) {
     cur = tb -> head;
     while (cur != NULL) {
         tmp = cur;
-        destroyLine(tmp);
         cur = cur -> next;
+        destroyLine(tmp);
     }
     free(tb);
 }
@@ -125,12 +128,12 @@ void releaseTB (TB tb) {
 char *dumpTB (TB tb) {
     char * res = malloc(sizeof(char));
     if (res != NULL){
-        res[0] = '\n';
+        strcpy(res, "");
     }
     if (tb != NULL) {
         Line cur = tb -> head;
         while(cur != NULL) {
-            res = realloc(res, sizeof(strlen(res)+strlen(cur -> s)+1));
+            res = realloc(res, sizeof(strlen(res) + strlen(cur -> s) + 1));
             strcat(res, cur -> s);
             cur = cur -> next;
         }
@@ -156,33 +159,55 @@ int linesTB (TB tb) {
 void swapTB (TB tb, int pos1, int pos2) {
     assert(tb != NULL);
     int total = linesTB(tb);
-    if (pos2 >= total) {
-        printf("%d is invalid Postion 2 value\npos2 must be positive integer less than %d\n", pos2, linesTB(tb));
-    } else if (pos1 < 0 || pos1 > pos2) {
-        printf("%d is invalid Postion 1 value\npos1 must be positive integer less than %d\n", pos1, pos2);
+    if ((pos2 < total && pos2 >= 0) || (pos1 < total && pos1 >= 0)) {
+        if (pos1 != pos2) {
+            Line l1 = getLine(tb, pos1);
+            Line l2 = getLine(tb, pos2);
+            Line pre1 = l1 -> prev;
+            Line nex1 = l1 -> next;
+            Line pre2 = l2 -> prev;
+            Line nex2 = l2 -> next;
+            l1 -> prev = pre2;
+            if (pre2 != NULL)
+                pre2 -> next = l1;
+            else tb -> head = l1;
+            l1 -> next = nex2;
+            if (nex2 != NULL)
+                nex2 -> prev = l1;
+            else tb -> tail = l1;
+            l2 -> prev = pre1;
+            if (pre1 != NULL)
+                pre1 -> next = l2;
+            else tb -> head = l2;
+            l2 -> next = nex1;
+            if (nex1 != NULL)
+                nex1 -> prev = l2;
+            else tb -> tail = l2;
+            if(total == 2) {
+                if (pos1 < pos2) {
+                    l1 -> prev = l2;
+                    l2 -> next = l1;
+                } else {
+                    l1 -> next = l2;
+                    l2 -> prev = l1;
+                    tb -> head = l1;
+                    tb -> tail = l2;
+                }
+            }
+        }
+
+    } else if (pos1 < 0 || pos2 < 0) {
+        if (pos1 < 0) {
+            printf("Invalid pos: %d must be greater than 0.\n", pos1);
+        } else if (pos2 < 0) {
+            printf("Invalid pos: %d must be greater than 0.\n", pos2);
+        }
     } else{
-        Line l1 = getLine(tb, pos1);
-        Line l2 = getLine(tb, pos2);
-        Line pre1 = l1 -> prev;
-        Line nex1 = l1 -> next;
-        Line pre2 = l2 -> prev;
-        Line nex2 = l2 -> next;
-        l2 -> prev = pre1;
-        l2 -> next = nex1;
-        l1 -> next = nex2;
-        l1 -> prev = pre2;
-        if (l1 -> prev != NULL)
-            pre1 -> next = l2;
-        else tb -> head = l2;
-        if (l2 -> prev != NULL)
-            pre2 -> next = l1;
-        else tb -> head = l2;
-        if (l1 -> next != NULL)
-            nex1 -> prev = l2;
-        else tb -> tail = l2;
-        if (l2 -> next != NULL)
-            nex2 -> prev = l1;
-        else tb -> tail = l1;
+        if (pos1 < 0) {
+            printf("Invalid pos:%d must be less than %d\n", pos2, linesTB(tb));
+        } else if (pos2 < 0) {
+            printf("Invalid pos:%d must be less than %d\n", pos1, linesTB(tb));
+        }
     }
 }
 /* Merge 'tb2' into 'tb1' at line 'pos'.
@@ -236,22 +261,28 @@ TB cutTB (TB tb, int from, int to) {
     TB res = NULL;
     int total = linesTB(tb);
     if (from >= 0 && from <= to && to < total) {
-        res = newTB("");
-        char * f = res -> head -> s;
-        free(f);
+        res = newTB(NULL);
         Line lF = getLine(tb, from);
-        res -> head = lF;
         Line lT = lF;
         if (from != to) {
-            getLine(tb, to);
+            lT = getLine(tb, to);
         }
-        res -> tail = lT;
         if (lF -> prev != NULL)
             lF -> prev -> next = lT -> next;
         else tb -> head = lT -> next;
         if (lT -> next != NULL)
             lT -> next -> prev = lF -> prev;
         else tb -> tail = lF -> prev;
+        lF -> prev = NULL;
+        lT -> next = NULL;
+        Line cur = lF;
+        while (cur != NULL && cur != tb -> head) {
+            appendTB(res, cur);
+            cur = cur -> next;
+        }
+        if (cur != NULL)
+            cur = NULL;
+        tb -> size -= res -> size;
     } else if (to >= total || from >= total) {
         printf("From:%d or to:%d is out of tb range %d\n", from, to, total);
         abort();
@@ -299,11 +330,11 @@ void replaceText (TB tb, char* str1, char* str2) {
     int len2 = strlen(str2);
     int diff = len2 - len1;
     char * s = tb -> head -> s;
-    while (occur = strstr(s, str1) != NULL) {
+    while ((occur = strstr(s, str1)) != NULL) {
         s = realloc(s, sizeof(strlen(s) + diff));
         char * tem = strdup(occur + len1);
         strcpy(occur, str2);
-        strcpy(occur + str2, tem);
+        strcpy((occur + len2), tem);
         free(tem);
     }
 }
