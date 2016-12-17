@@ -13,10 +13,9 @@ struct textbuffer{
     Line head;
     Line tail;
     int size;
-    char * history[HIST_SIZE];
+    char * history[HIST_SIZE];// free history in release TB
     int hist_top;
     int hist_cur;
-
 };
 
 struct textLine{
@@ -25,13 +24,27 @@ struct textLine{
     Line next;
 };
 
+static void snapshot(TB tb) {
+//check if it needs to shift (top is equal to 10)
+//advance cur to next slot
+//before I dump check if there is occupied before if so free it;
+//dump current tb into cur slot of the array history
+//set top to that current + 1;
 
-//typedef struct operation * Opt;
-//struct operation{
-//
-//};
+}
+static void restoreFromSnapshot(TB tb, char * s){
+//don't amend history
+//free all the lines
+//set head tail and size according to the string
+checkTB(tb);
+}
 static void checkTB(TB tb){
     assert(tb != NULL);
+    if (tb -> head == NULL) {
+        assert(tb -> tail == NULL);
+        assert(tb -> size == 0);
+        return;
+    }
     assert(tb -> head -> prev == NULL);
     assert(tb -> tail -> next == NULL);
     Line cur = tb -> head;
@@ -126,6 +139,8 @@ TB newTB(char text[]) {
         }
     }
     free(lines);
+    new -> hist_cur = -1;
+    snapshot(new);
     checkTB(new);
     return new;
 }
@@ -186,6 +201,7 @@ void swapTB(TB tb, int pos1, int pos2) {
         // [ ..., a, b, ... ]
         // [ ..., a, ..., b, ... ]
         // [ a, ... ] and [ ..., b ]
+
         if (pos1 > pos2) {
             int temp = pos1;
             pos1 = pos2;
@@ -215,7 +231,9 @@ void swapTB(TB tb, int pos1, int pos2) {
         if (l2 -> next != NULL)
             l2 -> next ->  prev = l2;
         else tb ->  tail = l2;
-
+        // char * temp = l1 -> s;
+        // l1 -> s = l2 -> s;
+        // l2 -> s = temp;
     } else if (pos1 < 0 || pos2 < 0)
         printf("Invalid pos must be greater than 0.\n");
     else printf("Invalid pos must be less than %d\n", linesTB(tb));
@@ -246,6 +264,7 @@ void mergeTB(TB tb1, int pos, TB tb2) {
         printf("Invalid %d position in text buffer1", pos);
         abort();
     }
+    checkTB(tb1);
     free(tb2);
 }
 /* Paste 'tb2' into 'tb1' at line 'pos'.
@@ -260,6 +279,8 @@ void pasteTB(TB tb1, int pos, TB tb2) {
     char *s = dumpTB(tb2);
     TB merge = newTB(s);
     mergeTB(tb1, pos, merge);
+    checkTB(tb1);
+    checkTB(tb2);
 }
 
 /* Cut the lines between and including 'from' and 'to' out of the textbuffer
@@ -275,7 +296,7 @@ TB cutTB(TB tb, int from, int to) {
     TB res = NULL;
     int total = linesTB(tb);
     if (from >= 0 && from <= to && to < total) {
-        res = newTB(NULL);
+        res = newTB("");
         Line lF = getLine(tb, from);
         Line lT = lF;
         if (from != to) {
@@ -304,6 +325,8 @@ TB cutTB(TB tb, int from, int to) {
         printf("From:%d or To:%d is less than 0\n", from, to);
         abort();
     }
+    checkTB(tb);
+    checkTB(res);
     return res;
 }
 
@@ -318,6 +341,8 @@ TB cutTB(TB tb, int from, int to) {
 TB copyTB(TB tb, int from, int to) {
     TB res = cutTB(tb, from, to);
     pasteTB(tb, from, res);
+    checkTB(tb);
+    checkTB(res);
     return res;
 }
 
@@ -331,6 +356,7 @@ TB copyTB(TB tb, int from, int to) {
 void deleteTB(TB tb, int from, int to) {
     TB res = cutTB(tb, from, to);
     releaseTB(res);
+    checkTB(tb);
 }
 
 
@@ -352,13 +378,24 @@ void replaceText(TB tb, char* str1, char* str2) {
         free(tem);
     }
     tb -> head -> s = s;
+    checkTB(tb);
 }
 /* Bonus Challenges
 */
 
 char* diffTB(TB tb1, TB tb2) ;
 
-void undoTB(TB tb) ;
+void undoTB(TB tb) {
+//cur == 0 , nothing to undo
+//move current to left
+//restore snapshot
+//checkTB
+}
 
-void redoTB(TB tb) ;
+void redoTB(TB tb) {
+//if curr + 1 = top return;
+//otherwise we move cur to the right
+//restore from that snapshot
+//checkTB
+}
 
