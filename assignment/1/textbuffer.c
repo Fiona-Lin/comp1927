@@ -24,20 +24,6 @@ struct textLine{
     Line next;
 };
 
-static void snapshot(TB tb) {
-//check if it needs to shift (top is equal to 10)
-//advance cur to next slot
-//before I dump check if there is occupied before if so free it;
-//dump current tb into cur slot of the array history
-//set top to that current + 1;
-
-}
-static void restoreFromSnapshot(TB tb, char * s){
-//don't amend history
-//free all the lines
-//set head tail and size according to the string
-checkTB(tb);
-}
 static void checkTB(TB tb){
     assert(tb != NULL);
     if (tb -> head == NULL) {
@@ -57,6 +43,48 @@ static void checkTB(TB tb){
     assert(tb -> tail == cur);
     assert(tb -> size == size);
 }
+
+static void snapshot(TB tb) {
+    //check if it needs to shift (top is equal to 10)
+    assert(tb != NULL);
+    int i;
+
+    if (tb -> hist_top == HIST_SIZE) {
+        free(tb -> history[0]);
+        for (i = 0; i < (HIST_SIZE - 1); i++) {
+            tb -> history[i] = tb -> history[i + 1];
+        }
+        tb -> hist_cur--;
+    }
+    //advance cur to next slot
+    tb -> hist_cur ++;
+    //before I dump check if there is occupied before if so free it;
+    if (tb -> history[tb -> hist_cur] != NULL)
+        free(tb -> history[tb -> hist_cur]);
+    //dump current tb into cur slot of the array history
+    tb -> history[tb -> hist_cur] = dumpTB(tb);
+    //set top to that current + 1;
+    tb -> hist_top = (tb -> hist_cur + 1);
+
+}
+static void restoreFromSnapshot(TB tb, char * s){
+    //don't amend history
+    TB temp = newTB(s);
+    int size = tb -> size;
+    //free all the lines
+    Line lH = tb -> head;
+    Line lT = tb -> tail;
+    //set head tail and size according to the string
+    tb -> head = temp -> head;
+    tb -> tail = temp -> tail;
+    tb -> size = temp -> size;
+    temp -> head = lH;
+    temp -> tail = lT;
+    temp -> size = size;
+    releaseTB(temp);
+    checkTB(tb);
+}
+
 static Line newTextLine(char s[]) {
     Line new = calloc(sizeof(struct textLine), 1);
     assert(new != NULL);
@@ -67,8 +95,7 @@ static Line newTextLine(char s[]) {
 }
 
 static void destroyLine(Line l) {
-    assert(l != NULL);
-    if (l ->  s != NULL) {
+    if (l != NULL && l ->  s != NULL) {
         free(l -> s);
     }
     free(l);
@@ -140,7 +167,7 @@ TB newTB(char text[]) {
     }
     free(lines);
     new -> hist_cur = -1;
-    snapshot(new);
+   //snapshot(new);
     checkTB(new);
     return new;
 }
@@ -151,12 +178,16 @@ TB newTB(char text[]) {
 void releaseTB(TB tb) {
     Line cur = NULL;
     Line tmp = NULL;
+    int i;
     if (tb != NULL) {
         cur = tb ->  head;
         while (cur != NULL) {
             tmp = cur;
             cur = cur ->  next;
             destroyLine(tmp);
+        }
+        for (i = 0; i < HIST_SIZE; i++) {
+            free(tb -> history[i]);
         }
     }
     free(tb);
@@ -238,6 +269,7 @@ void swapTB(TB tb, int pos1, int pos2) {
         printf("Invalid pos must be greater than 0.\n");
     else printf("Invalid pos must be less than %d\n", linesTB(tb));
     checkTB(tb);
+    snapshot(tb);
 }
 /* Merge 'tb2' into 'tb1' at line 'pos'.
  *
@@ -266,6 +298,7 @@ void mergeTB(TB tb1, int pos, TB tb2) {
     }
     checkTB(tb1);
     free(tb2);
+//    snapshot(tb1);
 }
 /* Paste 'tb2' into 'tb1' at line 'pos'.
  *
@@ -296,7 +329,7 @@ TB cutTB(TB tb, int from, int to) {
     TB res = NULL;
     int total = linesTB(tb);
     if (from >= 0 && from <= to && to < total) {
-        res = newTB("");
+        res = calloc(sizeof(struct textbuffer), 1);
         Line lF = getLine(tb, from);
         Line lT = lF;
         if (from != to) {
@@ -310,14 +343,12 @@ TB cutTB(TB tb, int from, int to) {
         else tb ->  tail = lF ->  prev;
         lF ->  prev = NULL;
         lT ->  next = NULL;
-        Line cur = lF;
-        while (cur != NULL && cur != tb ->  head) {
-            appendTB(res, cur);
-            cur = cur ->  next;
-        }
-        if (cur != NULL)
-            cur = NULL;
+        res -> head = lF;
+        res -> tail = lT;
+        res -> size = to - from + 1;
         tb ->  size -= linesTB(res);
+        res -> hist_cur = -1;
+        snapshot(res);
     } else if (to >= total || from >= total) {
         printf("From:%d or to:%d is out of tb range %d\n", from, to, total);
         abort();
@@ -327,6 +358,7 @@ TB cutTB(TB tb, int from, int to) {
     }
     checkTB(tb);
     checkTB(res);
+    snapshot(tb);
     return res;
 }
 
@@ -369,15 +401,19 @@ void replaceText(TB tb, char* str1, char* str2) {
     int len1 = strlen(str1);
     int len2 = strlen(str2);
     int diff = len2 - len1 + 1;
-    char * s = tb ->  head ->  s;
-    while ((occur = strstr(s, str1)) != NULL) {
-        s = realloc(s, (strlen(s) + diff));
-        char * tem = strdup(occur + len1);
-        strcpy(occur, str2);
-        strcpy((occur + len2), tem);
-        free(tem);
+    Line cur =  tb ->  head;
+    while (cur != NULL) {
+        char * s = cur ->  s;
+        while ((occur = strstr(s, str1)) != NULL) {
+            s = realloc(s, (strlen(s) + diff));
+            char * tem = strdup(occur + len1);
+            strcpy(occur, str2);
+            strcpy((occur + len2), tem);
+            free(tem);
+        }
+        cur -> s = s;
+        cur = cur -> next;
     }
-    tb -> head -> s = s;
     checkTB(tb);
 }
 /* Bonus Challenges
@@ -386,16 +422,30 @@ void replaceText(TB tb, char* str1, char* str2) {
 char* diffTB(TB tb1, TB tb2) ;
 
 void undoTB(TB tb) {
-//cur == 0 , nothing to undo
-//move current to left
-//restore snapshot
-//checkTB
+    //cur == 0 , nothing to undo
+    if (tb -> hist_cur == 0) {
+        return ;
+    }
+    //move current to left
+    tb -> hist_cur --;
+    char * s  = tb -> history[tb -> hist_cur];
+    //restore snapshot
+    restoreFromSnapshot(tb,s);
+    checkTB(tb);
 }
 
 void redoTB(TB tb) {
-//if curr + 1 = top return;
-//otherwise we move cur to the right
-//restore from that snapshot
-//checkTB
+    //curr + 1 = top do nothing
+    if(tb -> hist_cur + 1 == tb -> hist_cur)
+        return ;
+    else{
+        //otherwise we move cur to the right
+        tb -> hist_cur ++;
+        char * s  = tb -> history[tb -> hist_cur];
+        //restore from that snapshot
+        restoreFromSnapshot(tb,s);
+        //checkTB
+        checkTB(tb);
+    }
 }
 
