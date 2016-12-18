@@ -167,7 +167,7 @@ TB newTB(char text[]) {
     }
     free(lines);
     new -> hist_cur = -1;
-   //snapshot(new);
+    //snapshot(new);
     checkTB(new);
     return new;
 }
@@ -298,7 +298,7 @@ void mergeTB(TB tb1, int pos, TB tb2) {
     }
     checkTB(tb1);
     free(tb2);
-//    snapshot(tb1);
+    //    snapshot(tb1);
 }
 /* Paste 'tb2' into 'tb1' at line 'pos'.
  *
@@ -311,6 +311,7 @@ void mergeTB(TB tb1, int pos, TB tb2) {
 void pasteTB(TB tb1, int pos, TB tb2) {
     char *s = dumpTB(tb2);
     TB merge = newTB(s);
+    free(s);
     mergeTB(tb1, pos, merge);
     checkTB(tb1);
     checkTB(tb2);
@@ -401,18 +402,14 @@ void replaceText(TB tb, char* str1, char* str2) {
     int len1 = strlen(str1);
     int len2 = strlen(str2);
     int diff = len2 - len1 + 1;
-    Line cur =  tb ->  head;
-    while (cur != NULL) {
-        char * s = cur ->  s;
-        while ((occur = strstr(s, str1)) != NULL) {
-            s = realloc(s, (strlen(s) + diff));
-            char * tem = strdup(occur + len1);
-            strcpy(occur, str2);
-            strcpy((occur + len2), tem);
-            free(tem);
-        }
-        cur -> s = s;
-        cur = cur -> next;
+    char * s = tb ->  head -> s;
+
+    while ((occur = strstr(s, str1)) != NULL) {
+        s = realloc(s, (strlen(s) + diff));
+        char * tem = strdup(occur + len1);
+        
+        strcpy((occur + len2), tem);
+        free(tem);
     }
     checkTB(tb);
 }
