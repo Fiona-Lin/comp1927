@@ -48,7 +48,6 @@ static void snapshot(TB tb) {
     //check if it needs to shift (top is equal to 10)
     assert(tb != NULL);
     int i;
-
     if (tb -> hist_top == HIST_SIZE) {
         free(tb -> history[0]);
         for (i = 0; i < (HIST_SIZE - 1); i++) {
@@ -167,7 +166,7 @@ TB newTB(char text[]) {
     }
     free(lines);
     new -> hist_cur = -1;
-    //snapshot(new);
+    snapshot(new);
     checkTB(new);
     return new;
 }
@@ -201,7 +200,7 @@ char *dumpTB(TB tb) {
         res = calloc(sizeof(char), 1);
         Line cur = tb ->  head;
         while (cur != NULL) {
-            res = realloc(res,(strlen(res) + strlen(cur ->  s) + 1));
+            res = realloc(res ,(strlen(res) + strlen(cur ->  s) + 1));
             strcat(res, cur ->  s);
             cur = cur ->  next;
         }
@@ -218,13 +217,7 @@ int linesTB(TB tb) {
     }
     return res;
 }
-
-/* Swap the two given lines in the textbuffer.
- *
- * - The program is to abort() with an error message if line 'pos1' or line
- *   'pos2' is out of range.  The first line of a textbuffer is at position 0.
- */
-void swapTB(TB tb, int pos1, int pos2) {
+static void swapLine(TB tb, int pos1, int pos2) {
     assert(tb != NULL);
     int total = linesTB(tb);
     int diff = pos1 - pos2;
@@ -269,18 +262,20 @@ void swapTB(TB tb, int pos1, int pos2) {
         printf("Invalid pos must be greater than 0.\n");
     else printf("Invalid pos must be less than %d\n", linesTB(tb));
     checkTB(tb);
+
+}
+/* Swap the two given lines in the textbuffer.
+ *
+ * - The program is to abort() with an error message if line 'pos1' or line
+ *   'pos2' is out of range.  The first line of a textbuffer is at position 0.
+ */
+void swapTB(TB tb, int pos1, int pos2) {
+    swapLine(tb, pos1, pos2);
     snapshot(tb);
 }
-/* Merge 'tb2' into 'tb1' at line 'pos'.
- *
- * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
- * - The old line 'pos' of 'tb1' will follow after the last line of 'tb2'.
- * - After this operation 'tb2' can not be used anymore(as if we had used
- *   releaseTB() on it).
- * - The program is to abort() with an error message if 'pos' is out of range.
- */
-void mergeTB(TB tb1, int pos, TB tb2) {
+static void mergeLine(TB tb1, int pos, TB tb2) {
     assert(tb1 != NULL && tb2 != NULL);
+    int i;
     if (pos < linesTB(tb1) && pos >= 0) {
         Line l = getLine(tb1, pos);
         if (l ->  prev != NULL) {
@@ -292,14 +287,43 @@ void mergeTB(TB tb1, int pos, TB tb2) {
         l ->  prev = tb2 ->  tail;
         tb2 -> tail -> next = l;
         tb1 -> size += tb2 -> size;
+    } else if (pos == linesTB(tb1)) {
+        tb1 -> tail -> next = tb2 -> head;
+        tb1 -> tail -> next -> prev = tb1 -> tail;
+        tb1 -> tail = tb2 -> tail;
+        tb1 -> size += tb2 -> size;
     } else {
         printf("Invalid %d position in text buffer1", pos);
         abort();
     }
     checkTB(tb1);
+    for (i = 0; i < HIST_SIZE; i++) {
+        free(tb2 -> history[i]);
+    }
     free(tb2);
-    //    snapshot(tb1);
+    tb2 = NULL;
 }
+/* Merge 'tb2' into 'tb1' at line 'pos'.
+ *
+ * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
+ * - The old line 'pos' of 'tb1' will follow after the last line of 'tb2'.
+ * - After this operation 'tb2' can not be used anymore(as if we had used
+ *   releaseTB() on it).
+ * - The program is to abort() with an error message if 'pos' is out of range.
+ */
+void mergeTB(TB tb1, int pos, TB tb2) {
+    mergeLine(tb1, pos, tb2);
+    snapshot(tb1);
+}
+static void pasteLine(TB tb1, int pos, TB tb2) {
+    char *s = dumpTB(tb2);
+    TB merge = newTB(s);
+    free(s);
+    mergeLine(tb1, pos, merge);
+    checkTB(tb1);
+    checkTB(tb2);
+}
+
 /* Paste 'tb2' into 'tb1' at line 'pos'.
  *
  * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
@@ -309,23 +333,11 @@ void mergeTB(TB tb1, int pos, TB tb2) {
  * - The program is to abort() with an error message if 'pos' is out of range.
  */
 void pasteTB(TB tb1, int pos, TB tb2) {
-    char *s = dumpTB(tb2);
-    TB merge = newTB(s);
-    free(s);
-    mergeTB(tb1, pos, merge);
-    checkTB(tb1);
-    checkTB(tb2);
+    pasteLine(tb1, pos, tb2);
+    snapshot(tb1);
 }
 
-/* Cut the lines between and including 'from' and 'to' out of the textbuffer
- * 'tb'.
- *
- * - The result is a new textbuffer(much as one created with newTB()).
- * - The cut lines will be deleted from 'tb'.
- * - The program is to abort() with an error message if 'from' or 'to' is out
- *   of range.
- */
-TB cutTB(TB tb, int from, int to) {
+static TB cutLine(TB tb, int from, int to) {
     assert(tb != NULL);
     TB res = NULL;
     int total = linesTB(tb);
@@ -359,6 +371,18 @@ TB cutTB(TB tb, int from, int to) {
     }
     checkTB(tb);
     checkTB(res);
+    return res;
+}
+/* Cut the lines between and including 'from' and 'to' out of the textbuffer
+ * 'tb'.
+ *
+ * - The result is a new textbuffer(much as one created with newTB()).
+ * - The cut lines will be deleted from 'tb'.
+ * - The program is to abort() with an error message if 'from' or 'to' is out
+ *   of range.
+ */
+TB cutTB(TB tb, int from, int to) {
+    TB res = cutLine(tb, from, to);
     snapshot(tb);
     return res;
 }
@@ -372,10 +396,11 @@ TB cutTB(TB tb, int from, int to) {
  *   of range.
  */
 TB copyTB(TB tb, int from, int to) {
-    TB res = cutTB(tb, from, to);
-    pasteTB(tb, from, res);
+    TB res = cutLine(tb, from, to);
+    pasteLine(tb, from, res);
     checkTB(tb);
     checkTB(res);
+    snapshot(tb);
     return res;
 }
 
@@ -387,8 +412,9 @@ TB copyTB(TB tb, int from, int to) {
  *   of range.
  */
 void deleteTB(TB tb, int from, int to) {
-    TB res = cutTB(tb, from, to);
+    TB res = cutLine(tb, from, to);
     releaseTB(res);
+    snapshot(tb);
     checkTB(tb);
 }
 
@@ -407,7 +433,7 @@ void replaceText(TB tb, char* str1, char* str2) {
     while ((occur = strstr(s, str1)) != NULL) {
         s = realloc(s, (strlen(s) + diff));
         char * tem = strdup(occur + len1);
-        
+
         strcpy((occur + len2), tem);
         free(tem);
     }
@@ -433,7 +459,7 @@ void undoTB(TB tb) {
 
 void redoTB(TB tb) {
     //curr + 1 = top do nothing
-    if(tb -> hist_cur + 1 == tb -> hist_cur)
+    if(tb -> hist_cur + 1 == tb -> hist_top)
         return ;
     else{
         //otherwise we move cur to the right
