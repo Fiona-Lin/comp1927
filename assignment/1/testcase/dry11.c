@@ -115,8 +115,11 @@ int main(int argc, char** argv) {
   printf("%s",s) ; 
   free(s) ; 
   
-  cutTB(tb1,3,4) ; 
-  cutTB(tb1,0,1) ; 
+  TB res = NULL;
+  res = cutTB(tb1,3,4) ; 
+  releaseTB(res);
+  res = cutTB(tb1,0,1) ; 
+  releaseTB(res);
   printf("\nafter 2 cuts ...\n") ; 
   s = dumpTB(tb1) ; 
   printf("%s",s) ; 
@@ -135,5 +138,6 @@ int main(int argc, char** argv) {
   printf("%s",s) ; 
   free(s) ; 
   
+  releaseTB(tb1) ; 
   return EXIT_SUCCESS ;   
 }
