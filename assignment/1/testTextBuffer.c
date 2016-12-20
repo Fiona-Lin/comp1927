@@ -32,11 +32,11 @@ int main(int argc, char* argv []) {
     //testCreateReleaseDumpLinesTB();
     //testSwapTB();
     //testMergeTB();
-    testPasteTB();
-    //   testCutTB();
-    //   testCopyTB();
-    //   testDeleteTB();
-    //   testReplaceText();
+    //testPasteTB();
+   // testCutTB();
+   // testCopyTB();
+   // testDeleteTB();
+       testReplaceText();
     //   // testDiffTB();
     //   testUndoTB();
     //   testRedoTB();
@@ -411,7 +411,6 @@ void testPasteTB() {
 
     printf("\n#1.2 Pos is within the range of 0 to number of lines of tb0\n");
     tb0 = newTB("1.1 abc\n1.2 def\nxxxxx\n");
-    tb1 = newTB("new stuff\nblah blah blah\nqwer\n");
     str = dumpTB(tb0) ;
     printf("Original Tb0:\n%s\n",str) ;
     free(str) ;
@@ -435,7 +434,6 @@ void testPasteTB() {
 
     printf("\n#1.3 Pos is the end of tb0\n");
     tb0 = newTB("1.1 abc\n1.2 def\nxxxxx\n");
-    tb1 = newTB("new stuff\nblah blah blah\nqwer\n");
     str = dumpTB(tb0) ;
     printf("Original Tb0:\n%s\n",str) ;
     free(str) ;
@@ -460,7 +458,6 @@ void testPasteTB() {
 
     printf("\n#1.4 Pos is equal to the number of lines of tb0\n");
     tb0 = newTB("1.1 abc\n1.2 def\nxxxxx\n");
-    tb1 = newTB("new stuff\nblah blah blah\nqwer\n");
     str = dumpTB(tb0) ;
     printf("Original Tb0:\n%s\n",str) ;
     free(str) ;
@@ -480,6 +477,7 @@ void testPasteTB() {
     free(str) ;
     printf("\n##Passed!##\n");
     releaseTB (tb0);
+    releaseTB (tb1);
     printf("Released Tb \n");
 
     printf("\n#1.5 Paste a empty text buffer at pos within tb0\n");
@@ -487,21 +485,20 @@ void testPasteTB() {
     tb1 = newTB("");
     str = dumpTB(tb0) ;
     printf("Original Tb0:\n%s\n",str) ;
-    str1 = dumpTB(tb1) ;
-    printf("Original Tb1:\n%s\n",str1) ;
-    free(str1);
+    char *str2 = dumpTB(tb1) ;
 
     pasteTB(tb0, 2, tb1);
     str1 = dumpTB(tb0) ;
     printf("Pasted...\n%s\n",str1) ;
-    assert(strcmp(str, str1) == 0);
-    free(str) ;
-    str = dumpTB(tb1) ;
+    assert(strcmp(str1, str) == 0);
+    free(str1) ;
+    str1 = dumpTB(tb1) ;
     printf("Original Tb1:\n%s\n",str) ;
-    assert(strcmp(str, str0) == 0);
+    assert(strcmp(str1, str2) == 0);
     free(str) ;
     printf("\n##Passed!##\n");
     free(str1);
+    free(str2);
     releaseTB (tb0);
     releaseTB (tb1);
     printf("Released Tb \n");
@@ -515,10 +512,6 @@ void testPasteTB() {
     str1 = dumpTB(tb0) ;
     printf("Pasted...\n%s\n",str1) ;
     assert(strcmp(str, str1) == 0);
-    free(str) ;
-    str = dumpTB(tb1) ;
-    printf("Original Tb1:\n%s\n",str) ;
-    assert(strcmp(str, str0) == 0);
     free(str) ;
     printf("\n##Passed!##\n");
     free(str1);
@@ -548,140 +541,757 @@ void testPasteTB() {
     //   printf("\nPaste to NULL text buffer\n");
     //   pasteTB(NULL, 1, tb0);
 
+    free(str0) ;
     releaseTB (tb0);
     releaseTB (tb1);
     printf("Released Tb \n");
 }
 
 void testCutTB() {
-    // from is great than and equal to number of lines of tb1
+    printf("\n#5\tTest cut from Text Buffers\n");
+    char str[] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n"
+        "line 06\n"
+        "line 07\n"
+        "line 08\n"
+        "line 09\n"
+        "line 10\n";
+    TB tb1 = newTB(str);
+    TB tb2;
+    char *s;
+    char *c;
+    int from, to, diff;
 
-    // to is great than and equal to number of lines of tb1
 
-    // from and to are great than and equal to number of lines of tb1
+    printf("\n#1.1 test cut from and to, which are at the beginning of text buffer\n");
+    from = 0;
+    to = 0;
+    tb2 = cutTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str + diff *8) == 0);
+    assert(strcmp(c,"line 01\n") == 0);
+    assert(linesTB(tb2) == diff);
+    printf ("tb2 = cutTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from is less than 0
+    releaseTB (tb1);
+    releaseTB (tb2);
+    printf("Released Tb \n");
 
-    // to is less than 0
+    printf("\n#1.2 test cut from the beginning of text buffer\n");
+    tb1 = newTB(str);
+    from = 0;
+    to = 2;
+    tb2 = cutTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str + diff *8) == 0);
+    assert(strcmp(c,"line 01\nline 02\nline 03\n") == 0);
+    assert(linesTB(tb2) == diff);
+    printf ("tb2 = cutTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from and to are less than 0
+    releaseTB (tb1);
+    releaseTB (tb2);
+    printf("Released Tb \n");
 
-    // from is at the beginning of textbuffer
 
-    // to is at the beginning of textbuffer
 
-    // from and to are at the beginning of textbuffer
+    printf("\n#1.3 test cut from and to are within the range of 0 to number of lines of text buffer tb1\n");
+    tb1 = newTB(str);
+    from = 1;
+    to = 5;
+    tb2 = cutTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,"line 01\nline 07\nline 08\nline 09\nline 10\n") == 0);
+    assert(strcmp(c,"line 02\nline 03\nline 04\nline 05\nline 06\n") == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = cutTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from is at the end of textbuffer
+    releaseTB (tb1);
+    releaseTB (tb2);
 
-    // to is at the end of textbuffer
 
-    // from and to are at the end of textbuffer
+    printf("\n#1.4 test cut from is at the end of textbuffer, from and to are at the end of textbuffer \n");
+    tb1 = newTB(str);
+    char str1[] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n"
+        "line 06\n"
+        "line 07\n"
+        "line 08\n"
+        "line 09\n";
+    to = linesTB(tb1) - 1;
+    from = to;
+    tb2 = cutTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str1) == 0);
+    assert(strcmp(c,"line 10\n") == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = cutTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from and to are at the end and beginning of textbuffer
+    releaseTB (tb1);
+    releaseTB (tb2);
 
-    // from and to are within the range of 0 to number of lines of tb1.
+    printf("\n#1.5 test cut to the end of textbuffe\n");
+    tb1 = newTB(str);
+    char str2 [] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n";
+    to = linesTB(tb1) - 1;
+    from = 5;
+    tb2 = cutTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str2) == 0);
+    assert(strcmp(c,str+diff*8) == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = cutTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    releaseTB (tb2);
+
+    printf("\n#1.7 test cut from greater than to\n");
+    tb1 = newTB(str);
+    from = linesTB(tb1) - 1;
+    to = 5;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    assert(tb2 == NULL);
+    assert(strcmp(s,str) == 0);
+    free(s);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    releaseTB (tb2);
+
+
+    printf("\n#1.7 test all invalid pos for  text buffer\n");
+    //tb1 = newTB(str);
+
+    //    printf("\n** From is less than 0, from and to are less than 0 **\n");
+    //    from = -5;
+    //    to = - 1;
+    //    tb2 = cutTB(tb1, from, to);
+    //
+    //    printf("\n** To is less than 0 **\n");
+    //    from = 5;
+    //    to = - 1;
+    //    tb2 = cutTB(tb1, from, to);
+    //
+    //
+    //    // from and to are great than and equal to number of lines of tb1
+    //    printf("\n** From is great than and equal to number of lines of tb1 **\n");
+    //    from = linesTB(tb1);
+    //    to = from + 1;
+    //    tb2 = cutTB(tb1, from, to);
+    //
+    //    printf("\n** To is great than and equal to number of lines of tb1 **\n");
+    //    to = linesTB(tb1);
+    //    from = to - 4;
+    //    tb2 = cutTB(tb1, from, to);
+
+    //releaseTB (tb1);
+    //releaseTB (tb2);
 
 }
 
 void testCopyTB() {
-    // from is great than and equal to number of lines of tb1
+    printf("\n#6\tTest copy from Text Buffers\n");
+    char str[] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n"
+        "line 06\n"
+        "line 07\n"
+        "line 08\n"
+        "line 09\n"
+        "line 10\n";
+    TB tb1 = newTB(str);
+    TB tb2;
+    char *s;
+    char *c;
+    int from, to, diff;
 
-    // to is great than and equal to number of lines of tb1
 
-    // from and to are great than and equal to number of lines of tb1
+    printf("\n#1.1 test copy from and to, which are at the beginning of text buffer\n");
+    from = 0;
+    to = 0;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str) == 0);
+    assert(strcmp(c,"line 01\n") == 0);
+    assert(linesTB(tb2) == diff);
+    printf ("tb2 = copyTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from is less than 0
+    releaseTB (tb1);
+    releaseTB (tb2);
+    printf("Released Tb \n");
 
-    // to is less than 0
+    printf("\n#1.2 test copy from the beginning of text buffer\n");
+    tb1 = newTB(str);
+    from = 0;
+    to = 2;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str) == 0);
+    assert(strcmp(c,"line 01\nline 02\nline 03\n") == 0);
+    assert(linesTB(tb2) == diff);
+    printf ("tb2 = copyTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from and to are less than 0
+    releaseTB (tb1);
+    releaseTB (tb2);
+    printf("Released Tb \n");
 
-    // from is at the beginning of textbuffer
 
-    // to is at the beginning of textbuffer
 
-    // from and to are at the beginning of textbuffer
+    printf("\n#1.3 test copy from and to are within the range of 0 to number of lines of text buffer tb1\n");
+    tb1 = newTB(str);
+    from = 1;
+    to = 5;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str) == 0);
+    assert(strcmp(c,"line 02\nline 03\nline 04\nline 05\nline 06\n") == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = copyTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from is at the end of textbuffer
+    releaseTB (tb1);
+    releaseTB (tb2);
 
-    // to is at the end of textbuffer
 
-    // from and to are at the end of textbuffer
+    printf("\n#1.4 test copy from is at the end of textbuffer, from and to are at the end of textbuffer \n");
+    tb1 = newTB(str);
+    to = linesTB(tb1) - 1;
+    from = to;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str) == 0);
+    assert(strcmp(c,"line 10\n") == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = copyTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
 
-    // from and to are at the end and beginning of textbuffer
+    releaseTB (tb1);
+    releaseTB (tb2);
 
-    // from and to are within the range of 0 to number of lines of tb1.
+    printf("\n#1.5 test copy to the end of textbuffer\n");
+    tb1 = newTB(str);
+    to = linesTB(tb1) - 1;
+    from = 5;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    c = dumpTB(tb2);
+    diff = to - from + 1;
+    assert(strcmp(s,str) == 0);
+    assert(strcmp(c,str+diff*8) == 0);
+    assert((linesTB(tb2) - diff ) == 0);
+    printf ("tb2 = copyTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    releaseTB (tb2);
+
+    printf("\n#1.6 test copy from greater than to\n");
+    tb1 = newTB(str);
+    from = linesTB(tb1) - 1;
+    to = 5;
+    tb2 = copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    assert(tb2 == NULL);
+    assert(strcmp(s,str) == 0);
+    free(s);
+    free(c);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    releaseTB (tb2);
+
+    printf("\n#1.7 test all invalid pos for  text buffer\n");
+    //tb1 = newTB(str);
+
+    //    printf("\n** From is less than 0, from and to are less than 0 **\n");
+    //    from = -5;
+    //    to = - 1;
+    //    tb2 = copyTB(tb1, from, to);
+    //
+    //    printf("\n** To is less than 0 **\n");
+    //    from = 5;
+    //    to = - 1;
+    //    tb2 = copyTB(tb1, from, to);
+    //
+    //
+    //    // from and to are great than and equal to number of lines of tb1
+    //    printf("\n** From is great than and equal to number of lines of tb1 **\n");
+    //    from = linesTB(tb1);
+    //    to = from + 1;
+    //    tb2 = copyTB(tb1, from, to);
+    //
+    //    printf("\n** To is great than and equal to number of lines of tb1 **\n");
+    //    to = linesTB(tb1);
+    //    from = to - 4;
+    //    tb2 = copyTB(tb1, from, to);
+
+   // releaseTB (tb1);
+   // releaseTB (tb2);
+
 }
 
 
 void testDeleteTB() {
-    char str1[] = "line 01\n" "line 02\n" "line 03\n" "line 04\n" "line 05\n" "line 06\n" "line 07\n" "line 08\n" "line 09\n" "line 10\n";
+    printf("\n#7\tTest delete from Text Buffers\n");
+    char str[] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n"
+        "line 06\n"
+        "line 07\n"
+        "line 08\n"
+        "line 09\n"
+        "line 10\n";
+    TB tb1 = newTB(str);
+    char *s;
+    int from, to, diff;
 
-    TB tb1 = newTB(str1);
-    char* str = dumpTB(tb1) ;
-    printf("Original Tb:\n%s\n",str) ;
-    free(str) ;
 
-    // from and to are at the beginning of textbuffer
-    deleteTB(tb1,0,0) ;
-    str = dumpTB(tb1) ;
-    printf("\nFirst line is deleted...\n%s\n",str) ;
-    free(str) ;
-
-
-    printf("Original Tb:\n%s\n",str) ;
-    free(str) ;
-    // from and to are within the range of 0 to number of lines of tb1.
-    deleteTB(tb1,4,6) ;
-    str = dumpTB(tb1) ;
-    printf("\nLast line is deleted...\n%s\n",str) ;
-    free(str) ;
-
-    printf("Original Tb:\n%s\n",str) ;
-    free(str) ;
-
-    // from and to are at the end of textbuffer
-    deleteTB(tb1,9,9) ;
-    str = dumpTB(tb1) ;
-    printf("\nLast line is deleted...\n%s\n",str) ;
-    free(str) ;
+    printf("\n#1.1 test delete from and to, which are at the beginning of text buffer\n");
+    from = 0;
+    to = 0;
+    deleteTB(tb1, from, to);
+    s = dumpTB(tb1);
+    diff = to - from + 1;
+    assert(strcmp(s,str + diff *8) == 0);
+    assert(10 - linesTB(tb1) == diff);
+    printf ("deleteTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
 
     releaseTB (tb1);
     printf("Released Tb \n");
 
-    // from and to are at the end and beginning of textbuffer
+    printf("\n#1.2 test delete from the beginning of text buffer\n");
+    tb1 = newTB(str);
+    from = 0;
+    to = 2;
+    deleteTB(tb1, from, to);
+    s = dumpTB(tb1);
+    diff = to - from + 1;
+    assert(strcmp(s,str + diff *8) == 0);
+    assert(10 - linesTB(tb1) == diff);
+    printf ("deleteTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    printf("Released Tb \n");
 
 
-    // from is great than and equal to number of lines of tb1
 
-    // to is great than and equal to number of lines of tb1
+    printf("\n#1.3 test delete from and to are within the range of 0 to number of lines of text buffer tb1\n");
+    tb1 = newTB(str);
+    from = 1;
+    to = 5;
+    deleteTB(tb1, from, to);
+    s = dumpTB(tb1);
+    diff = to - from + 1;
+    assert(strcmp(s,"line 01\nline 07\nline 08\nline 09\nline 10\n") == 0);
+    assert(10 - linesTB(tb1) == diff);
+    printf ("deleteTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
 
-    // from and to are great than and equal to number of lines of tb1
+    releaseTB (tb1);
+    printf("Released Tb \n");
 
-    // from is less than 0
 
-    // to is less than 0
+    printf("\n#1.4 test delete from is at the end of textbuffer, from and to are at the end of textbuffer \n");
+    tb1 = newTB(str);
+    char str1[] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n"
+        "line 06\n"
+        "line 07\n"
+        "line 08\n"
+        "line 09\n";
+    to = linesTB(tb1) - 1;
+    from = to;
+    deleteTB(tb1, from, to);
+    s = dumpTB(tb1);
+    diff = to - from + 1;
+    assert(strcmp(s,str1) == 0);
+    assert(10 - linesTB(tb1) == diff);
+    printf ("deleteTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
+    releaseTB (tb1);
+    printf("Released Tb \n");
 
-    // from and to are less than 0
+    printf("\n#1.5 test delete to the end of textbuffe\n");
+    tb1 = newTB(str);
+    char str2 [] = "line 01\n"
+        "line 02\n"
+        "line 03\n"
+        "line 04\n"
+        "line 05\n";
+    to = linesTB(tb1) - 1;
+    from = 5;
+    deleteTB(tb1, from, to);
+    s = dumpTB(tb1);
+    diff = to - from + 1;
+    assert(strcmp(s,str2) == 0);
+    assert(10 - linesTB(tb1) == diff);
+    printf ("deleteTB(tb1, %d, %d)\nno. of lines in tb1 = %d\ntb1 = \n%s\n", from, to, linesTB(tb1), s);
+    free(s);
+    printf("\n##Passed!##\n");
+    releaseTB (tb1);
+    printf("Released Tb \n");
 
+    printf("\n#1.6 test delete from greater than to\n");
+    tb1 = newTB(str);
+    from = linesTB(tb1) - 1;
+    to = 5;
+    copyTB(tb1, from, to);
+    s = dumpTB(tb1);
+    assert(strcmp(s,str) == 0);
+    assert(linesTB(tb1) == 10);
+    free(s);
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb1);
+    printf("Released Tb \n");
+
+
+    printf("\n#1.7 test all invalid pos for  text buffer\n");
+    //tb1 = newTB(str);
+
+    //    printf("\n** From is less than 0, from and to are less than 0 **\n");
+    //    from = -5;
+    //    to = - 1;
+    //    deleteTB(tb1, from, to);
+    //
+    //    printf("\n** To is less than 0 **\n");
+    //    from = 5;
+    //    to = - 1;
+    //    deleteTB(tb1, from, to);
+    //
+    //
+    //    // from and to are great than and equal to number of lines of tb1
+    //    printf("\n** From is great than and equal to number of lines of tb1 **\n");
+    //    from = linesTB(tb1);
+    //    to = from + 1;
+    //    deleteTB(tb1, from, to);
+    //
+    //    printf("\n** To is great than and equal to number of lines of tb1 **\n");
+    //    to = linesTB(tb1);
+    //    from = to - 4;
+    //    deleteTB(tb1, from, to);
+
+    //releaseTB (tb1);
+    //
 
 }
 
 void testReplaceText() {
-    //string1 is not in text buffer
+    printf("\n#8\tTest replace text in Text Buffers\n");
 
-    //string1 is same length as string2
+    printf("\n#1.1 test string1 is not in text buffer\n");
+    TB tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    char* str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "hd", "YY");
+    char * str1 = dumpTB(tb0);
+    assert(strcmp(str0,str1) == 0);
+    printf("replaced  hd   with YY...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
 
-    //string1 is shorter than string2
+    releaseTB (tb0);
+    printf("Released Tb \n");
 
-    //string1 is longer than string2
+    printf("\n#1.2 test string1 is same length as string2\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "YY");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,"1.1 aYY\ndef\nghc\nklmnYY\n") == 0);
+    assert(strlen(str0) == strlen(str1));
+    printf("replaced  bc   with YY...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
 
-    //string1 is replace with empty string2
+    releaseTB (tb0);
+    printf("Released Tb \n");
+
+
+    printf("\n#1.3 test string1 is replaced with empty string2\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,"1.1 a\ndef\nghc\nklmn\n") == 0);
+    assert(strlen(str0) > strlen(str1));
+    printf("replaced  bc with empty string...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb0);
+    printf("Released Tb \n");
+
+
+    printf("\n#1.4 test string1 is replaced by a longer string2\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "Y");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,"1.1 aY\ndef\nghc\nklmnY\n") == 0);
+    assert(strlen(str1) < strlen(str0));
+    printf("replaced  bc   with Y...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb0);
+    printf("Released Tb \n");
+
+    printf("\n#1.5 test string1 is replaced by a shorter string2\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "YYY");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,"1.1 aYYY\ndef\nghc\nklmnYYY\n") == 0);
+    assert(strlen(str1) > strlen(str0));
+    printf("replaced  bc   with YYY...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb0);
+    printf("Released Tb \n");
+
+    printf("\n#1.6 test string1 is replaced by a double itself string\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "bcbc");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,"1.1 abcbc\ndef\nghc\nklmnbcbc\n") == 0);
+    assert(strlen(str1) > strlen(str0));
+    printf("replaced  bc   with bcbc...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb0);
+    printf("Released Tb \n");
+
+    printf("\n#1.7 test string1 is replaced by itself\n");
+    tb0 = newTB("1.1 abc\ndef\nghc\nklmnbc\n");
+    str0 = dumpTB(tb0) ;
+    printf("Original Tb:\n%s\n",str0) ;
+    replaceText (tb0, "bc", "bc");
+    str1 = dumpTB(tb0);
+    assert(strcmp(str1,str0) == 0);
+    assert(strlen(str0) == strlen(str1));
+    printf("replaced  bc   with bc...\n%s\n",str1) ;
+    free(str0) ;
+    free(str1) ;
+    printf("\n##Passed!##\n");
+
+    releaseTB (tb0);
+    printf("Released Tb \n");
 }
 
 void testDiffTB() { }
 
-void testUndoTB() { }
+void testUndoNRedoTB() {
+    char str1[] = "1 line 01\n"
+        "1 line 02\n"
+        "1 line 03\n"
+        "1 line 04\n"
+        "1 line 05\n";
 
-void testRedoTB() { }
+    char str2[] = "2 line 01\n"
+        "2 line 02\n"
+        "2 line 03\n"
+        "2 line 04\n";
+
+
+    char* s ;
+
+    TB tb1 = newTB(str1) ;
+    TB tb2 = newTB(str2) ;
+
+    // swap undo & redo
+    printf("test 1 : swap undo & redo\n") ;
+    swapTB(tb1,0,2) ;
+    swapTB(tb1,1,3) ;
+    swapTB(tb1,2,4) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter undo 3 times...\n") ;
+    undoTB(tb1) ;
+    undoTB(tb1) ;
+    undoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter redo 2 times...\n") ;
+    redoTB(tb1) ;
+    redoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+    printf("\n\n") ;
+
+    // delete
+    releaseTB(tb1) ;
+    tb1 = newTB(str1) ;
+    printf("test 2 : delete undo & redo\n") ;
+    deleteTB(tb1,3,4) ;
+    deleteTB(tb1,0,1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter undo 1 time...\n") ;
+    undoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter undo 1 time...\n") ;
+    undoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+    printf("\n\n") ;
+
+
+    // paste & merge undo
+    releaseTB(tb1) ;
+    tb1 = newTB(str1) ;
+    printf("test 3 : paste / merge undo & redo\n") ;
+    pasteTB(tb1,3,tb2) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s)  ;
+    free(s) ;
+
+    printf("\nafter undo ...\n") ;
+    undoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter merge ...\n") ;
+    mergeTB(tb1,linesTB(tb1),tb2) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter redo ...\n") ;
+    redoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    undoTB(tb1) ;
+    printf("\nafter undo ...\n") ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+
+    // cut undo
+    releaseTB(tb1) ;
+    tb1 = newTB(str1) ;
+
+    printf("test 5 : cut undo & redo\n") ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    cutTB(tb1,3,4) ;
+    cutTB(tb1,0,1) ;
+    printf("\nafter 2 cuts ...\n") ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter undo 2 times...\n") ;
+    undoTB(tb1) ;
+    undoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+    printf("\nafter redo 1 time...\n") ;
+    redoTB(tb1) ;
+    s = dumpTB(tb1) ;
+    printf("%s",s) ;
+    free(s) ;
+
+
+ }
+

@@ -259,10 +259,12 @@ static void swapLine(TB tb, int pos1, int pos2) {
         // l1 -> s = l2 -> s;
         // l2 -> s = temp;
     } else if (pos1 < 0 || pos2 < 0) {
-        printf("Invalid pos must be greater than 0.\n");
+        printf("\n>>!!Invalid pos must be greater than 0.\n");
+        releaseTB(tb);
         abort();
     } else {
-        printf("Invalid pos must be less than %d\n", linesTB(tb));
+        printf("\n>>!!Invalid pos must be less than %d\n", linesTB(tb));
+        releaseTB(tb);
         abort();
     }
     checkTB(tb);
@@ -298,10 +300,14 @@ static void mergeLine(TB tb1, int pos, TB tb2) {
             tb1 -> size += tb2 -> size;
         } else {
             if (linesTB(tb2) == 0) {
-                printf("Nothing to merge into text buffer\n");
+                printf("\n>>!!Nothing to merge into text buffer\n");
+                releaseTB(tb1);
+                releaseTB(tb2);
                 return ;
             } else {
-                printf("Invalid %d position in text buffer\n", pos);
+                printf("\n>>!!Invalid %d position in text buffer\n", pos);
+                releaseTB(tb1);
+                releaseTB(tb2);
                 abort();
             }
         }
@@ -329,12 +335,14 @@ void mergeTB(TB tb1, int pos, TB tb2) {
     snapshot(tb1);
 }
 static void pasteLine(TB tb1, int pos, TB tb2) {
-    char *s = dumpTB(tb2);
-    TB merge = newTB(s);
-    free(s);
-    mergeLine(tb1, pos, merge);
-    checkTB(tb1);
-    checkTB(tb2);
+    if(tb1 != tb2 && linesTB(tb2) != 0) {
+        char *s = dumpTB(tb2);
+        TB merge = newTB(s);
+        mergeLine(tb1, pos, merge);
+        free(s);
+        checkTB(tb1);
+        checkTB(tb2);
+    }
 }
 
 /* Paste 'tb2' into 'tb1' at line 'pos'.
@@ -375,15 +383,17 @@ static TB cutLine(TB tb, int from, int to) {
         tb ->  size -= linesTB(res);
         res -> hist_cur = -1;
         snapshot(res);
+        checkTB(tb);
+        checkTB(res);
     } else if (to >= total || from >= total) {
-        printf("From:%d or to:%d is out of tb range %d\n", from, to, total);
+        printf("\n>>!!From:%d or to:%d is out of tb range %d\n", from, to, total - 1);
+        releaseTB(tb);
         abort();
     } else if (from < 0 || to < 0) {
-        printf("From:%d or To:%d is less than 0\n", from, to);
+        printf("\n>>!!From:%d or To:%d is less than 0\n", from, to);
+        releaseTB(tb);
         abort();
     }
-    checkTB(tb);
-    checkTB(res);
     return res;
 }
 /* Cut the lines between and including 'from' and 'to' out of the textbuffer
@@ -411,8 +421,6 @@ TB cutTB(TB tb, int from, int to) {
 TB copyTB(TB tb, int from, int to) {
     TB res = cutLine(tb, from, to);
     pasteLine(tb, from, res);
-    checkTB(tb);
-    checkTB(res);
     snapshot(tb);
     return res;
 }
@@ -437,34 +445,25 @@ void deleteTB(TB tb, int from, int to) {
  * with str2
  */
 void replaceText(TB tb, char* str1, char* str2) {
-    char * occur = NULL;
     int len1 = strlen(str1);
     int len2 = strlen(str2);
-    int diff = len2 - len1 + 1;
     Line cur = tb -> head;
     while (cur != NULL) {
         char * s = cur -> s;
-        occur = strstr(s,str1);
-        int i = 0;
-        while (occur != NULL) {
-            occur = strstr(occur+len1,str1);
-            i++;
-        }
-        occur = s;
-        int l = strlen(s) + (i*diff) + 1;
-        char * res = calloc(l * sizeof(char), 1);
-        strcpy(res, s);
-        int off = 0;
-        while ((occur = strstr(res + off, str1)) != NULL) {
-            char * tem = strdup(occur + len1);
-            strcpy(occur, str2);
-            off = strlen(res);
-            strcpy((occur + len2), tem);
-            free(tem);
-        }
-        free(s);
+        char *match;
+        int l = 0;
+        while ((match = strstr(s+l, str1)) != NULL) {
+            char* curr = malloc(strlen(s) - len1 + len2 + 1);
+            memcpy(curr, s, match-s);
+            curr[match-s] = 0;
+            strcat(curr, str2);
+            l = strlen(curr);
+            strcat(curr,match + len1);
 
-        cur -> s = res;
+            free(s);
+            s = curr;
+        }
+        cur -> s = s;
         cur = cur -> next;
     }
     checkTB(tb);
