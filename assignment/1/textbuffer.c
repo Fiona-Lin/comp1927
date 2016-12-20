@@ -66,6 +66,7 @@ static void snapshot(TB tb) {
     tb -> hist_top = (tb -> hist_cur + 1);
 
 }
+
 static void restoreFromSnapshot(TB tb, char * s){
     //don't amend history
     TB temp = newTB(s);
@@ -270,6 +271,7 @@ static void swapLine(TB tb, int pos1, int pos2) {
     checkTB(tb);
 
 }
+
 /* Swap the two given lines in the textbuffer.
  *
  * - The program is to abort() with an error message if line 'pos1' or line
@@ -279,6 +281,7 @@ void swapTB(TB tb, int pos1, int pos2) {
     swapLine(tb, pos1, pos2);
     snapshot(tb);
 }
+
 static void mergeLine(TB tb1, int pos, TB tb2) {
     assert(tb1 != NULL && tb2 != NULL);
     if(tb1 != tb2) {
@@ -322,6 +325,7 @@ static void mergeLine(TB tb1, int pos, TB tb2) {
         checkTB(tb1);
     }
 }
+
 /* Merge 'tb2' into 'tb1' at line 'pos'.
  *
  * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
@@ -334,6 +338,7 @@ void mergeTB(TB tb1, int pos, TB tb2) {
     mergeLine(tb1, pos, tb2);
     snapshot(tb1);
 }
+
 static void pasteLine(TB tb1, int pos, TB tb2) {
     if(tb1 != tb2 && linesTB(tb2) != 0) {
         char *s = dumpTB(tb2);
@@ -396,6 +401,7 @@ static TB cutLine(TB tb, int from, int to) {
     }
     return res;
 }
+
 /* Cut the lines between and including 'from' and 'to' out of the textbuffer
  * 'tb'.
  *
@@ -425,7 +431,6 @@ TB copyTB(TB tb, int from, int to) {
     return res;
 }
 
-
 /* Remove the lines between and including 'from' and 'to' from the textbuffer
  * 'tb'.
  *
@@ -438,8 +443,6 @@ void deleteTB(TB tb, int from, int to) {
     snapshot(tb);
     checkTB(tb);
 }
-
-
 
 /* Search every line of tb for each occurrence of str1 and replaces them
  * with str2
