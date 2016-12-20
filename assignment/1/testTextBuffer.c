@@ -1292,9 +1292,11 @@ void testUndoNRedoTB() {
     printf("test 5 : cut undo & redo\n");
     printf("%s", str1);
 
-    cutTB(tb1, 3, 4);
+    TB res = cutTB(tb1, 3, 4);
     b1 = dumpTB(tb1);
-    cutTB(tb1, 0, 1);
+    releaseTB(res);
+    res = cutTB(tb1, 0, 1);
+    releaseTB(res);
     printf("\nafter 2 cuts ...\n");
     b2 = dumpTB(tb1);
     printf("%s", b2);
@@ -1318,5 +1320,6 @@ void testUndoNRedoTB() {
     printf("\n##Passed!##\n");
     printf("\n\n");
 
+    releaseTB(tb1);
 }
 
