@@ -163,11 +163,11 @@ TB newTB(char text[]) {
             newLine = newTextLine(lines[i]);
             appendTB(new, newLine);
         }
+        new -> hist_cur = -1;
+        snapshot(new);
+        checkTB(new);
     }
     free(lines);
-    new -> hist_cur = -1;
-    snapshot(new);
-    checkTB(new);
     return new;
 }
 
@@ -221,7 +221,7 @@ static void swapLine(TB tb, int pos1, int pos2) {
     assert(tb != NULL);
     int total = linesTB(tb);
     int diff = pos1 - pos2;
-    if ((pos2 < total && pos2 >= 0) ||(pos1 < total && pos1 >= 0)) {
+    if ((pos2 < total && pos2 >= 0) &&(pos1 < total && pos1 >= 0)) {
         // [ ..., a, b, ... ]
         // [ ..., a, ..., b, ... ]
         // [ a, ... ] and [ ..., b ]
@@ -258,9 +258,13 @@ static void swapLine(TB tb, int pos1, int pos2) {
         // char * temp = l1 -> s;
         // l1 -> s = l2 -> s;
         // l2 -> s = temp;
-    } else if (pos1 < 0 || pos2 < 0)
+    } else if (pos1 < 0 || pos2 < 0) {
         printf("Invalid pos must be greater than 0.\n");
-    else printf("Invalid pos must be less than %d\n", linesTB(tb));
+        abort();
+    } else {
+        printf("Invalid pos must be less than %d\n", linesTB(tb));
+        abort();
+    }
     checkTB(tb);
 
 }
@@ -275,33 +279,42 @@ void swapTB(TB tb, int pos1, int pos2) {
 }
 static void mergeLine(TB tb1, int pos, TB tb2) {
     assert(tb1 != NULL && tb2 != NULL);
-    int i;
-    if (pos < linesTB(tb1) && pos >= 0) {
-        Line l = getLine(tb1, pos);
-        if (l ->  prev != NULL) {
-            l ->  prev ->  next = tb2 ->  head;
-            tb2 ->  head ->  prev = l ->  prev;
+    if(tb1 != tb2) {
+        if (pos < linesTB(tb1) && pos >= 0 && linesTB(tb2) != 0) {
+            Line l = getLine(tb1, pos);
+            if (l ->  prev != NULL) {
+                l ->  prev ->  next = tb2 ->  head;
+                tb2 ->  head ->  prev = l ->  prev;
+            } else {
+                tb1 ->  head = tb2 ->  head;
+            }
+            l ->  prev = tb2 ->  tail;
+            tb2 -> tail -> next = l;
+            tb1 -> size += tb2 -> size;
+        } else if (pos == linesTB(tb1)) {
+            tb1 -> tail -> next = tb2 -> head;
+            tb1 -> tail -> next -> prev = tb1 -> tail;
+            tb1 -> tail = tb2 -> tail;
+            tb1 -> size += tb2 -> size;
         } else {
-            tb1 ->  head = tb2 ->  head;
+            if (linesTB(tb2) == 0) {
+                printf("Nothing to merge into text buffer\n");
+                return ;
+            } else {
+                printf("Invalid %d position in text buffer\n", pos);
+                abort();
+            }
         }
-        l ->  prev = tb2 ->  tail;
-        tb2 -> tail -> next = l;
-        tb1 -> size += tb2 -> size;
-    } else if (pos == linesTB(tb1)) {
-        tb1 -> tail -> next = tb2 -> head;
-        tb1 -> tail -> next -> prev = tb1 -> tail;
-        tb1 -> tail = tb2 -> tail;
-        tb1 -> size += tb2 -> size;
-    } else {
-        printf("Invalid %d position in text buffer1", pos);
-        abort();
+        tb2 -> tail = NULL;
+        tb2 -> size = 0;
+        int i;
+        for (i = 0; i < HIST_SIZE; i++) {
+            free(tb2 -> history[i]);
+        }
+        free(tb2);
+        tb2 = NULL;
+        checkTB(tb1);
     }
-    checkTB(tb1);
-    for (i = 0; i < HIST_SIZE; i++) {
-        free(tb2 -> history[i]);
-    }
-    free(tb2);
-    tb2 = NULL;
 }
 /* Merge 'tb2' into 'tb1' at line 'pos'.
  *
@@ -428,14 +441,31 @@ void replaceText(TB tb, char* str1, char* str2) {
     int len1 = strlen(str1);
     int len2 = strlen(str2);
     int diff = len2 - len1 + 1;
-    char * s = tb ->  head -> s;
+    Line cur = tb -> head;
+    while (cur != NULL) {
+        char * s = cur -> s;
+        occur = strstr(s,str1);
+        int i = 0;
+        while (occur != NULL) {
+            occur = strstr(occur+len1,str1);
+            i++;
+        }
+        occur = s;
+        int l = strlen(s) + (i*diff) + 1;
+        char * res = calloc(l * sizeof(char), 1);
+        strcpy(res, s);
+        int off = 0;
+        while ((occur = strstr(res + off, str1)) != NULL) {
+            char * tem = strdup(occur + len1);
+            strcpy(occur, str2);
+            off = strlen(res);
+            strcpy((occur + len2), tem);
+            free(tem);
+        }
+        free(s);
 
-    while ((occur = strstr(s, str1)) != NULL) {
-        s = realloc(s, (strlen(s) + diff));
-        char * tem = strdup(occur + len1);
-
-        strcpy((occur + len2), tem);
-        free(tem);
+        cur -> s = res;
+        cur = cur -> next;
     }
     checkTB(tb);
 }
