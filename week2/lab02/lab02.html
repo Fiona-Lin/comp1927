@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Lab Exercises Week 02 - 17x1 COMP1927</title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="../../style.css">
+
+<h1 id="head-da20fc10d9db0fff63d350f5e4ee574fb3e1aebb">Lab Exercises Week 02</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867">
+</p>
+<h2>Objectives</h2>
+<p>
+<UL>
+<LI> To practice implementing and testing ADTs
+</UL>
+</p>
+
+<h2> Assessment </h2>
+<p>
+<p><b>Deadline</b>: 11:59pm Tue 13 December 2016
+<p><b>Total Marks</b>: 3
+
+<h2>Related Chapters of textbook </h2>
+<p> 
+Chapter 4
+</p>
+
+<h2>Setting up </h2>
+<p>
+<P class=line874><SPAN class=anchor id=line-25></SPAN>
+<P class=line862>Change into your lab02 directory and run the following command: <SPAN 
+class=anchor id=line-30></SPAN><SPAN class=anchor id=line-31></SPAN><SPAN 
+class=anchor id=line-32></SPAN><PRE>cp /home/cs1927/public_html/17x1/week02//lab02/files/* .</PRE>
+<SPAN class=anchor id=line-33></SPAN>
+<P class=line874>Note the "." at the end of the command, meaning "into the 
+current directory". <SPAN class=anchor id=line-34></SPAN><SPAN class=anchor 
+id=line-35></SPAN>
+<P class=line874>If you've done the above correctly, you should find the 
+following files now in the directory: <SPAN class=anchor id=line-36></SPAN>
+<DIV>
+<TABLE>
+  <TBODY>
+    <TR>
+    <TD><SPAN class=anchor id=line-41></SPAN>
+      <P class=line891><STRONG>Makefile</STRONG></P></TD>
+    <TD>
+
+      <P class=line862>Running make should produce executables testStack 
+testArrayQueue testListQueue</P></TD></TR>
+
+  <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>Stack.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>A stack interface that should NOT be modified</P></TD></TR>
+     <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>arrayStack.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A buggy implementation of a stack using an array that needs to be 
+modified.
+
+      <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>testStack.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A stub file for your stack ADT tests
+
+  <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>Queue.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>A queue interface that should NOT be modified</P></TD></TR>
+
+ <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>testQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A stub file for your queue ADT tests
+  <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>listQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>An incorrectly implemented queue that needs to be debugged and tested</P></TD></TR>
+
+<TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>arrayQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A fully functioning array implementation of a queue that will be modified to improve efficiency</P></TD></TR>
+  
+ 
+</TBODY></TABLE></DIV>
+</p>
+
+<p>To compile all the code you just need to type
+<pre>
+make
+</pre>
+This will produce 3 executable programs
+<pre>
+./testStack
+./testArrayQueue
+./testListQueue
+</pre>
+<p>These programs are incomplete and you will modify the .c files as 
+outlined in the instructions below. Evey time you modify the .c files you 
+can recompile simply by typing the command
+<pre>
+make
+</pre>
+
+<h2>Task 1: Stack ADT Array Implementation with Bounds Checking - 1 mark</h2>
+<p> The array based stack ADT implementation we developed in lectures, had 
+some serious shortcomings.
+
+<p>
+Pushing 
+an item onto the stack when the maximum number of items has been reached, or popping from the stack when the stack is empty, leads to out of bounds array access. This can cause other program variables to be unintentionally overwritten and/or may result in apparently random crashes.
+It is good programming practice to make ADT implementations robust 
+against out-of-bounds errors and similar problems. 
+
+<p>
+The provided file, arrayStack.c has the same problems. You need to 
+modify the implementation in stackArray.c to provide the following behaviour:
+<p>
+
+<UL>
+<LI>When an attempt is made to push an item onto a stack that is already 
+full, the array is resized to accomodate the extra element. Make sure the 
+stack is only resized when it is full and make the resized array be 
+2 times bigger. 
+<p>
+<LI>It prints the message "stack underflow" when an attempt is made to pop from an empty
+stack and calls the function <code>abort</code> to terminate the program.
+Also when the size of the stack drops below 1/4 of the size of the array, the array size should be
+resized to half of its size. However the array size should never dop below its original 
+starting size. </ul>
+<p>Hint: Look at the C function realloc. (Note: this should ONLY be used 
+to resize memory that has been malloced. Thus if you had declared you array like: int array[100]; You could NOT use realloc to 
+resize it).
+
+<P>While you are developing you implementation, 
+add some tests to the whiteBoxTests function in arrayStack.c. This should
+contain unit tests that have access to the internal structure of the ADT.
+These tests should be able to make sure the array is resized
+appropriately, as well as testing the rest of the stack functionality.  
+ </P>
+
+<P>Add  test cases to the testStack.c program, that 
+would have triggered the out of bounds conditions to test that your code works properly. Be brutal 
+with your tests! Also check that popping an empty stack generates the appropriate error messages. 
+Note that the tests you create in testStack.c should be black box tests and can only
+only use the typedefs and functions that are declared in the .h interface. 
+
+<p><strong>If you look inside the Makefile you can see we have 
+<pre>
+CFLAGS=-Wall -Werror -O
+</pre>
+
+<p>If you want to use valgrind or gdb, you can modify the Makefile and replace the -O flag with a -g or -gdwarf-2.
+</strong>
+<h2> Exercise 2a: Creating black box tests for a Queue - 0.5 marks</h2>
+</STRONG>
+<P>
+In the provided file called <tt>testQueue.c</tt> write a comprehensive set of black box tests 
+for the Queue.h interface. 
+<p>
+When you have finished writing your tests, use the provided Makefile to 
+compile testQueue.c. The Makefile compiles the arrayQueue.c and the 
+testQueue.c files and links them together to create a program called 
+<tt>testArrayQueue</tt>. The Makefile also compiles the listQueue.c 
+and the testQueue.c files and links them together to create a program called 
+<tt>testListQueue</tt>.
+<p>
+run the <tt>testArrayQueue</tt> program
+<p>Does the provided arrayQueue.c pass your tests? It should, provided that 
+you do not insert more than 10 items. The code contains an abort statement
+that will kill the program in this situation.
+ 
+<p>run the <tt>testListQueue</tt> program
+<p>Does the provided listQueue.c pass your tests? It should not. It should contain errors that 
+you will need to fix.
+
+<h2>Exercise 2b: Debugging a linked list Queue - 0.5 marks </h2>
+<P>In the provided file called <tt> listQueue.c</tt> write some whitebox tests and try to find 
+and fix any errors in the listQueue.c implementation. Make sure the implementation passes all 
+blackbox and whitebox tests.
+
+<h2>Exercise 3: Changing the arrayQueue implementation - 1 mark</h2>
+<p>
+The implementation of the array based queue provided in 
+<tt>arrayQueue.c</tt> is not very efficient. 
+When an item is removed, all the remaining items are shifted down one place in the array. 
+This makes the getQueue function O(n). 
+Modify the queue implementation so that both putQueue and getQueue are O(1) operations. 
+</P>
+<p>
+Hint: Store the index of the start of the queue and the end of the queue. 
+This way when you get an element you do not have to shift all the elements over one place, you 
+can just update the index of the start of the queue.
+</P>
+<P>
+You should also still make sure your implementation checks that the queue 
+never exceeds its maximum and that it never trys to get an element from an 
+empty queue. 
+In this case you should print out an error message and call the function abort.
+(Unlike the first part of the lab, you do not have to resize the array when it 
+becomes full).
+<p>
+Write some white box unit tests to confirm that your new implementation works and recompile and 
+run against your original black box tests. If your implementation is correct they should still 
+work.
+</P>
+
+
+<h2>Submission</h2>
+When you are happy with your work, please show it to your tutor to get it marked.
+Before you leave your lab, remember to submit your lab via the give command
+<p>
+<pre>
+1927 classrun 17x1 give lab02 arrayStack.c testStack.c arrayQueue.c testQueue.c listQueue.c
+</pre>
+<br>
+</div>
+</body></html>

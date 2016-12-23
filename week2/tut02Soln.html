@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Tute02 - 17x1 COMP1927 </title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+<script language="JavaScript">
+function changeText(el, newText) {
+  // Safari work around
+  if (el.innerText)
+    el.innerText = newText;
+  else if (el.firstChild && el.firstChild.nodeValue)
+    el.firstChild.nodeValue = newText;
+}
+function toggleVisible(elid) {
+  el1 = document.getElementById(elid);
+  el2 = document.getElementById(elid+"a");
+  if (el1.style.display == "") {
+     el1.style.display = "none";
+     changeText(el2,"show answer");
+  }
+  else {
+     el1.style.display = "";
+     changeText(el2,"hide answer");
+  }
+}
+</script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" 
+href="../../style.css">
+
+<h1 id="head-c4ae72924d158947b2cf3b7a412be366ae799569">Tutorial Exercises Week 02</h1>
+
+<h2> Exercise 1 - Function Pointers</h2>
+Given the following function prototypes and assignments:
+<pre>
+int  add (int n1, int n2);
+link reverse (link ls);
+void square (double *x);
+
+ x1 = add;
+ x2 = reverse;
+ x3 = square;
+</pre>
+Give the correct variable declarations for <tt>x1</tt>, <tt>x2</tt>, and <tt>x3</tt>.
+
+<strong> <br>
+<pre>
+Solution:
+int  (*x1) (int, int);
+link (*x2) (link);
+void (*x3) (double *);
+</pre>
+</strong>
+
+<h2> Exercise 2 - Stacks</h2>
+
+ Write a program which, given a string containing round, curly, and square brackets, will print 'success' if the parentheses are
+ correctly balanced, and 'fail' otherwise.
+
+<pre background=lightgrey> 
+ 
+> ./check_parens "()"
+success
+> ./check_parens "([])"
+success
+> ./check_parens "([]){}"
+success
+> ./check_parens "([]){"
+fail
+> ./check_parens "([sdfdf]ss)fdfsd"
+success
+</pre></td>
+ <bf>Hint:</bf> the problem is similar to the postfix expression evaluation problem.
+</pre>
+
+<strong>
+<br>
+<pre>
+Solution
+Item safePop (Stack s) {
+  if (stackSize(s) == 0) {
+    printf ("syntax error in postfix expression\n");
+    abort ();
+  } else {
+    return (pop(s));
+  }
+}
+
+
+char closing (char c) {
+  if (c == '(') {
+    return ')';
+  } else if (c == '[') {
+    return ']';
+  } else if (c == '{') {
+    return '}';
+  } else return '\0';
+}
+
+
+int main (int argc, char *argv[]) { 
+  Stack s;
+  char *a;
+  int i;
+   
+  if (argc < 2) {
+    printf ("No argument string provided\n");
+    return 0;
+  }
+  a = argv[1];
+  
+  s = createStack();
+  for (i = 0; a[i] != '\0'; i++) {
+    if ((a[i] == '(') || 
+        (a[i] == '{') || 
+        (a[i] == '[')) { 
+      push(s,a[i]);
+    } else if ((a[i] == ')') || 
+               (a[i] == '}') || 
+	       (a[i] == ']')) {
+      if (closing (safePop (s)) != a[i]) {
+	printf ("fail\n");
+	return (0);
+      }
+    }
+  }
+    
+  if (stackSize (s) == 0) {
+    printf ("success\n");
+  } else {
+    printf ("fail\n");
+  }
+  return (0);
+}       
+
+</pre>
+</strong>
+
+
+<h2>Exercise 3 - Testing</h2>
+<p>What is the difference between black box and white box testing ADTs?
+
+<p> 
+<pre>
+<strong>Solution </strong>
+Black box testing tests the functionality of the code. It focuses on the input and output of the functions
+defined in the interface. It does not rely on the underlying  implementation.  It can't access the underlying
+implementation. Our black box tests should still work even if we change the underlying implementation.
+
+White bo testing te
+sts the structure of the code. It relies on knowing, accessing and testing the internal
+state of the code. If we changed our implementation we would need to write new white box tests. 
+</pre>
+
+<h2>Exercise 4 - Blackbox testing</h2>
+Imagine you have the following test file defined in a file called testStack.c and it 
+includes the Stack.h interface from Exercise 1:
+
+<pre>
+#include "Stack.h"
+
+int main(int argc, char * argv[]){
+    printf("Testing new stack\n");
+    Stack s = createStack();
+    assert(s->size == 0);
+    printf("Test passed\n");
+    return 0;
+}
+</pre>
+When compiling my test file using
+<pre>
+gcc -Wall -Werror -c testStack.c
+</pre>
+I get the following compile error
+<pre>
+testStack.c:12:5: error: dereferencing pointer to incomplete type
+</pre>
+What does this mean?
+<pre>
+<p><strong>Solution<br></strong>
+It this case we are getting the error as we are trying to use the internal structure of the ADT by saying s->size. 
+We have no access to the underlying implementation of the stack, we
+we can only access the ADT by the functions and typedefs provided in the interface (.h file). 
+</pre>
+
+<h2> Exercise 4 - Timing</h2>
+<ol>
+<li><p>
+You can obtain overall timing data on the execution of programs on Linux
+via the <tt>bash</tt> shell's built-in <tt>time</tt> command.
+You use it simply by preceding the command you want to run with the word
+<tt>time</tt>, e.g.
+</p>
+<pre>
+$ <b>time</b> ./program < aBigInputFile > aBigOutputFile
+</pre>
+<p>
+The output from the <tt>time</tt> command looks like:
+</p>
+<pre>
+<span style="color:#009900">0.22user 0.03system 0:01.90elapsed 13%CPU</span> (0avgtext+0avgdata 17488maxresident)k
+0inputs+13488outputs (0major+1760minor)pagefaults 0swaps
+</pre>
+<p>
+Describe what the first four components on the first line (in green)
+are and how they are related.
+</p>
+</li>
+<pre>
+<strong>Solution<br></strong>
+<ul>
+<li> <tt>user</tt> ... the number of cpu seconds spent executing the program code </li>
+<li> <tt>system</tt> ... the number of cpu seconds spent executing system functions on behalf of the program (examples would include I/O)
+</li>
+<li> <tt>elapsed</tt> ... the amount of (wall-clock) time between when the process started, and when it finished
+</li>
+<li> <tt>%CPU</tt> ... how much usage of the CPU the program got while executing; your program will never be the only process running a modern computer system;
+you would typically observe that <tt>elapsed &approx; (user+system)*100/%CPU</tt>
+</li>
+</ul>
+For the purpose of measuring the "execution cost" of a program, we would typically use <tt>user+system</tt>.
+</li>
+</pre>
+<li>
+<p>
+Consider the following shell script to run some timing tests:
+</p>
+<pre>
+#!/bin/sh
+
+cat /dev/null &gt; log
+for size in 1000 10000 100000 1000000
+do
+	for order in random sorted reverse
+	do
+		echo === Testing for $order input, size $size === &gt;&gt; log
+		for i in 1 2 3 4 5
+		do
+			case $order in
+			random) flag=&quot;R&quot; ;;
+			sorted) flag=&quot;A&quot; ;;
+			reverse) flag=&quot;D&quot; ;;
+			esac
+			{ ./seqq $size $flag | time sort &gt; /dev/null ; } 2&gt;&gt; log
+		done
+		echo &quot;&quot; &gt;&gt; log
+	done
+done
+</pre>
+<p>
+The <tt>seqq</tt> prints sequences of numbers in the range 1..Max.
+It takes two command line parameters:
+</p>
+<ul>
+<li>
+<b>Maximum</b> ... a positive giving the maximum number in the sequence
+</li>
+<li>
+<b>Order</b> ... the order the numbers appear: <tt>A</tt> = ascending,
+<tt>D</tt> = descending, <tt>R</tt> = random
+</li>
+</ul>
+<p>
+Answer the following based on your understanding of the script:
+</p>
+<ol type="a">
+<li>
+How many times will the <tt>sort</tt> command be invoked?
+</li>
+<li>
+What sequences of numbers are going to be generated by <tt>seqq</tt>?
+</li>
+<li>
+Where does the output from the script go?
+</li>
+<li>
+What does the line <tt><nobr>cat /dev/null > log</nobr></tt> do?
+</li>
+<li>
+What does the line <tt><nobr>echo "" >> log</nobr></tt> do?
+</li>
+</ol>
+<pre><strong>Solution<br></strong><ol type="a">
+<li> The <tt>sort</tt> command is invoked once during each iteration of the innermost loop body.
+The outermost loop executes 4 times (for 1000..1000000).
+For each of its executions, the <tt>for&nbsp;order</tt> loop
+will be executed 3 times (for random, sorted, reverse).
+For each of the <tt>for&nbsp;order</tt> loop's iterations,
+the <tt>for&nbsp;i</tt> loop is executed 5 times.
+Total number of executions of innermost loop body = <nobr>4*3*5 = 60.</nobr>
+So <tt>sort</tt> is executed 60 times.
+</li>
+<li> The first 1000 positive integers in ascending, descending and random order.<br>
+The first 10000 positive integers in ascending, descending and random order.<br>
+The first 100000 positive integers in ascending, descending and random order.<br>
+The first 1000000 positive integers in ascending, descending and random order.
+</li>
+<li> All of the output from the script goes to a file called <tt>log</tt>.
+</li>
+<li>The line <tt><nobr>cat /dev/null > log</nobr></tt> creates an initially
+empty <tt>file</tt>. Reading from <tt>/dev/null</tt> always gives empty input.
+</li>
+<li> The line <tt><nobr>echo "" >> log</nobr></tt> appends an empty line
+to the <tt>log</tt> file, after each set of 5 runs for a given size
+and order combination.
+</li>
+</ol>
+</li>
+</ol>
+</pre>
+<h2> Exercise 5 - Algorithmic Complexity</h2>
+<ol>
+<li>
+<p>
+Consider two functions <tt>f(n)</tt> and <tt>g(n)</tt> for
+the same task.
+The time cost for <tt>f(n)</tt> is <i>time(f(n)) = 100n</i>, while the
+time cost for  <tt>g(n)</tt> is <i>time(g(n)) = 2n<sup>2</sup></i>.
+</p>
+<ol type="a">
+<li>Which function is faster for n=10?</li>
+<li>Which function is faster for n=20?</li>
+<li>Which function is faster for n=100?</li>
+<li>Which function is faster for n=1000?</li>
+<li>What is the crossover point where <tt>f()</tt> becomes more efficient than <tt>g()</tt>?
+</ol>
+<pre><ol type="a">
+<li>For n=10, &nbsp; time(f(n)) = 1000, &nbsp; time(g(n)) = 200</li>
+<li>For n=20, &nbsp; time(f(n)) = 2000, &nbsp; time(g(n)) = 800</li>
+<li>For n=100, &nbsp; time(f(n)) = 10,000, &nbsp; time(g(n)) = 20,000</li>
+<li>For n=1000, &nbsp; time(f(n)) = 100,000, &nbsp; time(g(n)) = 2,000,000</li>
+<li>Crossover occurs when time(f(n)) = time(g(n)), i.e. when 100n = 2n<sup>2</sup>
+With a little bit of simple algebraic manipulation n = 50 is the crossover point.
+</ol>
+</li>
+</pre>
+<br><li>
+<p>Analyze the behaviour of each of the following functions, and determine their algorithmic complexity.</p>
+    <br><b>a.  Nested Loop </b><br>
+    <tt> void f3(int n) {
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;int i,j;
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;for (i=1; i<=n; i++) {
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (j=1; j<=n; j++) {
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("hello");}
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;}
+    <br>}
+    </tt>
+   
+    <b>b.  Linear Search </b><br>
+    <tt>
+    <br> // Pre:  n > 0 && valid(int[n],a) && valid(int,val)
+    <br> // Post: return value = (&exist; i &in; [0..n-1], a[i] == val)
+    <br> bool found(int a[], int n, int val) {
+    <br> &nbsp;&nbsp;&nbsp;&nbsp; int i;
+	<br> &nbsp;&nbsp;&nbsp;&nbsp; for (i = 0; i < n; i++) {
+	<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (a[i] == val) return 1;
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;}
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+    <br}
+</tt>
+
+<pre>
+<ol type="a">
+<li>Nested Loop
+The outer loop executes <tt>n</tt> times. The inner loop executes <tt>n</tt> times.
+The total number of steps is n^2.  Therefore, time-complexity of the algorithm is O(n^2) or quadratic.
+If there is a third nested loop that executes <tt>n</tt> times, then time-complexity is O(n^3).
+</li>
+<li> Linear search
+The function scans the array from start to finish and examines all <tt>n</tt> elements. Each element is compared against the
+value being searched for <tt>val</tt>. If <tt>val</tt> is found, the function immediately returns a true result and the rest of
+the array is ignored. 
+The analysis is more complicated, because the performance can be different for different arrays and search values.
+<ul>
+<li> Best case: <tt>val</tt> occurs as the first element in the array. In this case only one comparison occurs.
+</li>
+<li> Worst case: <tt>val</tt> is not in the array, or only occurs as the last element. In this case there are <tt>n</tt> comparisons.
+</li>
+<li>Average case: <tt>val</tt> occurs somewhere in the middle of the array. If each value is equally likely to be searched for, then,
+on average, there will be <tt>n/2</tt> comparisons.</li>
+</ul>
+The most interesting case is the worst case, since it gives us an upper bound on the performance.
+We would normally quote the algorithmic complexity as the complexity of the worst case; in this case <i>O(n)</i>.
+</li>
+</ol>
+</li>
+</ol>
+</pre>
+</body></html>

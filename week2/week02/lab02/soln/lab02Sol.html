@@ -1,0 +1,540 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Lab Exercises Week 02 - 16x1 COMP1927</title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="../../style.css">
+
+<h1 id="head-da20fc10d9db0fff63d350f5e4ee574fb3e1aebb">Lab  Solutions Week 02</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867">
+</p>
+<h2>Objectives</h2>
+<p>
+<UL>
+<LI> To practice implementing and testing ADTs
+</UL>
+</p>
+
+
+
+<h2>Related Chapters of textbook </h2>
+<p> 
+Chapter 4
+</p>
+
+<h2>Setting up </h2>
+<p>
+<P class=line874><SPAN class=anchor id=line-25></SPAN>
+<P class=line862>Change into your lab03 directory and run the following command: <SPAN 
+class=anchor id=line-30></SPAN><SPAN class=anchor id=line-31></SPAN><SPAN 
+class=anchor id=line-32></SPAN><PRE>cp /home/cs1927/public_html/16x1/labs/lab02/files/* .</PRE>
+<SPAN class=anchor id=line-33></SPAN>
+<P class=line874>Note the "." at the end of the command, meaning "into the 
+current directory". <SPAN class=anchor id=line-34></SPAN><SPAN class=anchor 
+id=line-35></SPAN>
+<P class=line874>If you've done the above correctly, you should find the 
+following files now in the directory: <SPAN class=anchor id=line-36></SPAN>
+<DIV>
+<TABLE>
+  <TBODY>
+    <TR>
+    <TD><SPAN class=anchor id=line-41></SPAN>
+      <P class=line891><STRONG>Makefile</STRONG></P></TD>
+    <TD>
+
+      <P class=line862>Running make should produce
+executables testStack testArrayQueue testListQueue</P></TD></TR>
+
+
+     <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>Item.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>Defines Item to be an int. This file should not be modified</P></TD></TR>
+    <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>Stack.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>An interface for a STACK ADT. This file should not be modified</P></TD></TR>
+    <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>arrayStack.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>An array based implementation of a stack ADT that needs to be modified</P></TD></TR>
+   <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>testStack.c</STRONG></P></TD>
+    <TD>
+   
+   <P class=line862>A STACK  <STRONG>test</STRONG> program 
+that must be 
+completed to test the modifications to the stack implementation</P></TD></TR>
+ <TR>
+    <TD><SPAN class=anchor id=line-41></SPAN>
+      <P class=line891><STRONG>Makefile</STRONG></P></TD>
+    <TD>
+
+      <P class=line862>that does not need to be modified. Running make should produce 
+executables testStack testArrayQueue testListQueue</P></TD></TR>
+     
+  <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>Queue.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>A queue interface that should NOT be modified</P></TD></TR>
+<TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>arrayQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A fully functioning QUEUE implementation that will be modified to 
+improve efficiency</P></TD></TR>
+    <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>listQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>An incorrectly implemented queue that needs to be debugged and tested</P></TD></TR>
+  <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>testQueue.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A stub file for your black box queue tests
+
+</TBODY></TABLE></DIV>
+</p>
+
+
+<h2>Task 1: Stack ADT Array Implementation with Bounds Checking - 1 mark</h2>
+<p> The array based stack ADT implementation we developed in lectures, 
+Had some serious shortcomings.
+
+<p>
+<UL>
+<li>
+Pushing 
+an item onto the stack when the maximum number of items has been reached, or popping from the stack when the stack is empty, leads to out of bounds array access. This can cause other program variables to be unintentionally overwritten and/or may result in apparently random crashes.
+It is good programming practice to make ADT implementations robust 
+against out-of-bounds errors and similar problems. 
+</ul>
+<p>
+The file stackArray.c, provided for this week's lab, implements the first class Stack ADT defined in stack.h.
+This overcomes the first limitation of the stack we implemented in lectures and allows a client program to create as many stacks 
+as they would like.  However the stackArray.c still has some problems when pushing or popping a full or empty stack. You need to 
+modify the implementation in stackArray.c 
+to provide the following behaviour:
+<p>
+
+<UL>
+<LI>When an attempt is made to push an item onto a stack that is already 
+full, the array is resized to accomodate the extra element. Make sure the 
+stack is only resized when it is full and make the resized array be 
+2 times bigger. 
+<p>
+<LI>It prints the message "stack underflow" when an attempt is made to pop from an empty
+stack and calls the function <code>abort</code> to terminate the program.
+Also when the size of the stack drops below 
+1/4 of the size of the array, the array size should be resized to half of 
+its size. However the array size should never dop below its original 
+starting size. </ul>
+<p>Hint: Look at the C function realloc. (Note: this should ONLY be used 
+to resize memory that has been malloced. Thus if you had 
+declared you array like: int array[100]; You could NOT use realloc to 
+resize it).
+
+<P>While you are developing you implementation, add some tests to the whiteBoxTests function in arrayStack.c. This should
+contain unit tests that have access to the internal structure of the ADT.
+These tests should be able to make sure the array is resized
+appropriately, as well as testing the rest of the stack functionality.  
+ </P>
+
+
+<P>Add  test cases to the testStack.c  program, that 
+would have triggered the out 
+of bounds conditions to test that your code works properly. Be brutal 
+with your tests! Also check that popping an empty stack generates the
+appropriate error messages. 
+Note that the tests you create in testStack.c should be black 
+box tests and can only
+only use the typedefs and functions that are declared in the .h 
+interface. 
+
+<strong>
+<p><STRONG>Solution</STRONG>
+<PRE>
+void push (Stack stack, Item item){
+    assert(stack != NULL);
+    if(stack->top == stack->maxSize){         
+        stack->items = realloc(stack->items,stack->maxSize*2*sizeof(Item));
+        assert(stack->items != NULL);
+        stack->maxSize = stack->maxSize*2;
+    }
+    stack->items[stack->top++] = item;
+}
+
+Item pop (Stack stack){   
+    assert(stack != NULL);
+    if(stack->top == 0){
+        fprintf(stderr,"stack underflow");
+        abort();
+    }
+    stack->top--;
+    Item item = stack->items[stack->top];
+    if(stack->top <= stack->maxSize/4.0  && stack->maxSize/2.0 >= DEFAULT_SIZE){
+        stack->items = realloc(stack->items,(stack->maxSize/2.0)*sizeof(Item));
+        assert(stack->items != NULL);   
+        stack->maxSize = stack->maxSize/2.0;
+    }
+    return item;
+}
+
+</pre>
+<p>
+These are some examples of how you could test your ADT
+<p>
+<pre>
+//blackbox test in testStack.c
+int main(void){
+    int i;
+    //create two stacks
+    Stack s,s2;
+    whiteBoxTests();
+    printf("\nBlackBoxTests\n");
+    printf("Test 1: Create stacks\n");
+    s = createStack();
+    s2 = createStack();
+    assert(s != NULL);
+    assert(s2 != NULL);
+    assert(stackSize(s) == 0);
+    assert(stackSize(s2) == 0);
+    printf("Passed\n");
+
+    printf("Test 2: Push stacks\n");
+    for(i=0;i<1000;i++){
+        push(s2,i);
+        push(s,i);
+        assert(stackSize(s2) == i+1);
+        assert(stackSize(s) == i+1);
+    }
+    printf("Passed\n");
+    printf("Test 3: Pop stacks\n");
+    for(i=999;i>=0;i--){
+        Item item = pop(s);
+        assert(stackSize(s) == i);
+        assert(i == item);
+        item = pop(s2);
+        assert(stackSize(s2) == i);
+        assert(i == item);
+    }
+    printf("Passed\n");
+    
+    //pop(s);
+    //pop(s2);
+    printf("Test 4: Destroy Stacks\n");
+    destroyStack(s);
+    destroyStack(s2);  
+    printf("Passed\n");
+    return 0;
+}
+</pre>
+<p>
+<pre>
+//inside arrayStack.c
+void whiteBoxTests(void){
+    int i;
+    Stack s = createStack();
+    printf("White Box Tests\n");
+    printf("Test 1: Create a new Stack\n");
+    assert(s != NULL);
+    assert(s->items != NULL); 
+    assert(s->top == 0);
+    assert(s->maxSize = DEFAULT_SIZE);
+    printf("Passed\n");
+
+    printf("Test 2: Push elements\n");
+    for(i=0;i<1000;i++){  
+        push(s,i);
+        assert(s->top = i+1);
+        assert(s->items[i] == i);
+        if(i < 100){
+            assert(s->maxSize == 100);
+        }else if(i < 200){  
+            assert(s->maxSize == 200);
+        }else if(i < 400){
+            assert(s->maxSize == 400);
+        }else if(i < 800){    
+            assert(s->maxSize == 800);
+        }else{
+            assert(s->maxSize == 1600);
+        }
+    }
+    printf("Passed\n"); 
+    printf("Test 3: Pop\n"); 
+    for(i=999;i>=0;i--){
+        Item item = pop(s);
+        assert(i == item);
+        assert(s->top == i);
+        if(i > 400){
+            assert(s->maxSize == 1600);
+        }else if(i > 200){
+            assert(s->maxSize == 800);
+        }else if(i > 100){
+            assert(s->maxSize == 400);
+        }else if(i > 50){
+            assert(s->maxSize == 200);
+        }else{
+            assert(s->maxSize == 100);
+        }
+    }
+    printf("Passed\n"); 
+    printf("Test 4: Destroy stack\n");
+    destroyStack(s);
+    printf("Passed\n");
+}
+</pre>
+
+</strong>
+
+<h2> Exercise 2a: Creating black box tests for a Queue - 0.5 marks</h2>
+</STRONG>
+<P>
+In the provided file called <tt>testQueue.c</tt> write a comprehensive set of black box tests 
+for the Queue.h interface. 
+<p>
+When you have finished writing your tests, use the provided Makefile to 
+compile testQueue.c. The Makefile compiles the arrayQueue.c and the 
+testQueue.c files and links them together to create a program called 
+<tt>testArrayQueue</tt>. The Makefile also compiles the listQueue.c 
+and the testQueue.c files and links them together to create a program called 
+<tt>testListQueue</tt>.
+<p>
+run the <tt>testArrayQueue</tt> program
+<p>Does the provided arrayQueue.c pass your tests? It should, provided that 
+you do not insert more than 10 items. The code contains an abort statement
+that will kill the program in this situation.
+ 
+<p>run the <tt>testListQueue</tt> program
+<p>Does the provided listQueue.c pass your tests? It should not. It should contain errors that 
+you will need to fix.
+
+<pre>
+<strong>
+int main(void){
+    int i;
+    Queue q,q2;
+    queueWhiteBoxTests();
+    printf("\nBlackBoxTests\n");
+    printf("Test 1: Create queues\n");
+    q = createQueue();
+    q2 = createQueue();
+    assert(q != NULL);
+    assert(q2 != NULL);
+    assert(queueSize(q) == 0);
+    assert(queueSize(q2) == 0);
+    printf("Passed\n");
+
+    printf("Test 2: putQueue\n");
+    for(i=0;i<100000;i++){
+        putQueue(q2,i);
+        putQueue(q,i);
+        assert(queueSize(q2) == i+1);
+        assert(queueSize(q) == i+1);
+    }
+    printf("Passed\n");
+    printf("Test 3: get\n");
+    for(i=0;i< 100000;i++){
+        Item item = getQueue(q);
+        assert(queueSize(q) == 99999-i);
+        assert(i == item);
+        item = getQueue(q2);
+        assert(queueSize(q2) == 99999-i);
+        assert(i == item);
+    }
+    printf("Passed\n");
+    //get(q);
+    printf("Test 4: Destroy Queue\n");
+    destroyQueue(q);
+    destroyQueue(q2);  
+    printf("Passed\n");
+    return 0;
+}
+</pre>
+
+</strong>
+</pre>
+
+<h2>Exercise 2b: Debugging a linked list Queue - 0.5 marks </h2>
+<P>In the provided file called <tt> listQueue.c</tt> write some whitebox tests and try to find 
+and fix any errors in the listQueue.c implementation. Make sure the implementation passes all 
+blackbox and whitebox tests.
+
+<pre>
+<strong>
+void putQueue (Queue q, Item item){
+    assert(q != NULL);
+    link n = createNode(item);
+    if(q->tail != NULL){
+       q->tail->next = n; 
+    } else {
+       q->head = n; 
+    }
+    q->tail = n;
+    q->size++;
+}
+    
+Item getQueue (Queue q){
+    assert(q != NULL);
+    if(q->head == NULL){
+        fprintf(stderr,"queue underflow\n");
+        abort();
+    }
+    Item item = q->head->item;
+    link delNode = q->head; 
+    q->head = q->head->next;
+    if(delNode == q->tail){
+        q->tail = NULL;
+    }
+    free(delNode);
+    q->size--;  
+    return item;
+}
+
+
+void queueWhiteBoxTests(void){
+    printf("White box tests: \n");
+    int i;
+    Queue q = createQueue();
+    printf("White Box Tests - linked list implementation\n");
+    printf("Test 1: Create a new Queue\n");
+    assert(q != NULL);
+    assert(q->head == NULL);
+    assert(q->size == 0);  
+    printf("Passed\n");   
+        
+    printf("Test 2: putQueue\n");  
+    for(i=0;i<100000;i++){
+        putQueue(q,i);
+        assert(q->size = i+1);
+        assert(q->head->item == 0);
+        assert(q->tail->item == i);
+    }
+    printf("Passed\n");
+    printf("Test 3: getQueue\n");
+    for(i=0;i<100000;i++){
+        Item item = getQueue(q);
+        assert(i == item);
+        assert(q->size == 99999 - i);
+    }
+    assert(q->head == NULL);
+    assert(q->tail == NULL);
+    printf("Passed\n");
+
+    printf("Test 4: Destroy queue\n");
+    destroyQueue(q);
+    printf("Passed\n");    
+}
+
+</strong>
+</pre>
+
+<h2>Exercise 3: Changing the arrayQueue implementation - 1 mark</h2>
+<p>
+The implementation of the array based queue provided in 
+<tt>arrayQueue.c</tt> is not very efficient. 
+When an item is removed, all the remaining items are shifted down one place in the array. 
+This makes the getQueue function O(n). 
+Modify the queue implementation so that both putQueue and getQueue are O(1) 
+operations. 
+</P>
+<p>
+Hint: Store the index of the start of the queue and the end of the queue. 
+This way when you get an element you do not have to shift all the elements over one place, you 
+can just update the index of the start of the queue.
+</P>
+<P>
+You should also still make sure your implementation checks that the queue 
+never exceeds its maximum and that it never trys to get an element from an 
+empty queue. 
+In this case you should print out an error message and call the function abort.
+(Unlike the first part of the lab, you do not have to resize the array when it 
+becomes full).
+<p>
+Write some white box unit tests to confirm that your new implementation works and recompile and 
+run against your original black box tests. If your implementation is correct they should still 
+work.
+</P>
+<strong>
+<pre>
+struct queueImp{
+    Item *items;
+    int max;
+    int size; 
+    int head;
+    int tail;
+};
+
+//O(1)
+Queue createQueue(void){
+    Queue q = malloc(sizeof(struct queueImp));
+    q->items = malloc(DEFAULT_SIZE * sizeof(Item));
+    q->max = DEFAULT_SIZE;
+    q->head = 0;
+    q->tail = 0;
+    q->size = 0;
+    return q;
+}
+
+void destroyQueue(Queue q){
+    assert(q != NULL);
+    assert(q->items != NULL);
+    free(q->items);
+    free(q);
+} 
+
+//O(1)
+int queueSize(Queue q){
+    assert(q != NULL);
+    return q->size;
+}
+
+//O(1);
+void queuePut(Queue q, Item i){
+    assert(q != NULL);
+    if(q->size >= q->max){
+        fprintf(stderr,"queue overflow\n");
+        abort();
+    }
+    q->items[q->tail] = i;
+    q->tail = (q->tail+1)%q->max;
+    q->size++;   
+}
+
+//O(1)
+Item getQueue(Queue q){
+    Item item;
+    assert(q != NULL);
+    if(q->size == 0){
+        fprintf(stderr,"queue underflow\n");
+    } 
+    item = q->items[q->head];
+    q->size--;
+    q->head = (q->head+1)%q->max;
+    return item;
+}
+//You would also need to write new whitebox tests while you were developing this
+</pre>
+</strong>
+<h2>Submission</h2>
+When you are happy with your work, please show it to your tutor to get it marked.
+Before you leave your lab, remember to submit your lab via the give command
+<p>
+<pre>
+give cs1927 lab02 arrayStack.c testStack.c arrayQueue.c testQueue.c listQueue.c
+</pre>
+<br>
+</div>
+</body></html>
