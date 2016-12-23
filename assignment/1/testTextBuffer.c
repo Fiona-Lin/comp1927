@@ -29,14 +29,14 @@ void testUndoNRedoTB();
 
 int main(int argc,  char* argv []) {
 //    testCreateReleaseDumpLinesTB();
-//    testSwapTB();
-//    testMergeTB();
-//    testPasteTB();
-//    testCutTB();
-//    testCopyTB();
-//    testDeleteTB();
-//    testReplaceText();
-//    // testDiffTB();
+    testSwapTB();
+    testMergeTB();
+    testPasteTB();
+    testCutTB();
+    testCopyTB();
+    testDeleteTB();
+    testReplaceText();
+    testDiffTB();
     testUndoNRedoTB();
     return EXIT_SUCCESS;
 }
@@ -1158,9 +1158,58 @@ void testReplaceText() {
     printf("Released Tb \n");
 }
 
-void testDiffTB() { }
+void testDiffTB() {
+
+    printf("\n#9\tTest diff in Text Buffers\n");
+
+    char str1[] = " line 01\n"
+        " line 02\n"
+        " line 03\n"
+        " line 04\n"
+        " line 05\n";
+
+    char str2[] = " line 02\n line 04\n"
+        " line 03\n";
+
+    char* s1;
+    char* s2;
+
+    TB tb1 = newTB(str1);
+    TB tb2 = newTB(str2);
+    s1 = dumpTB(tb1);
+    s2 = dumpTB(tb2);
+    printf("\nOriginal Tb1:\n%s\n", s1);
+    printf("\nOriginal Tb2:\n%s\n", s2);
+    printf("Operations to convert TB1 to TB2:\n");
+    char * command = diffTB(tb1, tb2);
+    printf("%s", command);
+    free(command);
+    releaseTB(tb1);
+    releaseTB(tb2);
+    free(s1);
+    free(s2);
+
+
+    tb1 = newTB(" line 01\n line 02\n line 03\n line 04\n line 05\n");
+    tb2 = newTB(" line 05\n line 02\n line 04\n line 03\n");
+    s1 = dumpTB(tb1);
+    s2 = dumpTB(tb2);
+    printf("\nOriginal Tb1:\n%s\n", s1);
+    printf("\nOriginal Tb2:\n%s\n", s2);
+    printf("Operations to convert TB1 to TB2:\n");
+    command = diffTB(tb1, tb2);
+    printf("%s", command);
+    free(command);
+    releaseTB(tb1);
+    releaseTB(tb2);
+    free(s1);
+    free(s2);
+
+}
+
 
 void testUndoNRedoTB() {
+    printf("\n#10\tTest undo/redo in Text Buffers\n");
     char str1[] = "1 line 01\n"
         "1 line 02\n"
         "1 line 03\n"
@@ -1322,4 +1371,3 @@ void testUndoNRedoTB() {
 
     releaseTB(tb1);
 }
-
