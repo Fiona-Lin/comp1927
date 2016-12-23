@@ -1,0 +1,356 @@
+
+<!-- saved from url=(0061)https://www.cse.unsw.edu.au/~cs1927/17x1/week03/tut03Sol.html -->
+<html class="gr__cse_unsw_edu_au"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Tute03 Solutions - 16x1 COMP1927</title>
+
+
+<script src="./Tute03 Solutions - 16x1 COMP1927_files/common.js" type="text/javascript"></script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="./Tute03 Solutions - 16x1 COMP1927_files/style.css">
+
+</head><body data-gr-c-s-loaded="true"><div lang="en" id="content" dir="ltr"><span class="anchor" id="top"></span><span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span>
+<p class="line867">
+
+</p><h1> Tutorial Exercises Week 03 </h1>
+<h2> Exercise 1 </h2>
+<p> <strong> Function Growth Rates </strong></p>
+<p>Calculate how long T(n) steps would take for different 
+sizes of n for the T(n) functions in the table below.
+Assume you are running it on a computer that performs one million steps 
+per millisecond.
+Note: A millisecond is a thousandth of a second. 
+</p><p>
+<table border="1" cellspacing="0" cellpadding="6">
+<tbody><tr><th>n</th><th>T(n) = log n</th><th>T(n) = n</th><th>T(n) = n log n</th><th>T(n) =
+n<sup>2</sup></th><th>T(n) = n<sup>3</sup></th><th>T(n) = 2<sup>n</sup>
+</th></tr><tr><th>10</th><td>0.003 microsec </td><td>0.01 microsec </td><td>0.03 microsec </td><td> 
+0.1 microsec</td><td> 0.001ms</td><td>0.001ms
+</td></tr><tr><th>20</th><td>0.004 microsec </td><td>0.02 microsec </td><td>0.09microsec </td><td>
+0.4 microsec</td><td>0.008ms </td><td> 1ms
+</td></tr><tr><th>50</th><td>0.006 microsec </td><td>0.05 microsec </td><td>0.28 microsec
+</td><td>0.0025ms </td><td> 0.125ms
+</td><td>13 days
+</td></tr><tr><th>100</th><td>0.007 microsec </td><td>0.1 microsec </td><td>0.67 microsec
+</td><td>0.01ms </td><td>1ms
+</td><td>4x10<sup>13</sup> years
+</td></tr><tr><th>1000</th><td>0.01 microsec </td><td>0.001 ms </td><td>0.01 ms </td><td>1ms </td><td>
+1 second</td><td>very long time
+</td></tr><tr><th>10000</th><td>0.013 microsec </td><td>0.01 ms </td><td>0.13 ms </td><td>100ms </td><td>17 minutes
+</td><td>very very long time
+</td></tr></tbody></table>
+
+
+</p><p>For what size of n does the computation time for T(n) = 2<sup>n</sup> 
+become too large to be practical?  Would it help if we used a computer 
+that was a million times faster?
+
+</p><p>
+
+</p><h3>Solution</h3>
+when n &gt;= 50, the computation time for T(n) = 2<sup>n</sup> has started to
+become too large to be practical.
+At  n &gt;= 100 it would be impossible to wait for it to finish - unless you
+are blessed with the gift of eternal life.
+<p>
+Even if we were to increase the speed of the machine by a million, 
+2<sup>n</sup> for n = 100, it  would still take 40,000,000 years.
+</p>
+
+<h2> Exercise 2 </h2>
+<p>Write a recursive function </p>
+<pre>int allEven (int a[], int l, int r);
+</pre>
+<p>
+which takes an array, the left-most and right-most index of the current 
+segment of the array as an argument and checks if all elements in an array are 
+even. 
+</p><p>It must use a divide and conquer approach, by splitting the array in 
+half, first checking if all the 
+elements in the left half are even, and 
+then (only if necessary) checking the right half. 
+
+<strong>
+</strong></p><pre><strong>int allEven(int a[], int l, int r) {
+    int mid, first;
+    if(r &lt; l) return 1;
+    if (l == r){
+        return (a[l] % 2 == 0);
+    }else{
+        mid = (l + r)/2;
+        first = allEven(a, l, mid);
+        if(first){
+           return allEven(a, mid + 1, r);
+        } else {
+           return 0;
+        }
+    }
+}
+
+</strong></pre><strong>
+</strong>
+<p>
+What would the worst-case time complexity be in Big O notation? 
+
+</p><p>
+<strong>
+In the worst case - that they are all even, all elements in the array must 
+be checked so the time complexity ends up being O(n).
+</strong>
+
+</p><h2> Exercise 3 </h2>
+<p><strong> Binary Search Tree Insertion, Deletion and Traversal</strong>
+</p><p> Insert the following keys into a BST:&nbsp; 10 20 5 30 15 25 24
+</p><p>What is the height of the resulting tree?
+</p><p> Delete 5 30 20 (assume we replace nodes with the left-most of the 
+right sub-tree when necessary)
+</p><p>What is the height of the resulting tree?
+
+</p><p class="line874">Show the output obtained by traversing the tree and
+printing out <span class="anchor" id="line-20"></span>each node in the
+following orders:
+<span class="anchor" id="line-21"></span></p>
+<ul><li>prefix (NLR) <span class="anchor" id="line-22"></span></li><li>postfix (LRN) <span class="anchor" id="line-23"></span></li><li>infix (LNR) <span class="anchor" id="line-24"></span></li></ul>
+<p class="line867"><span class="anchor" id="EndEx1"></span> <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span></p><p class="line867">
+</p>
+
+<p><strong>Solution </strong>
+</p><pre> 10
+ / \
+5  20
+   / \
+  /   \
+ 15   30
+      /
+     25
+    /
+   24
+
+Height: 4
+</pre>    
+
+<p> Delete 5 30 20
+</p><p>What is the height of the resulting tree?
+</p><p><strong>Solution </strong>
+</p><pre>
+After deleting 5
+
+10 
+  \ 
+  20
+  / \
+ /   \
+15   30
+     / 
+    25 
+   / 
+  24 
+
+After deleting 30
+10
+  \
+  20
+  / \
+ /   \
+15   25
+     /
+    24
+
+After deleting 20
+       
+10   
+  \  
+  24
+  / \
+ /   \
+15   25
+   
+Height: 2
+
+</pre>
+
+<strong>Solution </strong>
+Traversals of the final tree
+<ul>
+
+<li>prefix: 10 24 15 25
+</li><li>postfix: 15 25 24 10
+</li><li>infix: 10 15 24 25
+</li></ul>
+
+
+<h2> Exercise 4 </h2>
+<p><strong>BST Functions</strong></p>
+<p>Assume the following representation of a BST</p>
+<pre>typedef struct treenode *treelink;
+
+struct treenode{
+    Item item;
+    treelink left;
+    treelink right;
+}
+
+</pre>
+<ul>
+
+<li><p>Assume that you have <strong>Queue</strong> and <strong>Stack</strong> ADTs available.  Discuss how these ADTs may be
+used to implement a non-recursive pre-order traversal and a non-recursive level-order reversal.
+</p><pre>// Use STACK ADT to do a pre-order traversal
+void traverse(Treelink t, void (*visit) (t) {
+   Stack s = createStack();
+   if (t!=null) push(s,t);
+   while (stackSize(s)!=0) {
+       // Visit the node and do something with item
+       (*visit)(t=pop(s));
+       if (t-&gt;right != NULL) push(s,t-&gt;right);
+       if (t-&gt;left != NULL) push(s,t-&gt;left);
+   }
+
+}
+</pre>
+<pre>// Use QUEUE ADT to do a level-order (breadth-first) traversal
+void traverse(Treelink t, void (*visit) (t) {
+   Queue q = createQueue();
+   if (t != NULL) queuePut(q,t);
+   while (queueSize(q)!=0) {
+       // Visit the node and do something with item
+       (*visit)(t=getQueue(q));
+       if (q-&gt;left != NULL) queuePut(q,t-&gt;left);
+       if (q-&gt;right != NULL) queuePut(q,t-&gt;right);
+   }
+}
+</pre>
+
+
+</li><li><p>Assume your tree holds items of type int. Write a function to recursively 
+sum the items of a BST tree. Your 
+function should have the following prototype:
+</p><pre>int sumItems(treelink tree);
+</pre>
+<strong>
+<pre>int sumItems(treelink tree){
+    if(tree == NULL){
+        return 0;
+    } else {
+        return tree-&gt;item + sumItems(tree-&gt;left) + sumItems(tree-&gt;right);
+    }
+}
+</pre>
+</strong>
+
+
+</li><li><p>
+Write a function that searches for a given item in a BST. Your   
+function should return 1 if the item is found and 0 otherwise. You
+should use an iterative approach and a recursive approach </p><p>
+</p><pre>int iterativeSearch(treelink t, Item i);
+</pre>
+<pre>int recursiveSearch(treelink t, Item i);
+</pre>
+<strong>
+<pre>int iterativeSearch(treelink t, Item i){
+    int result = 0;
+    treelink curr = t;
+    while(curr != NULL &amp;&amp; result == 0){
+        if(i &lt; curr-&gt;item){
+            curr = curr-&gt;left;
+        }else if(i &gt; curr-&gt;item ){
+            curr = curr-&gt;right;
+        }else{ 
+            result = 1;
+        }
+    }
+    return result;
+}
+</pre>
+</strong>
+<strong>
+<pre>int recursiveSearch(treelink t, Item i){
+    if (t == NULL) {
+        result = 0;
+    } else if( i &lt; t-&gt;item ){
+        result = search(t-&gt;left,i); 
+    } else if( i &gt; t-&gt;item ){
+        result = search(t-&gt;right,i);   
+    } else {
+        result = 1;
+    }    
+    return result;
+
+}
+</pre>
+</strong>
+
+
+
+</li><li><p>
+Write a function that will free all the memory associated with a tree
+</p><pre>void freeTree(treelink t);
+</pre>
+<strong>
+<pre>void freeTree(treelink t) {   
+    if (t != NULL) {
+        freeTree(t-&gt;left);    // must free the children first
+        freeTree(t-&gt;right);
+        free(t);
+    }
+}
+</pre>
+</strong>
+
+
+<p>Write a function to insert an item into a BST. It should return the 
+root of the tree.
+
+</p><pre>treelink insert(treelink t, Item i);
+</pre>
+
+<strong>
+<pre>treelink insertIterative(treelink tree, Item key) {
+    treelink curr = tree;
+    treelink prev = NULL;
+    treelink newNode = createNode(key);
+    while(curr != NULL){ 
+        prev = curr;       
+        if ( key &lt;= curr-&gt;item){
+            curr = curr-&gt;left;
+        } else {
+             curr = curr-&gt;right;
+        }
+    }
+    if(prev == NULL){
+       return newNode;
+    } else if(key &lt; prev-&gt;item){
+        prev-&gt;left = newNode;
+    } else {
+        prev-&gt;right = newNode;
+    }
+    return tree;
+   
+}
+</pre>
+<pre>treelink insertRec (treelink tree, Item item) {
+    if(tree == NULL){
+        treelink newNode = createNode(item);
+        return newNode; //now the root of the tree
+    } else {
+        if(item &lt;= tree-&gt;item){
+            tree-&gt;left = insertRec(tree-&gt;left, item); //
+        } else {
+            tree-&gt;right = insertRec(tree-&gt;right, item);
+        }
+    }
+  return tree;
+}
+
+</pre>
+
+</strong>
+
+
+<p>
+</p></li></ul>
+
+</div>
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
