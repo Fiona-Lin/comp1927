@@ -15,26 +15,26 @@ struct treeNode {
 
 
 static treelink createNode(TreeItem item){
-     treelink t = (treelink) malloc (sizeof (*t));
-     t->item = item;
-     t->left = NULL;
-     t->right = NULL;
-     return t;
+    treelink t = (treelink) malloc (sizeof (*t));
+    t->item = item;
+    t->left = NULL;
+    t->right = NULL;
+    return t;
 }
 
 TreeItem getItem(treelink t){
-     assert(t != NULL);
-     return t->item;
+    assert(t != NULL);
+    return t->item;
 }
 
 void printTreeNode (treelink t) {
-     if(t != NULL);
-     printf("%d ",t->item);
+    if(t != NULL);
+    printf("%d ",t->item);
 }
 
 void preorderTraversal (treelink tree, void (*visit) (treelink)) {
     if (tree == NULL) {
-       return;
+        return;
     }
     (*visit)(tree);
     preorderTraversal (tree->left,visit);
@@ -43,18 +43,17 @@ void preorderTraversal (treelink tree, void (*visit) (treelink)) {
 
 //This function inserts duplcates on the left
 treelink insertTreeNode (treelink tree, TreeItem item) {
-  if (tree == NULL) {
-      tree = createNode(item);
-      tree->item = item;
-      tree->left = NULL;
-      tree->right = NULL;
-   
-  } else if (tree->item < item) {
-      tree->right = insertTreeNode (tree->right, item);
-  } else {
-      tree->left = insertTreeNode (tree->left, item);
-  }
-  return tree;
+    if (tree == NULL) {
+        tree = createNode(item);
+        tree->item = item;
+        tree->left = NULL;
+        tree->right = NULL;
+    } else if (tree->item < item) {
+        tree->right = insertTreeNode (tree->right, item);
+    } else {
+        tree->left = insertTreeNode (tree->left, item);
+    }
+    return tree;
 }
 
 int size(treelink t){
@@ -71,14 +70,34 @@ treelink search(treelink t, TreeItem i){
     if (t == NULL) {
         result = NULL;
     } else if( i < t->item ){
-        result = search(t->left,i); 
+        result = search(t->left,i);
     } else if( i > t->item ){
-        result = search(t->right,i);   
+        result = search(t->right,i);
     } else {
         result = t;
-    }    
+    }
     return result;
 }
 
+int countLeaves(treelink tree) {
+    int res = 0;
+    if(tree != NULL) {
+        if (tree -> left != NULL) {
+            countLeaves(tree->left);
+        }
+        if (tree -> left != NULL) {
+            countLeaves(tree->left);
+        }
+        if (tree -> left == NULL && tree -> right == NULL) {
+            return res++;
+        }
+    }
+    return res;
+}
 
+treelink searchInsert(treelink t, TreeItem i); 
+int countIf (treelink tree, int (*pred)(TreeItem));
+int isEven (TreeItem n);
+int isOdd (TreeItem n);
+int isNegative (TreeItem n);
 
