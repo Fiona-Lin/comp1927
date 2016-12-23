@@ -304,8 +304,6 @@ static void mergeLine(TB tb1, int pos, TB tb2) {
         } else {
             if (linesTB(tb2) == 0) {
                 printf("\n>>!!Nothing to merge into text buffer\n");
-                releaseTB(tb1);
-                releaseTB(tb2);
                 return ;
             } else {
                 printf("\n>>!!Invalid %d position in text buffer\n", pos);
@@ -474,7 +472,108 @@ void replaceText(TB tb, char* str1, char* str2) {
 /* Bonus Challenges
 */
 
-char* diffTB(TB tb1, TB tb2) ;
+char* diffTB(TB tb1, TB tb2) {
+    assert(tb1 != NULL && tb2 != NULL);
+    int t1s = linesTB(tb1);
+    int t2s = linesTB(tb2);
+    char * commo [t1s];
+    char in[6];
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    char * res = strdup("");
+    Line cur1 = tb1 -> head;
+    Line cur2 = tb2 -> head;
+    //find the common ordered sequence in tb1
+    while (cur1 != NULL) {
+        sprintf(in, "%d", i);
+        commo[i] = calloc((strlen(cur1->s) + strlen(in) + 7), 1);
+        strcpy(commo[i], " - , ");
+        while (cur2 != NULL) {
+            if (strcmp(cur1->s, cur2->s) == 0) {
+                strcpy(commo[i], " 0 , ");
+                k = j+1;
+                t2s--;
+            }
+            j ++;
+            cur2 = cur2 -> next;
+        }
+        strcpy(commo[i]+strlen(commo[i]),in);
+        strcpy(commo[i]+strlen(commo[i]), ",");
+        strcpy(commo[i]+strlen(commo[i]), cur1 -> s);
+        j = k;
+        i ++;
+        cur1 = cur1 -> next;
+        cur2 = getLine(tb2,k);
+    }
+    k = t1s - (linesTB(tb2) - t2s);
+    char * diff1 [k];
+    char * diff2 [t2s];
+    //get the common line into a string
+    char * com = strdup("");
+    j = 0;
+    k = 0;
+    char * tem ;
+    for(i = 0; i < t1s; i++) {
+        char * tem ;
+        if (!strstr(commo[i]," 0 , ")){
+            diff1[k] = strdup("");
+            tem = diff1[k];
+            diff1[k] = calloc(strlen(tem)+strlen(commo[i])+1,1);
+            strcpy(diff1[k],tem);
+            strcpy(diff1[k]+strlen(diff1[k]), commo[i]);
+            k++;
+        } else {
+            tem = com;
+            com = calloc(strlen(tem)+strlen(commo[i])+1,1);
+            strcpy(com,tem);
+            strcpy(com+strlen(com), commo[i]);
+            j++;
+        }
+        free(commo[i]);
+        free(tem);
+    }
+    //find the difference in tb2
+    cur2 = tb2 -> head;
+    i = 0;
+    j = 0;
+    while(cur2 != NULL) {
+        sprintf(in, "%d", i);
+        if (!strstr(com, cur2 -> s)) {
+            diff2[j] = calloc((strlen(cur2->s) + strlen(in) + 7), 1);
+            strcpy(diff2[j], " + , ");
+            strcpy(diff2[j] + strlen(diff2[j]), in);
+            strcpy(diff2[j] + strlen(diff2[j]), ",");
+            strcpy(diff2[j] + strlen(diff2[j]), cur2 -> s);
+            j++;
+        }
+        cur2 = cur2 -> next;
+        i++;
+    }
+    free(com);
+    int l = (j > k)? j: k;
+    // conver the tb1 diff into res
+    printf("\ntext buffer1:\n");
+    for (i = 0; i < l; i++) {
+        if (i < k) {
+            tem = res;
+            res = calloc(strlen(tem)+strlen(diff1[i])+1,1);
+            strcpy(res+strlen(res), tem);
+            strcpy(res+strlen(res), diff1[i]);
+            free(tem);
+            free(diff1[i]);
+        }
+        if (i < j) {
+            tem = res;
+            res = calloc(strlen(tem)+strlen(diff2[i])+1,1);
+            strcpy(res+strlen(res), tem);
+            strcpy(res+strlen(res), diff2[i]);
+            free(tem);
+            free(diff2[i]);
+        }
+    }
+    return res;
+}
 
 void undoTB(TB tb) {
     //cur == 0 , nothing to undo
@@ -503,4 +602,3 @@ void redoTB(TB tb) {
         checkTB(tb);
     }
 }
-
