@@ -1,0 +1,609 @@
+        -:    0:Source:textbuffer.c
+        -:    0:Graph:textbuffer.gcno
+        -:    0:Data:textbuffer.gcda
+        -:    0:Runs:2
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <string.h>
+        -:    4:#include <assert.h>
+        -:    5:#include <math.h>
+        -:    6:
+        -:    7:#include "textBuffer.h"
+        -:    8:#define HIST_SIZE 10
+        -:    9:
+        -:   10:typedef struct textLine * Line;
+        -:   11:
+        -:   12:struct textbuffer{
+        -:   13:    Line head;
+        -:   14:    Line tail;
+        -:   15:    int size;
+        -:   16:    char * history[HIST_SIZE];// free history in release TB
+        -:   17:    int hist_top;
+        -:   18:    int hist_cur;
+        -:   19:};
+        -:   20:
+        -:   21:struct textLine{
+        -:   22:    char * s;
+        -:   23:    Line prev;
+        -:   24:    Line next;
+        -:   25:};
+        -:   26:
+     1198:   27:static void checkTB(TB tb){
+     1198:   28:    assert(tb != NULL);
+     1198:   29:    if (tb -> head == NULL) {
+        4:   30:        assert(tb -> tail == NULL);
+        4:   31:        assert(tb -> size == 0);
+        4:   32:        return;
+        -:   33:    }
+     1194:   34:    assert(tb -> head -> prev == NULL);
+     1194:   35:    assert(tb -> tail -> next == NULL);
+     1194:   36:    Line cur = tb -> head;
+     1194:   37:    int size = 1;
+     6224:   38:    while (cur -> next != NULL) {
+     3836:   39:        assert(cur -> next -> prev == cur);
+     3836:   40:        cur = cur -> next;
+     3836:   41:        size ++;
+        -:   42:    }
+     1194:   43:    assert(tb -> tail == cur);
+     1194:   44:    assert(tb -> size == size);
+        -:   45:}
+        -:   46:
+      288:   47:static void snapshot(TB tb) {
+        -:   48:    //check if it needs to shift (top is equal to 10)
+      288:   49:    assert(tb != NULL);
+        -:   50:    int i;
+      288:   51:    if (tb -> hist_top == HIST_SIZE) {
+    #####:   52:        free(tb -> history[0]);
+    #####:   53:        for (i = 0; i < (HIST_SIZE - 1); i++) {
+    #####:   54:            tb -> history[i] = tb -> history[i + 1];
+        -:   55:        }
+    #####:   56:        tb -> hist_cur--;
+        -:   57:    }
+        -:   58:    //advance cur to next slot
+      288:   59:    tb -> hist_cur ++;
+        -:   60:    //before I dump check if there is occupied before if so free it;
+      288:   61:    if (tb -> history[tb -> hist_cur] != NULL)
+        2:   62:        free(tb -> history[tb -> hist_cur]);
+        -:   63:    //dump current tb into cur slot of the array history
+      288:   64:    tb -> history[tb -> hist_cur] = dumpTB(tb);
+        -:   65:    //set top to that current + 1;
+      288:   66:    tb -> hist_top = (tb -> hist_cur + 1);
+        -:   67:
+      288:   68:}
+        -:   69:
+       24:   70:static void restoreFromSnapshot(TB tb, char * s){
+        -:   71:    //don't amend history
+       24:   72:    TB temp = newTB(s);
+       24:   73:    int size = tb -> size;
+        -:   74:    //free all the lines
+       24:   75:    Line lH = tb -> head;
+       24:   76:    Line lT = tb -> tail;
+        -:   77:    //set head tail and size according to the string
+       24:   78:    tb -> head = temp -> head;
+       24:   79:    tb -> tail = temp -> tail;
+       24:   80:    tb -> size = temp -> size;
+       24:   81:    temp -> head = lH;
+       24:   82:    temp -> tail = lT;
+       24:   83:    temp -> size = size;
+       24:   84:    releaseTB(temp);
+       24:   85:    checkTB(tb);
+       24:   86:}
+        -:   87:
+      798:   88:static Line newTextLine(char s[]) {
+      798:   89:    Line new = calloc(sizeof(struct textLine), 1);
+      798:   90:    assert(new != NULL);
+      798:   91:    new ->  s = s;
+      798:   92:    new ->  prev = NULL;
+      798:   93:    new ->  next = NULL;
+      798:   94:    return new;
+        -:   95:}
+        -:   96:
+      798:   97:static void destroyLine(Line l) {
+      798:   98:    if (l != NULL && l ->  s != NULL) {
+      798:   99:        free(l -> s);
+        -:  100:    }
+      798:  101:    free(l);
+      798:  102:}
+      136:  103:static Line getLine(TB tb, int pos) {
+      136:  104:    Line l = NULL;
+      136:  105:    if (tb != NULL && pos < linesTB(tb) && pos >= 0) {
+      124:  106:        l = tb ->  head;
+      124:  107:        int i = 0;
+      530:  108:        while (l -> next != NULL && i < pos) {
+      282:  109:            l = l -> next;
+      282:  110:            i ++ ;
+        -:  111:        }
+        -:  112:    }
+      136:  113:    return l;
+        -:  114:}
+      162:  115:static char ** splitLines(char * s, int * l) {
+        -:  116:    int i;
+      162:  117:    int c = 0;
+      162:  118:    char ** lines = NULL;
+      162:  119:    int len = strlen(s);
+      162:  120:    int lastI  = -1;
+     6842:  121:    for (i = 0; i < len; i ++ )
+     6680:  122:        if (s[i] == '\n')
+      798:  123:            c ++ ;
+      162:  124:    lines = calloc(c * sizeof(char *), 1);
+      162:  125:    *l = c;
+      162:  126:    c = 0;
+     6842:  127:    for (i = 0; i < len; i ++ ) {
+     6680:  128:        if (s[i] == '\n') {
+      798:  129:            lines[c] = strndup(s + lastI + 1, i - lastI);
+      798:  130:            lastI = i;
+      798:  131:            c ++ ;
+        -:  132:        }
+        -:  133:    }
+      162:  134:    return lines;
+        -:  135:}
+      798:  136:static void appendTB(TB tb, Line l) {
+      798:  137:    if (tb != NULL) {
+      798:  138:        if (tb ->  head == NULL) {
+      158:  139:            tb ->  head = l;
+        -:  140:        } else {
+      640:  141:            tb ->  tail ->  next = l;
+      640:  142:            l ->  prev = tb ->  tail;
+        -:  143:        }
+      798:  144:        tb ->  tail = l;
+      798:  145:        tb ->  size ++ ;
+        -:  146:    } else {
+    #####:  147:        tb = newTB(l -> s);
+        -:  148:    }
+      798:  149:    checkTB(tb);
+      798:  150:}
+        -:  151:/* Allocate a new textbuffer whose contents is initialised with the text given
+        -:  152: * in the array.
+        -:  153: */
+      162:  154:TB newTB(char text[]) {
+        -:  155:    int i, l;
+      162:  156:    char ** lines = NULL;
+      162:  157:    TB new = NULL;
+      162:  158:    Line newLine = NULL;
+      162:  159:    if (text != NULL) {
+      162:  160:        new = calloc(sizeof(struct textbuffer), 1);
+      162:  161:        assert(new != NULL);
+      162:  162:        lines = splitLines(text, &l);
+      960:  163:        for (i = 0; i < l; i ++ ) {
+      798:  164:            newLine = newTextLine(lines[i]);
+      798:  165:            appendTB(new, newLine);
+        -:  166:        }
+      162:  167:        new -> hist_cur = -1;
+      162:  168:        snapshot(new);
+      162:  169:        checkTB(new);
+        -:  170:    }
+      162:  171:    free(lines);
+      162:  172:    return new;
+        -:  173:}
+        -:  174:
+        -:  175:/* Free the memory occupied by the given textbuffer.  It is an error to access
+        -:  176: * the buffer afterwards.
+        -:  177: */
+      174:  178:void releaseTB(TB tb) {
+      174:  179:    Line cur = NULL;
+      174:  180:    Line tmp = NULL;
+        -:  181:    int i;
+      174:  182:    if (tb != NULL) {
+      170:  183:        cur = tb ->  head;
+     1138:  184:        while (cur != NULL) {
+      798:  185:            tmp = cur;
+      798:  186:            cur = cur ->  next;
+      798:  187:            destroyLine(tmp);
+        -:  188:        }
+     1870:  189:        for (i = 0; i < HIST_SIZE; i++) {
+     1700:  190:            free(tb -> history[i]);
+        -:  191:        }
+        -:  192:    }
+      174:  193:    free(tb);
+      174:  194:}
+        -:  195:
+        -:  196:/* Allocate and return an array containing the text in the given textbuffer.
+        -:  197:*/
+      546:  198:char *dumpTB(TB tb) {
+      546:  199:    char * res = NULL;
+      546:  200:    if (tb != NULL) {
+      546:  201:        res = calloc(sizeof(char), 1);
+      546:  202:        Line cur = tb ->  head;
+     3594:  203:        while (cur != NULL) {
+     2502:  204:            res = realloc(res ,(strlen(res) + strlen(cur ->  s) + 1));
+     2502:  205:            strcat(res, cur ->  s);
+     2502:  206:            cur = cur ->  next;
+        -:  207:        }
+        -:  208:    }
+      546:  209:    return res;
+        -:  210:}
+        -:  211:
+        -:  212:/* Return the number of lines of the given textbuffer.
+        -:  213:*/
+      424:  214:int linesTB(TB tb) {
+      424:  215:    int res = 0;
+      424:  216:    if (tb != NULL) {
+      418:  217:        res = tb ->  size;
+        -:  218:    }
+      424:  219:    return res;
+        -:  220:}
+       16:  221:static void swapLine(TB tb, int pos1, int pos2) {
+       16:  222:    assert(tb != NULL);
+       16:  223:    int total = linesTB(tb);
+       16:  224:    int diff = pos1 - pos2;
+       32:  225:    if ((pos2 < total && pos2 >= 0) &&(pos1 < total && pos1 >= 0)) {
+        -:  226:        // [ ..., a, b, ... ]
+        -:  227:        // [ ..., a, ..., b, ... ]
+        -:  228:        // [ a, ... ] and [ ..., b ]
+        -:  229:
+       16:  230:        if (pos1 > pos2) {
+        2:  231:            int temp = pos1;
+        2:  232:            pos1 = pos2;
+        2:  233:            pos2 = temp;
+        -:  234:        }
+       16:  235:        Line l1 = getLine(tb, pos1);
+       16:  236:        Line l2 = getLine(tb, pos2);
+       16:  237:        Line prev1 = l1 ->  prev;
+       16:  238:        Line next1 = l1 ->  next;
+       16:  239:        l1 ->  prev = l2 ->  prev;
+       16:  240:        l1 ->  next = l2 ->  next;
+       16:  241:        l2 ->  prev = prev1;
+       16:  242:        l2 ->  next = next1;
+       16:  243:        if (diff == 1 || diff == -1) {
+        6:  244:            l1 ->  prev = l2;
+        6:  245:            l2 ->  next = l1;
+        -:  246:        }
+       16:  247:        if (l1 ->  prev != NULL)
+       14:  248:            l1 ->  prev -> next = l1;
+        2:  249:        else tb ->  head = l1;
+       16:  250:        if (l1 ->  next != NULL)
+        8:  251:            l1 ->  next ->  prev = l1;
+        8:  252:        else tb ->  tail = l1;
+       16:  253:        if (l2 -> prev != NULL)
+        8:  254:            l2 -> prev -> next = l2;
+        8:  255:        else tb ->  head = l2;
+       16:  256:        if (l2 -> next != NULL)
+       14:  257:            l2 -> next ->  prev = l2;
+        2:  258:        else tb ->  tail = l2;
+        -:  259:        // char * temp = l1 -> s;
+        -:  260:        // l1 -> s = l2 -> s;
+        -:  261:        // l2 -> s = temp;
+    #####:  262:    } else if (pos1 < 0 || pos2 < 0) {
+    #####:  263:        printf("\n>>!!Invalid pos must be greater than 0.\n");
+    #####:  264:        releaseTB(tb);
+    #####:  265:        abort();
+        -:  266:    } else {
+    #####:  267:        printf("\n>>!!Invalid pos must be less than %d\n", linesTB(tb));
+    #####:  268:        releaseTB(tb);
+    #####:  269:        abort();
+        -:  270:    }
+       16:  271:    checkTB(tb);
+        -:  272:
+       16:  273:}
+        -:  274:
+        -:  275:/* Swap the two given lines in the textbuffer.
+        -:  276: *
+        -:  277: * - The program is to abort() with an error message if line 'pos1' or line
+        -:  278: *   'pos2' is out of range.  The first line of a textbuffer is at position 0.
+        -:  279: */
+       16:  280:void swapTB(TB tb, int pos1, int pos2) {
+       16:  281:    swapLine(tb, pos1, pos2);
+       16:  282:    snapshot(tb);
+       16:  283:}
+        -:  284:
+       34:  285:static void mergeLine(TB tb1, int pos, TB tb2) {
+       34:  286:    assert(tb1 != NULL && tb2 != NULL);
+       34:  287:    if(tb1 != tb2) {
+       52:  288:        if (pos < linesTB(tb1) && pos >= 0 && linesTB(tb2) != 0) {
+       20:  289:            Line l = getLine(tb1, pos);
+       20:  290:            if (l ->  prev != NULL) {
+       12:  291:                l ->  prev ->  next = tb2 ->  head;
+       12:  292:                tb2 ->  head ->  prev = l ->  prev;
+        -:  293:            } else {
+        8:  294:                tb1 ->  head = tb2 ->  head;
+        -:  295:            }
+       20:  296:            l ->  prev = tb2 ->  tail;
+       20:  297:            tb2 -> tail -> next = l;
+       20:  298:            tb1 -> size += tb2 -> size;
+       12:  299:        } else if (pos == linesTB(tb1)) {
+       10:  300:            tb1 -> tail -> next = tb2 -> head;
+       10:  301:            tb1 -> tail -> next -> prev = tb1 -> tail;
+       10:  302:            tb1 -> tail = tb2 -> tail;
+       10:  303:            tb1 -> size += tb2 -> size;
+        -:  304:        } else {
+        2:  305:            if (linesTB(tb2) == 0) {
+        2:  306:                printf("\n>>!!Nothing to merge into text buffer\n");
+        2:  307:                return ;
+        -:  308:            } else {
+    #####:  309:                printf("\n>>!!Invalid %d position in text buffer\n", pos);
+    #####:  310:                releaseTB(tb1);
+    #####:  311:                releaseTB(tb2);
+    #####:  312:                abort();
+        -:  313:            }
+        -:  314:        }
+       30:  315:        tb2 -> tail = NULL;
+       30:  316:        tb2 -> size = 0;
+        -:  317:        int i;
+      330:  318:        for (i = 0; i < HIST_SIZE; i++) {
+      300:  319:            free(tb2 -> history[i]);
+        -:  320:        }
+       30:  321:        free(tb2);
+       30:  322:        tb2 = NULL;
+       30:  323:        checkTB(tb1);
+        -:  324:    }
+        -:  325:}
+        -:  326:
+        -:  327:/* Merge 'tb2' into 'tb1' at line 'pos'.
+        -:  328: *
+        -:  329: * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
+        -:  330: * - The old line 'pos' of 'tb1' will follow after the last line of 'tb2'.
+        -:  331: * - After this operation 'tb2' can not be used anymore(as if we had used
+        -:  332: *   releaseTB() on it).
+        -:  333: * - The program is to abort() with an error message if 'pos' is out of range.
+        -:  334: */
+       14:  335:void mergeTB(TB tb1, int pos, TB tb2) {
+       14:  336:    mergeLine(tb1, pos, tb2);
+       14:  337:    snapshot(tb1);
+       14:  338:}
+        -:  339:
+       30:  340:static void pasteLine(TB tb1, int pos, TB tb2) {
+       30:  341:    if(tb1 != tb2 && linesTB(tb2) != 0) {
+       20:  342:        char *s = dumpTB(tb2);
+       20:  343:        TB merge = newTB(s);
+       20:  344:        mergeLine(tb1, pos, merge);
+       20:  345:        free(s);
+       20:  346:        checkTB(tb1);
+       20:  347:        checkTB(tb2);
+        -:  348:    }
+       30:  349:}
+        -:  350:
+        -:  351:/* Paste 'tb2' into 'tb1' at line 'pos'.
+        -:  352: *
+        -:  353: * - Afterwards line 0 of 'tb2' will be line 'pos' of 'tb1'.
+        -:  354: * - The old line 'pos' of 'tb1' will follow after the last line of 'tb2'.
+        -:  355: * - After this operation 'tb2' is unmodified and remains usable independent
+        -:  356: *   of 'tb1'.
+        -:  357: * - The program is to abort() with an error message if 'pos' is out of range.
+        -:  358: */
+       14:  359:void pasteTB(TB tb1, int pos, TB tb2) {
+       14:  360:    pasteLine(tb1, pos, tb2);
+       14:  361:    snapshot(tb1);
+       14:  362:}
+        -:  363:
+       44:  364:static TB cutLine(TB tb, int from, int to) {
+       44:  365:    assert(tb != NULL);
+       44:  366:    TB res = NULL;
+       44:  367:    int total = linesTB(tb);
+       82:  368:    if (from >= 0 && from <= to && to < total) {
+       38:  369:        res = calloc(sizeof(struct textbuffer), 1);
+       38:  370:        Line lF = getLine(tb, from);
+       38:  371:        Line lT = lF;
+       38:  372:        if (from != to) {
+       26:  373:            lT = getLine(tb, to);
+        -:  374:        }
+       38:  375:        if (lF ->  prev != NULL)
+       22:  376:            lF ->  prev ->  next = lT ->  next;
+       16:  377:        else tb ->  head = lT ->  next;
+       38:  378:        if (lT ->  next != NULL)
+       22:  379:            lT ->  next ->  prev = lF ->  prev;
+       16:  380:        else tb ->  tail = lF ->  prev;
+       38:  381:        lF ->  prev = NULL;
+       38:  382:        lT ->  next = NULL;
+       38:  383:        res -> head = lF;
+       38:  384:        res -> tail = lT;
+       38:  385:        res -> size = to - from + 1;
+       38:  386:        tb ->  size -= linesTB(res);
+       38:  387:        res -> hist_cur = -1;
+       38:  388:        snapshot(res);
+       38:  389:        checkTB(tb);
+       38:  390:        checkTB(res);
+        6:  391:    } else if (to >= total || from >= total) {
+    #####:  392:        printf("\n>>!!From:%d or to:%d is out of tb range %d\n", from, to, total - 1);
+    #####:  393:        releaseTB(tb);
+    #####:  394:        abort();
+        6:  395:    } else if (from < 0 || to < 0) {
+    #####:  396:        printf("\n>>!!From:%d or To:%d is less than 0\n", from, to);
+    #####:  397:        releaseTB(tb);
+    #####:  398:        abort();
+        -:  399:    }
+       44:  400:    return res;
+        -:  401:}
+        -:  402:
+        -:  403:/* Cut the lines between and including 'from' and 'to' out of the textbuffer
+        -:  404: * 'tb'.
+        -:  405: *
+        -:  406: * - The result is a new textbuffer(much as one created with newTB()).
+        -:  407: * - The cut lines will be deleted from 'tb'.
+        -:  408: * - The program is to abort() with an error message if 'from' or 'to' is out
+        -:  409: *   of range.
+        -:  410: */
+       14:  411:TB cutTB(TB tb, int from, int to) {
+       14:  412:    TB res = cutLine(tb, from, to);
+       14:  413:    snapshot(tb);
+       14:  414:    return res;
+        -:  415:}
+        -:  416:
+        -:  417:/* Copy the lines between and including 'from' and 'to' of the textbuffer
+        -:  418: * 'tb'.
+        -:  419: *
+        -:  420: * - The result is a new textbuffer(much as one created with newTB()).
+        -:  421: * - The textbuffer 'tb' will remain unmodified.
+        -:  422: * - The program is to abort() with an error message if 'from' or 'to' is out
+        -:  423: *   of range.
+        -:  424: */
+       16:  425:TB copyTB(TB tb, int from, int to) {
+       16:  426:    TB res = cutLine(tb, from, to);
+       16:  427:    pasteLine(tb, from, res);
+       16:  428:    snapshot(tb);
+       16:  429:    return res;
+        -:  430:}
+        -:  431:
+        -:  432:/* Remove the lines between and including 'from' and 'to' from the textbuffer
+        -:  433: * 'tb'.
+        -:  434: *
+        -:  435: * - The program is to abort() with an error message if 'from' or 'to' is out
+        -:  436: *   of range.
+        -:  437: */
+       14:  438:void deleteTB(TB tb, int from, int to) {
+       14:  439:    TB res = cutLine(tb, from, to);
+       14:  440:    releaseTB(res);
+       14:  441:    snapshot(tb);
+       14:  442:    checkTB(tb);
+       14:  443:}
+        -:  444:
+        -:  445:/* Search every line of tb for each occurrence of str1 and replaces them
+        -:  446: * with str2
+        -:  447: */
+       14:  448:void replaceText(TB tb, char* str1, char* str2) {
+       14:  449:    int len1 = strlen(str1);
+       14:  450:    int len2 = strlen(str2);
+       14:  451:    Line cur = tb -> head;
+       84:  452:    while (cur != NULL) {
+       56:  453:        char * s = cur -> s;
+        -:  454:        char *match;
+       56:  455:        int l = 0;
+      136:  456:        while ((match = strstr(s+l, str1)) != NULL) {
+       24:  457:            char* curr = malloc(strlen(s) - len1 + len2 + 1);
+       24:  458:            memcpy(curr, s, match-s);
+       24:  459:            curr[match-s] = 0;
+       24:  460:            strcat(curr, str2);
+       24:  461:            l = strlen(curr);
+       24:  462:            strcat(curr,match + len1);
+        -:  463:
+       24:  464:            free(s);
+       24:  465:            s = curr;
+        -:  466:        }
+       56:  467:        cur -> s = s;
+       56:  468:        cur = cur -> next;
+        -:  469:    }
+       14:  470:    checkTB(tb);
+       14:  471:}
+        -:  472:/* Bonus Challenges
+        -:  473:*/
+        -:  474:
+        4:  475:char* diffTB(TB tb1, TB tb2) {
+        4:  476:    assert(tb1 != NULL && tb2 != NULL);
+        4:  477:    int t1s = linesTB(tb1);
+        4:  478:    int t2s = linesTB(tb2);
+        4:  479:    char * commo [t1s];
+        -:  480:    char in[6];
+        4:  481:    int i = 0;
+        4:  482:    int j = 0;
+        4:  483:    int k = 0;
+        4:  484:    char * res = strdup("");
+        4:  485:    Line cur1 = tb1 -> head;
+        4:  486:    Line cur2 = tb2 -> head;
+        -:  487:    //find the common ordered sequence in tb1
+       28:  488:    while (cur1 != NULL) {
+       20:  489:        sprintf(in, "%d", i);
+       20:  490:        commo[i] = calloc((strlen(cur1->s) + strlen(in) + 7), 1);
+       20:  491:        strcpy(commo[i], " - , ");
+       76:  492:        while (cur2 != NULL) {
+       36:  493:            if (strcmp(cur1->s, cur2->s) == 0) {
+        8:  494:                strcpy(commo[i], " 0 , ");
+        8:  495:                k = j+1;
+        8:  496:                t2s--;
+        -:  497:            }
+       36:  498:            j ++;
+       36:  499:            cur2 = cur2 -> next;
+        -:  500:        }
+       20:  501:        strcpy(commo[i]+strlen(commo[i]),in);
+       20:  502:        strcpy(commo[i]+strlen(commo[i]), ",");
+       20:  503:        strcpy(commo[i]+strlen(commo[i]), cur1 -> s);
+       20:  504:        j = k;
+       20:  505:        i ++;
+       20:  506:        cur1 = cur1 -> next;
+       20:  507:        cur2 = getLine(tb2,k);
+        -:  508:    }
+        4:  509:    k = t1s - (linesTB(tb2) - t2s);
+        4:  510:    char * diff1 [k];
+        4:  511:    char * diff2 [t2s];
+        -:  512:    //get the common line into a string
+        4:  513:    char * com = strdup("");
+        4:  514:    j = 0;
+        4:  515:    k = 0;
+        -:  516:    char * tem ;
+       24:  517:    for(i = 0; i < t1s; i++) {
+        -:  518:        char * tem ;
+       20:  519:        if (!strstr(commo[i]," 0 , ")){
+       12:  520:            diff1[k] = strdup("");
+       12:  521:            tem = diff1[k];
+       12:  522:            diff1[k] = calloc(strlen(tem)+strlen(commo[i])+1,1);
+       12:  523:            strcpy(diff1[k],tem);
+       12:  524:            strcpy(diff1[k]+strlen(diff1[k]), commo[i]);
+       12:  525:            k++;
+        -:  526:        } else {
+        8:  527:            tem = com;
+        8:  528:            com = calloc(strlen(tem)+strlen(commo[i])+1,1);
+        8:  529:            strcpy(com,tem);
+        8:  530:            strcpy(com+strlen(com), commo[i]);
+        8:  531:            j++;
+        -:  532:        }
+       20:  533:        free(commo[i]);
+       20:  534:        free(tem);
+        -:  535:    }
+        -:  536:    //find the difference in tb2
+        4:  537:    cur2 = tb2 -> head;
+        4:  538:    i = 0;
+        4:  539:    j = 0;
+       22:  540:    while(cur2 != NULL) {
+       14:  541:        sprintf(in, "%d", i);
+       14:  542:        if (!strstr(com, cur2 -> s)) {
+        6:  543:            diff2[j] = calloc((strlen(cur2->s) + strlen(in) + 7), 1);
+        6:  544:            strcpy(diff2[j], " + , ");
+        6:  545:            strcpy(diff2[j] + strlen(diff2[j]), in);
+        6:  546:            strcpy(diff2[j] + strlen(diff2[j]), ",");
+        6:  547:            strcpy(diff2[j] + strlen(diff2[j]), cur2 -> s);
+        6:  548:            j++;
+        -:  549:        }
+       14:  550:        cur2 = cur2 -> next;
+       14:  551:        i++;
+        -:  552:    }
+        4:  553:    free(com);
+        4:  554:    int l = (j > k)? j: k;
+        -:  555:    // conver the tb1 diff into res
+        4:  556:    printf("\ntext buffer1:\n");
+       16:  557:    for (i = 0; i < l; i++) {
+       12:  558:        if (i < k) {
+       12:  559:            tem = res;
+       12:  560:            res = calloc(strlen(tem)+strlen(diff1[i])+1,1);
+       12:  561:            strcpy(res+strlen(res), tem);
+       12:  562:            strcpy(res+strlen(res), diff1[i]);
+       12:  563:            free(tem);
+       12:  564:            free(diff1[i]);
+        -:  565:        }
+       12:  566:        if (i < j) {
+        6:  567:            tem = res;
+        6:  568:            res = calloc(strlen(tem)+strlen(diff2[i])+1,1);
+        6:  569:            strcpy(res+strlen(res), tem);
+        6:  570:            strcpy(res+strlen(res), diff2[i]);
+        6:  571:            free(tem);
+        6:  572:            free(diff2[i]);
+        -:  573:        }
+        -:  574:    }
+        4:  575:    return res;
+        -:  576:}
+        -:  577:
+       16:  578:void undoTB(TB tb) {
+        -:  579:    //cur == 0 , nothing to undo
+       16:  580:    if (tb -> hist_cur == 0) {
+    #####:  581:        return ;
+        -:  582:    }
+        -:  583:    //move current to left
+       16:  584:    tb -> hist_cur --;
+       16:  585:    char * s  = tb -> history[tb -> hist_cur];
+        -:  586:    //restore snapshot
+       16:  587:    restoreFromSnapshot(tb,s);
+       16:  588:    checkTB(tb);
+        -:  589:}
+        -:  590:
+       10:  591:void redoTB(TB tb) {
+        -:  592:    //curr + 1 = top do nothing
+       10:  593:    if(tb -> hist_cur + 1 == tb -> hist_top)
+        2:  594:        return ;
+        -:  595:    else{
+        -:  596:        //otherwise we move cur to the right
+        8:  597:        tb -> hist_cur ++;
+        8:  598:        char * s  = tb -> history[tb -> hist_cur];
+        -:  599:        //restore from that snapshot
+        8:  600:        restoreFromSnapshot(tb,s);
+        -:  601:        //checkTB
+        8:  602:        checkTB(tb);
+        -:  603:    }
+        -:  604:}
