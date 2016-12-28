@@ -28,7 +28,7 @@ TreeItem getItem(treelink t){
 }
 
 void printTreeNode (treelink t) {
-    if(t != NULL);
+    if(t != NULL)
     printf("%d ",t->item);
 }
 
@@ -71,19 +71,19 @@ treelink search(treelink t, TreeItem i){
     if (t == NULL) {
         result = NULL;
     } else if( i < t->item ){
-        result = search(t->left,i); 
+        result = search(t->left,i);
     } else if( i > t->item ){
-        result = search(t->right,i);   
+        result = search(t->right,i);
     } else {
         result = t;
-    }    
+    }
     return result;
 }
 
 int countLeaves(treelink tree) {
     int count = 0;
     //In-Order-Traversal
-    if (tree != NULL) {  
+    if (tree != NULL) {
         if (tree->left == NULL && tree->right == NULL){
             count ++;
         }
@@ -103,7 +103,7 @@ treelink searchInsert(treelink t, TreeItem i) {
        int nCount = 0;
        if (t->item == i) {
        isIn++;
-       nCount++; 
+       nCount++;
        }
        if (tree->left != NULL && isIn == 0) {
        item = t->left->item;
@@ -134,11 +134,11 @@ treelink searchInsert(treelink t, TreeItem i) {
 
         }
     } else if( i < t->item ){
-        result = searchInsert(t->left,i); 
+        t -> left = searchInsert(t->left,i);
     } else if( i > t->item ){
-        result = searchInsert(t->right,i);   
-    } 
-    return result;
+        t -> right = searchInsert(t->right,i);
+    }
+    return t;
 }
 
 int countIf (treelink tree, int (*pred)(TreeItem)){
