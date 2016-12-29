@@ -69,6 +69,7 @@ void testCountLeaves() {
     c = countLeaves(t);
     assert(c == 7);
     printf(" %d leaves tree\n ## passed ##\n", c);
+    freeTree(t);
 }
 void testCountIf() {
     int i= 0;
@@ -95,8 +96,8 @@ void testCountIf() {
     printf(" %d even nodes tree\n ## passed ##\n", c);
 
     printf("\n## Test %d: 3 even nodes tree\n", ++i);
-    searchInsert(t, 4);
-    searchInsert(t, 12);
+    t= searchInsert(t, 4);
+    t= searchInsert(t, 12);
     c = countIf(t,isEven);
     assert(c == 3);
     c = countIf(t,isOdd);
@@ -142,48 +143,49 @@ void testCountIf() {
     printf(" %d negative nodes tree\n ## passed ##\n", c);
 
     printf("\n## Test %d: 1 negative node tree\n", ++i);
-    t = insertTreeNode(NULL, -10);
+    searchInsert(t, -10);
     c = countIf(t,isNegative);
     assert(c == 1);
     printf(" %d negative nodes tree\n ## passed ##\n", c);
 
     printf("\n## Test %d: 3 negative nodes tree\n", ++i);
-    insertTreeNode(t, -4);
-    insertTreeNode(t, -12);
+    searchInsert(t, -4);
+    searchInsert(t, -12);
     c = countIf(t,isNegative);
     assert(c == 3);
     printf(" %d negative nodes tree\n ## passed ##\n", c);
 
     printf("\n## Test %d: 4 negative nodes tree\n", ++i);
-    insertTreeNode(t, -2);
+    searchInsert(t, -2);
     c = countIf(t, isNegative);
     assert(c == 4);
     printf(" %d negative nodes tree\n ## passed ##\n", c);
 
     printf("\n## Test %d: 5 negative nodes tree\n", ++i);
-    insertTreeNode(t, -7);
+    searchInsert(t, -7);
     c = countIf(t, isNegative);
     assert(c == 5);
     printf(" %d negative nodes tree\n ## passed ##\n", c);
 
 
     printf("\n## Test %d: 9 negative nodes tree\n", ++i);
-    insertTreeNode(t, -11);
-    insertTreeNode(t, -18);
-    insertTreeNode(t, -1);
-    insertTreeNode(t, -3);
-   // insertTreeNode(t, -6);
-   // insertTreeNode(t, -8);
-   // insertTreeNode(t, -14);
-   // insertTreeNode(t, -26);
+    searchInsert(t, -11);
+    searchInsert(t, -18);
+    searchInsert(t, -1);
+    searchInsert(t, -3);
+    // searchInsert(t, -6);
+    // searchInsert(t, -8);
+    // searchInsert(t, -14);
+    // searchInsert(t, -26);
 
     c = countIf(t, isNegative);
     assert(c == 9);
     printf(" %d negative nodes tree\n ## passed ##\n", c);
+    freeTree(t);
 }
 
 void testSearchInsert(){
-//   Leaves test searching for 0
+    //   Leaves test searching for 0
     int i= 0;
     int c;
 
@@ -262,5 +264,6 @@ void testSearchInsert(){
     assert(c == 9);
     printf("\n %d nodes inserted to tree\n", c - o);
     printf("\n ## passed ##\n");
+    freeTree(t);
 }
 
