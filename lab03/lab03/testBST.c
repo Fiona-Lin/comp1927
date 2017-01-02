@@ -9,6 +9,7 @@ void testSearchInsert();
 
 int main(int argc, char * argv []) {
 
+//    whiteBoxTests();
     testCountLeaves();
     testCountIf();
     testSearchInsert();
