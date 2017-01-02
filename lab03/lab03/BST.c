@@ -29,7 +29,7 @@ TreeItem getItem(treelink t){
 
 void printTreeNode (treelink t) {
     if(t != NULL)
-    printf("%d ",t->item);
+        printf("%d ",t->item);
 }
 
 void preorderTraversal (treelink tree, void (*visit) (treelink)) {
@@ -98,41 +98,8 @@ int countLeaves(treelink tree) {
 }
 
 treelink searchInsert(treelink t, TreeItem i) {
-    /* int isIn = 0;
-       int item = 0;
-       int nCount = 0;
-       if (t->item == i) {
-       isIn++;
-       nCount++;
-       }
-       if (tree->left != NULL && isIn == 0) {
-       item = t->left->item;
-       nCount++;
-       isIn += searchInsert(t->left,item);
-       }
-       if (tree->right != NULL && isIn == 0) {
-       item = t->right->item;
-       nCount++;
-       isIn += searchInsert(t->right,item);
-       }
-       if (isIn == 0 && nCount != size(t)) {
-       return isIn;
-       }
-       else if (isIn == 0 && nCount == size(t)) {
-       insertTreeNode(t, i);
-       return t;
-       }*/
-
-    treelink result = NULL;
     if (t == NULL) {
-        if (size(t) == 0){
-            t = createNode(i);
-            result = t;
-        }
-        else {
-            result = insertTreeNode(t, i);
-
-        }
+        t = createNode(i);
     } else if( i < t->item ){
         t -> left = searchInsert(t->left,i);
     } else if( i > t->item ){
@@ -164,4 +131,14 @@ int isOdd (TreeItem n){
 }
 int isNegative (TreeItem n){
     return (n<0);
+}
+
+
+
+void freeTree (treelink tree) {
+    if (tree != NULL) {
+        freeTree(tree->left);
+        freeTree(tree->right);
+    }
+    free(tree);
 }
