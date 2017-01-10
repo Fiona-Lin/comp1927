@@ -11,9 +11,9 @@ TreeItem getItem(treelink t);
 
 //Functions you need to write
 int countLeaves(treelink tree);
-treelink searchInsert(treelink t, TreeItem i); 
+treelink searchInsert(treelink t, TreeItem i);
 int countIf (treelink tree, int (*pred)(TreeItem));
 int isEven (TreeItem n);
 int isOdd (TreeItem n);
 int isNegative (TreeItem n);
-
+void freeTree (treelink tree);
