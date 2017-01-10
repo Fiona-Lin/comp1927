@@ -47,7 +47,6 @@ int main(int argc, char **argv){
     // print some properties of the Tree
     TREEdisplay(wordTree);
     TREEshowStats(wordTree);
-    testSearchWords(wordTree);
     TREEdestroy(wordTree);
     return 0;
 }
@@ -85,31 +84,5 @@ void getAllWords(FILE *f, Tree wordTree){
     }
 }
 
-void testSearchWords(Tree wordTree){
-    int size = TREEcount(wordTree);
-    int i;
-    char * testData[16] = { "apple","egg","lettuce","quince","turnip", "fiona","arrange","kittenish","cerulean","outermost","excising","grimmer","reform","snoop","trike","éclair"};
-
-    if(size == 13) {
-        for (i = 0; i < 6; i++) {
-            clock_t begin = clock();
-            int res = TREEsearch(wordTree,testData[i]);
-            clock_t end = clock();
-            double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-            printf("\nSearch word [%s] takes %lf seconds, Found: %d\n", testData[i], time_spent, res);
-            TREEshowStats(wordTree);
-        }
-    } else {
-        for (i = 5; i < 16; i++) {
-            clock_t begin = clock();
-            int res = TREEsearch(wordTree,testData[i]);
-            clock_t end = clock();
-            double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-            printf("\nSearch word [%s] takes %lf seconds, Found: %d\n ", testData[i], time_spent, res);
-            TREEshowStats(wordTree);
-        }
-    }
-
-}
 
 

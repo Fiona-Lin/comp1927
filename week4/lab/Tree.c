@@ -41,7 +41,8 @@ static int nnodes(link t) {
     }
 }
 
-void whiteboxTests();
+static void testSearchWords(Tree wordTree);
+static void whiteboxTests();
 //Local function prototypes
 static link NEW (Item item, link l, link r, int size);
 static int max(int a, int b);
@@ -155,6 +156,7 @@ int TREEheight(Tree t) {
 
 void TREEdestroy(Tree t) {
     assert(t != NULL);
+    testSearchWords(t);
     destroyNodes(t -> root);
     free(emptyTree);
     free(t);
@@ -634,6 +636,32 @@ void testRotateLeft(Tree t) {
     printf("\n ## passed ##\n");
 }
 
+void testSearchWords(Tree wordTree){
+    int size = TREEcount(wordTree);
+    int i;
+    char * testData[16] = { "apple","egg","lettuce","quince","turnip", "fiona","arrange","kittenish","cerulean","outermost","excising","grimmer","reform","snoop","trike","éclair"};
+
+    if(size == 13) {
+        for (i = 0; i < 6; i++) {
+            clock_t begin = clock();
+            int res = TREEsearch(wordTree,testData[i]);
+            clock_t end = clock();
+            double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+            printf("\nSearch word [%s] takes %lf seconds, Found: %d\n", testData[i], time_spent, res);
+            TREEshowStats(wordTree);
+        }
+    } else {
+        for (i = 5; i < 16; i++) {
+            clock_t begin = clock();
+            int res = TREEsearch(wordTree,testData[i]);
+            clock_t end = clock();
+            double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+            printf("\nSearch word [%s] takes %lf seconds, Found: %d\n ", testData[i], time_spent, res);
+            TREEshowStats(wordTree);
+        }
+    }
+
+}
 
 void whiteboxTests(Tree t) {
     testRotateRight(t);
