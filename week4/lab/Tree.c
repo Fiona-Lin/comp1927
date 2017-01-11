@@ -14,7 +14,9 @@
 
 //This is how many levels of the tree the TREEdisplay will print out
 #define MAXLEVEL 15
-
+#define FOUND  1
+#define NOTFOUND 0
+#define UNKNOWN (-1)
 typedef struct node * link;
 
 struct treeImp {
@@ -378,51 +380,55 @@ link insertSplay (link tree, Item item) {
 
 //returns the new root of the tree
 //sets the value of *found to 0 or 1
-link searchSplay (link n, Key k, int * found) {
+static int match(link n, Key k) {
+    assert(n != NULL);
     if (n == emptyTree) {
         //If not found, return the last node on left search path
-        *found = 0;
-        return n;
+        return NOTFOUND;
     } else if (eq(key(n -> item),k)) {
         // my base case when it found, return the found node
-        *found = 1;
+        return FOUND;
+    }
+    return UNKNOWN;
+}
+link searchSplay (link n, Key k, int * found) {
+    *found = match(n, k);
+    //start with base case, if it's found return found node
+    //if it's not found or notFound, return last node on the search path
+    if (*found == FOUND || *found == NOTFOUND) {
         return n;
-    } else if (less (k, key(n -> item))) {
-        if (n -> left == emptyTree) {
-            //If not found, return the last node on left search path
-            *found = 0;
-            return n;
-        } else if (eq(key(n -> left -> item),k)) {
-            *found = 1;
-            return n;
-        }
-        //no matter found or not, return item will rotate upward, n got splay recursively
-        if (less (k, key (n -> left -> item))) {
-            n -> left -> left = searchSplay(n -> left -> left, k, found);
-            n = rotRight (n);
-        } else if (greater(k, key (n -> left -> item))) {
-            n -> left -> right = searchSplay (n -> left -> right, k, found);
-            n -> left = rotLeft (n -> left);
-        }
-        return rotRight (n);
     } else {
-        if (n -> right == emptyTree) {
-            //If the node was not found, the last node on right search path
-            *found = 0;
-            return n;
-        } else if (eq(key(n -> right -> item),k)) {
-            *found = 1;
-            return n;
+        if (less (k, key(n -> item))) {
+            *found = match(n -> left, k);
+            if (*found == FOUND || *found == NOTFOUND) {
+                return n;
+            } else {
+                //no matter found or not, return node will rotate upward, n got splay recursively
+                if (less (k, key (n -> left -> item))) {
+                    n -> left -> left = searchSplay(n -> left -> left, k, found);
+                    n = rotRight (n);
+                } else if (greater(k, key (n -> left -> item))) {
+                    n -> left -> right = searchSplay (n -> left -> right, k, found);
+                    n -> left = rotLeft (n -> left);
+                }
+                return rotRight (n);
+            }
+        } else {
+            *found = match(n -> right, k);
+            if (*found == FOUND || *found == NOTFOUND) {
+                return n;
+            } else {
+                //no matter found or not, return node will rotate upward, n got splay recursively
+                if (less (key (n -> right -> item), k)) {
+                    n -> right -> right = searchSplay (n -> right -> right, k, found);
+                    n = rotLeft (n);
+                } else if (greater(key (n -> right -> item), k)) {
+                    n -> right -> left = searchSplay (n -> right -> left, k, found);
+                    n -> right = rotRight (n -> right);
+                }
+                return rotLeft (n);
+            }
         }
-        //no matter found or not, return item will rotate upward, n got splay recursively
-        if (less (key (n -> right -> item), k)) {
-            n -> right -> right = searchSplay (n -> right -> right, k, found);
-            n = rotLeft (n);
-        } else if (greater(key (n -> right -> item), k)) {
-            n -> right -> left = searchSplay (n -> right -> left, k, found);
-            n -> right = rotRight (n -> right);
-        }
-        return rotLeft (n);
     }
 }
 
