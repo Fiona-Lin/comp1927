@@ -308,8 +308,6 @@ static link rotRight (link currentTree) {
     return rotRTree;
 }
 
-
-
 // partition tree at node with position pos (counting from 0) in the
 // sorted sequence of all items, node become new root node.
 link partitionR (link currentTree, int pos) {
@@ -391,6 +389,7 @@ static int match(link n, Key k) {
     }
     return UNKNOWN;
 }
+
 link searchSplay (link n, Key k, int * found) {
     *found = match(n, k);
     //start with base case, if it's found return found node
