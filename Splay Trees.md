@@ -63,16 +63,15 @@ X is child of the root.
 
 * A node initially at depth d on access from root to X more to find depth < 3+d/2.
 
-# Object first();
-# Object last();
+## Object first();/ Object last();
 
 Find entry with min/max key, Splay it to root.
 
-# void first(Object k Object v);
+## void first(Object k Object v);
   Insert new entry(k, v).
   Splay new node to the root.
 
-# Object remove(Object k);
+## Object remove(Object k);
 
 An entry having key k is removed from tree, as with ordinary BST.
 Let x to be the node removed from the tree. Splay X's parent to root.
