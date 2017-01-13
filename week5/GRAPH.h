@@ -29,3 +29,4 @@ void GRAPHshow(Graph g);
 //TODO FOR LAB05
 Graph GRAPHcopy(Graph);
 void GRAPHdestroy(Graph);
+int GRAPHdegree(Graph g, Vertex v);
