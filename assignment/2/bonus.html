@@ -1,0 +1,141 @@
+<html>
+<head>
+
+<title>Assignment2 Bonus- 17x1 COMP1927</title>
+
+<link rel="stylesheet" type="text/css" href="../style.css">
+
+</head>
+
+<body>
+<P>
+<h1>Assignment 2 Bonus: Master Thief</h1>
+<span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><p class="line867">
+</p><h1 id="head-b802f0d637b13109227f64996f03a4f16a6f6d7f">Due: 23:59:59 
+Friday  3rd February  No Late Submissions accepted</h1>
+<span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><p class="line867">
+</p><h2 id="head-9a90b310c74b04f09c4949b69caaf2ca0ae75ca4">Worth: 2 marks</h2>
+<span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span>
+
+<!--
+<P><H2>Modifications, Clarifications and FAQ</H2>
+<UL>
+<LI>
+<P>
+Question: the assn2Bonus spec says 
+"warn the thief about a detective's location if a detective comes 
+within N cities of the thief", N here refers to 
+distance/weight and not vertex indices, right?
+<P>
+Answer: It does not mean the distance (weight) or the vertex indices. 
+It means if there are N cities between them eg if a 
+detective is in city 3 and the thief is in 
+city 10 and the detective could get to city 10 by going from 
+3 to 1 then 6 then 10 then the detective is 3 cities away. 
+It does not matter how big the weights are. 
+It is how many cities the detective would have to travel through to 
+get to the thief.
+</UL>
+-->
+
+<P><H2>Assignment 2 Bonus Challenge Tasks </H2></p>
+<OL>
+<LI><STRONG>Task 0: Makefile - 0 Marks (but mandatory - you will receive 0 
+for automarking if it is missing) </STRONG>
+<P>Complete a Makefile for the bonus component of the assignment. 
+<P>It should be capable of producing:
+<p>
+<TABLE border = '1' cellspacing = '0' cellpadding = '6' >
+<TR><TD><STRONG>File name</STRONG><TD><STRONG>Comment</STRONG></TR>
+<TR><TD>assn2Bonus<TD>Client program</TR>
+</TABLE>
+<P>We will be using your makefile to compile your assignment for 
+automarking, so if you do not provide one you will receive 0 for the automarking. Also make sure your Makefile produces executables with the same name as given above. eg assn2Bonus
+
+<LI><STRONG>Task 1: Thief Strategy Implementation - 2 Marks</STRONG>
+<P>
+You must modify the assn2 program and implement a strategy for the thief.
+<P>Assume the thief has a map of the cities and knows where the getaway location is. Also assume that the thief knows the location of each detective, but does not know the strategy or stamina of the agent. Also assume that for this part of the assignment no detectives will be using random strategy. The thief does not know where the informants for the detectives are. 
+
+<P>The aim is to implement a clever strategy for the thief that increases the liklihood of getting away, or at least holding off being caught for as long as possible.
+
+</P>
+<li> <b>Diary: 0 Marks (but you lose 1 mark if it is missing)</b>You 
+must maintain an assn2Diary.txt file. 
+You will need to provide an entry in an assn2BonusDiary to explain 
+your
+strategy and the basics of how it works.
+
+</OL>
+
+
+<H2>Assessment of assn2Bonus </h2>
+<P>
+This will be run as a competition. 
+<P>
+All entries, along with the original random thief from the assn2Model will 
+be 
+run in different situations.
+<P>Different situations will include different maps, different starting locations, 
+different seeds, 
+different detective strategies etc.
+
+<P>Any submissions that do not follow the rules of the game will be disqualified. If they seem like a serious attempt that unintentionally broke the rules, they will get 0.5 marks, but will not be run during the competition.
+<P>
+During the competition, the number of times the thief gets away will be 
+recorded. The number of times the thief is caught will also be recorded, 
+along with as the number of hours the thief can resist being 
+caught by the detectives in situations when the thief gets caught or time 
+runs out..
+<P>The score is calculated by the number of getaways minus the number of 
+times the thief is caught.
+<P>The person with the highest score wins. In cases of ties, the total 
+number of hours the thief resisted being caught will be taken into account.
+<P>
+<STRONG> Marks </STRONG>
+<P>Marks will be given as follows:
+<OL>
+<LI>Winner 2/2
+<LI>Second 1.9/2
+<LI>Third  1.8/2
+<LI>Fourth 1.6/2
+<LI>Fifth  1.5/2
+</OL>
+<P>
+<UL>
+<LI>
+<P>
+Any other entries that can beat the Random Thief will be given a score of 1
+<P>
+<LI>Any other serious attempts that do not beat the Random Thief will get 0.5
+</UL>
+<p><h2>Originality of Work</h2>
+
+<p>
+ALL work submitted for this assignment MUST BE YOUR OWN WORK and it MUST BE COMPLETED INDIVIDUALLY. DO NOT COPY FROM OTHERS; DO NOT ALLOW ANYONE TO SEE YOUR CODE. We regard copying of assignments, in whole or part, as a serious offence. We use plagiarism detection software to search for multiply-submitted work and work that is similar to programs found on the internet and other sources. Be warned that:
+<UL>
+    <LI> the submission of work derived from another person, or jointly written with someone else will, at the very least, result in automatic failure for COMP1927 with a mark of zero. allowing another student to copy from you will, at the very least, result in a mark of zero for your own assignment; and
+    <LI> severe or second offences will result in automatic failure, exclusion from the University, and possibly other academic discipline.
+    <LI>Group submissions will not be allowed. Your program must be entirely your own work. 
+</UL>
+If you require further clarification on this matter please refer to: 
+<UL>
+<LI>Learning Centre: <a href='http://www.lc.unsw.edu.au/plagiarism/index.html'>Plagiarism and Academic Integrity</a>
+<li> MyUNSW: <a href='https://my.unsw.edu.au/student/atoz/Plagiarism.html'>Plagiarism</a>
+and 
+
+<a <a 
+href='https://my.unsw.edu.au/student/academiclife/assessment/examinations/AcademicMisconduct.html'>
+Academic Misconduct</a>
+<li> CSE: <a href='http://www.cse.unsw.edu.au/~chak/plagiarism/plagiarism.html'>Addendum to UNSW Plagiarism Guidelines</a>
+
+<li> CSE: <a href='http://www.cse.unsw.edu.au/~studentoffice/policies/yellowform.html'>Yellow Form</a> <small>(whose terms you have agreed to)</small>
+</ul>
+
+<p><H2>Submission</h2>
+You need to submit your assignment using the give command on a CSE machine
+<PRE>1927 classrun 17x1 give assn2Bonus *.c *.h Makefile assn2BonusDiary.txt</PRE>
+
+<div id="pagebottom"></div>
+</div>
+</body></html>
