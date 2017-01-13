@@ -1,0 +1,403 @@
+Dictionary 0:
+
+   Approach 0 No Rebalance:
+
+      Height: 12
+
+      User Time (insert and search): 0.000s
+
+      User Time (insert): 0.000s
+
+   Approach 1 Rebalance 1:
+
+      Height: 3
+
+      User Time (insert and search): 0.000s
+
+      User Time (insert): 0.000s
+
+   Approach 2 Rebalance 100:
+
+      Height: 12
+
+      User Time (insert and search): 0.000s
+
+      User Time (insert): 0.000s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 12
+
+      User Time (insert and search): 0.000s
+
+      User Time (insert): 0.000s
+
+   Approach 4 Randomised:
+
+      Height: 5, 7, 5, 4
+
+      User Time (insert and search): 0.004s, 0.000s, 0.000s, 0.000s
+
+      Height (insert only): 4, 5, 5, 7
+
+      User Time (insert): 0.000s, 0.000s, 0.000s, 0.000s
+
+   Approach 5 Splay:
+
+      Height: 12
+
+      User Time (insert and search): 0.000s
+
+      User Time (insert): 0.000s
+
+Dictionary 1:
+
+   Approach 0 No Rebalance:
+
+      Height: 1776
+
+      User Time (insert and search): 0.056s
+
+      User Time (insert): 0.028s
+
+   Approach 1 Rebalance 1:
+
+      Height: 10
+
+      User Time (insert and search): 0.252s
+
+      User Time (insert): 0.272s
+
+   Approach 2 Rebalance 100:
+
+      Height: 86
+
+      User Time (insert and search): 0.016s
+
+      User Time (insert): 0.012s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 785
+
+      User Time (insert and search): 0.028s
+
+      User Time (insert): 0.020s
+
+   Approach 4 Randomised:
+
+      Height: 23, 22, 23, 25
+
+      User Time (insert and search): 0.004s, 0.012s, 0.000s, 0.008s
+
+      Height (insert only): 21, 28, 24, 23
+
+      User Time (insert): 0.004s, 0.004s, 0.004s. 0.008s
+
+   Approach 5 Splay:
+
+      Height: 1776
+
+      User Time (insert and search): 0.016s
+
+      User Time (insert): 0.000s
+
+Dictionary 2:
+
+   Approach 0 No Rebalance:
+
+      Height: 7105
+
+      User Time (insert and search): 1.048s
+
+      User Time (insert): 0.464s
+
+   Approach 1 Rebalance 1:
+
+      Height: 12
+
+      User Time (insert and search): 5.924s
+
+      User Time (insert): 0.464s
+
+   Approach 2 Rebalance 100:
+
+      Height: 17
+
+      User Time (insert and search): 0.156s
+
+      User Time (insert): 0.168s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 117
+
+      User Time (insert and search): 0.164s
+
+      User Time (insert): 0.140s
+
+   Approach 4 Randomised:
+
+      Height: 28, 31, 30, 32
+
+      User Time (insert and search): 0.016s, 0.024s, 0.016s, 0.012s
+
+      Height(insert only): 30, 30, 27, 30
+
+      User Time (insert): 0.012s, 0.020s, 0.016s, 0.024s
+
+   Approach 5 Splay:
+
+      Height: 7105
+
+      User Time (insert and search): 0.380s
+
+      User Time (insert): 0.000s
+
+Dictionary 3:
+
+   Approach 0 No Rebalance:
+
+      Height: 21315
+
+      User Time (insert and search): 9.104s
+
+      User Time (insert): 5.680s
+
+   Approach 1 Rebalance 1:
+
+      Height: 14
+
+      User Time (insert and search): 1m 9.024s
+
+      User Time (insert): 1m 11.152s, 1m 18.656s, 56.812s
+
+   Approach 2 Rebalance 100:
+
+      Height: 29
+
+      User Time (insert and search): 1.324s
+
+      User Time (insert): 1.348s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 329
+
+      User Time (insert and search): 0.564s
+
+      User Time (insert):0.488s, 0.572s
+
+   Approach 4 Randomised:
+
+      Height: 34, 28, 30, 32
+
+      User Time (insert and search): 0.040s, 0.068s, 0.060s, 0.056s
+
+      Height (insert only): 32, 34, 31, 35
+
+      User Time (insert): 0.036s, 0.044s, 0.028s, 0.044s
+
+   Approach 5 Splay:
+
+      Height: 21315
+
+      User Time (insert and search): 3.960s
+
+      User Time (insert): 0.008s
+
+Dictionary 4:
+
+   Approach 0 No Rebalance:
+
+      Height: 63945
+
+      User Time (insert and search): 2m33.108s
+
+      User Time (insert):1m 18.844s
+
+   Approach 1 Rebalance 1:
+
+      Height: 15
+
+      User Time (insert and search): 13m 23.772s
+
+      User Time (insert): 14m43.820s
+
+   Approach 2 Rebalance 100:
+
+      Height:  60
+
+      User Time (insert and search): 15.476s
+
+      User Time (insert): 14.116s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 960
+
+      User Time (insert and search): 2.576s
+
+      User Time (insert): 2.604s
+
+   Approach 4 Randomised:
+
+      Height: 36, 41, 37, 41
+
+      User Time (insert and search): 0.200s, 0.144s, 0.136s, 0.156s
+
+      Height(insert only): 40, 37, 38, 36
+
+      User Time (insert): 0.128s, 0.112s, 0.108s, 0.128s
+
+   Approach 5 Splay:
+
+      Height: 63945
+
+      User Time (insert and search): 1m 3.344s
+
+      User Time (insert): 0.028s
+
+Dictionary 5:
+
+   Approach 0 No Rebalance:
+
+      Height: 98324
+
+      User Time (insert and search): 6m 16.712s
+
+      User Time (insert): 3m 37.184s
+
+   Approach 1 Rebalance 1:
+
+      Height: 98325
+
+      User Time (insert and search): 35m 12.164s
+
+      User Time (insert): 26m 1.916s
+
+   Approach 2 Rebalance 100:
+
+      Height: 40
+
+      User Time (insert and search): 38.576s
+
+      User Time (insert): 28.988s
+
+   Approach 3 Rebalance 1000:
+
+      Height: 340
+
+      User Time (insert and search): 5.960s
+
+      User Time (insert): 4.280s
+
+   Approach 4 Randomised:
+
+      Height: 38, 39, 37, 36
+
+      User Time (insert and search): 0.256s, 0.228s, 0.236s, 0.244s
+
+      Height (insert only): 39, 37, 40, 41
+
+      User Time (insert): 0.188s, 0.212s, 0.200s, 0.224s
+
+   Approach 5 Splay:
+
+      Height: 98325
+
+      User Time (insert and search): 2m 48.576s
+
+      User Time (insert):0.040s
+
+
+Discuss the reasons for the differences in height and run times between these different approaches and algorithms.
+
+How does each algorithm influence the time to insert vs the time to search vs the height of the resulting tree?
+
+*** What other tests could you run to compare these implementations.
+
+Let a list of 5 - 20 sample word.
+Measure and record their search time in different approach.
+And compare the collected data.
+
+More frequent rebalances result in smaller heights. It also means that insertion and searching occurs quicker. However, it takes more time to rotate the tree.
+
+Approach 0 -> maximum height, moderate user time. Insert: Worst case O(n)
+Approach 1 -> typically lowest height, high user time.
+Approach 2-> higher height, far lower user time.
+Approach 3 -> even higher height, lower user time.
+Approach 4 -> generally low height, fastest user time.
+Approach 5 -> maximum height, relatively low user time. Insert: Worst case O(n)
+ Apart from random, lower height takes a longer time.
+Approaches 1-4 have a reasonable height compared to 0, 5 which tend to have a maximal height.
+In terms of search and insert time, approaches 2,3 and 4 are best with Approach one being worst by far.
+For dictionary zero, before search height = 12 and time was 0.004s
+
+
+
+
+Task 3:
+
+Dictionary 0:
+
+   Approach 5 Splay:
+
+      Height: 12 / 10
+
+      User Time (insert): 0.004s
+      User Time (insert and search): 0.0s
+
+Dictionary 1:
+
+   Approach 5 Splay:
+
+      Height: 1776 / 1244
+
+      User Time (insert): 0.000s
+      User Time (insert and search): 0.18s
+
+Dictionary 2:
+
+   Approach 5 Splay:
+
+      Height: 7105 / 4974
+
+      User Time (insert): 0.004s
+      User Time (insert and search): 3.216s
+
+Dictionary 3:
+
+   Approach 5 Splay:
+
+      Height: 21315 / 14958
+
+      User Time (insert): 0.004s
+      User Time (insert and search): 48.128s
+
+Dictionary 4:
+
+   Approach 5 Splay:
+
+      Height: 63945 / 44886
+
+      User Time (insert): 0.024s
+      User Time (insert and search): 540.576 s
+
+Dictionary 5:
+
+   Approach 5 Splay:
+
+      Height: 98325 / 69021
+
+      User Time (insert):0.036s
+      User Time (insert and search): 1371.404s
+
+
+For the splay, insertion time was effectively none, however with insert and search, it dramatically increased as nodes were added.
+After running the searchAllWords function, the search height was reduced by up to 1/3rd.
+
+For the splay, only insertion was time efficient and it produces a degenerate tree, making the search time greater as the tree grows. It complexity of the insert and search is O(n) in this case.
+
+With insert and search, the splay search rebalances the degenerate tree This reduces the height of the tree when nodes are added, however, it requires more time as shown by the data.
+After running the searchAllWords function, the search height was reduced by up to 1/3rd. The amortised search time is improved. Its amortised performance is O(logn) on average.
