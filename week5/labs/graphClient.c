@@ -49,9 +49,9 @@ int main(int argc, char * argv[]){
     Graph randG = randomGraph(MAXV,MAXE);
     printf("Here is my random graph\n");
     GRAPHshow(randG);
- //   testGraphCopy() ;
+    testGraphCopy() ;
     testGraphDegree() ;
-//
+
 
     Graph g1 = graphScan();
     printf("\nHere is my scanned graph\n");
@@ -69,15 +69,11 @@ void testGraphCopy() {
     printf("------------------------------------------------------");
 
     // copy empty graph
-    printf("\n## Test %d: empty tree\n",++i);
+    printf("\n## Test %d: empty graph\n",++i);
     Graph cpy = GRAPHcopy(NULL);
     assert(cpy == NULL);
+    printf("\nExpected output:\n!!Empty NULL graph!!");
     printf("\n ## passed ##\n");
-
-    // 2 ways to check.
-    // either print and compare visually - show function already
-    // implemented ORRRR Compare each node's value iterating through it
-    // However, need to check if order's important
 
     // copy isolated 1 vertex graph
     printf("\n## Test %d: copy isolated 1 vertex graph\n",++i);
@@ -166,11 +162,22 @@ void testGraphDegree() {
     printf("\n>>>>> Test int GRAPHdegree(Graph g, Vertex v) <<<<<\n");
     printf("------------------------------------------------------");
 
-//    // test empty graph, this should stop program
-//    printf("\n## Test %d: empty graph\n",++i);
-//    Graph cpy = GRAPHcopy(g);
-//    assert(cpy == NULL);
-//    printf("\n ## passed ##\n");
+    // test empty graph
+    printf("\n## Test %d: empty graph\n",++i);
+    d =  GRAPHdegree(g, 0);
+    assert(d == 0);
+    printf("\nExpected output:\n!!Empty NULL graph!!");
+    printf("\n ## passed ##\n");
+
+    // test invalid vertex
+    printf("\n## Test %d: invalid vertex\n",++i);
+    g = randomGraph(2, 1);
+    d =  GRAPHdegree(g, 2);
+    assert(d == 0);
+    printf("\nExpected output:\n!!Invalid edge!!");
+    printf("\n ## passed ##\n");
+
+
 
     // test isolated 1 vertex graph, 0 degree
     printf("\n## Test %d: isolated 1 vertex graph, 0 degree\n",++i);

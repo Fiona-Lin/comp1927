@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Tute06 - 17x1 COMP1927 </title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="./style.css">
+
+<!-- css only for MSIE browsers -->
+<!--[if IE]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/~cs1921cgi/wiki-shared/htdocs/modern/css/msie.css">
+<![endif]-->
+
+
+<h1 id="head-c4ae72924d158947b2cf3b7a412be366ae799569">Tutorial Solutions Week 06</h1>
+
+<H2>Exercise 1</H2>
+<STRONG>Graph Properties</STRONG>
+
+<p>
+In the 18th Century, the Prussian town of Konigsberg (now Kaliningrad)
+was famous for the seven bridges connecting its two central islands
+with the banks of the River Pregel, as shown in the diagram.
+</p>
+<center><img src="./bridges.png"></center>
+<ol type='a'>
+<li> Can you draw a path which crosses each bridge exactly once?
+<li> If not, which bridge would you need to remove* to ensure that you could draw such a path?
+<li> For each case, show the path.
+</ol>
+<p><small>
+(* Possible methods of "removal" include: blowing up,
+weighing down with love-locks until it collapses,
+blocking permanently with Sydney Buses, etc.)
+</small></p>
+<STRONG>Answer:</STRONG>
+<p>
+It helps to have an annotated version of the bridges map.
+In the version below, the regions of land are the vertices
+and the bridges are the edges. There are only four vertices
+(A = north bank, B = small island, C = large island, D = south bank).
+Note also that this graph allows multiple edges between two vertices.
+We label these, so as to be able to distinguish the bridges
+</p>
+<center><img src="./bridge-graph.png"></center>
+<ol type="a">
+<li><p>
+No you can't ... but try a few first just to see.
+</p></li>
+<li><p>
+Removing bridge 1 allows starting from C and crossing bridges 3,2,4,7,5,6.<br>
+Removing bridge 2 allows starting from C and crossing bridges 3,1,4,7,5,6.<br>
+Removing bridge 3 allows starting from B and crossing bridged 1,2,4,7,5,6.<br>
+Removing bridge 4 allows starting from A and crossing bridges 1,2,3,7,5,6.<br>
+Removing bridge 5 allows starting from C and crossing bridges 4,6,7,3,2,1.<br>
+Removing bridge 6 allows starting from A and crossing bridges 4,5,7,3,2,1.<br>
+Removing bridge 7 allows starting from A and crossing bridges 1,2,3,4,5,6.<br>
+In fact, removing any one bridge allows you to solve the problem.
+</p></li>
+<li><p>
+See previous answer, which gives one path for each case.
+Other paths also exist.
+</p></li>
+<p>
+This, of course, is an instance of the Euler Path problem.
+</p>
+</ol>
+
+<H2>Exercise 2</H2>
+<p>
+<STRONG>Graph Search - Comparing DFS and BFS</STRONG>
+
+<p> Show what would be printed by the iterative depth-first and breadth-first traversals in the functions below on the following graph: </p>
+<p> <center><img src="./graph2.png"></center> </p>
+<p>
+When choosing which neighbour to visit next, always choose the smallest unvisited neighbour. Show the state of the <tt>Stack</tt> (DFS) or
+<tt>Queue</tt> (BFS) explicitly in each step.
+</p>
+<center>
+<STRONG>Answer:</STRONG>
+<table cellpadding='6' border='0'>
+<tr><td>
+<pre class="c" style="font-family:monospace;">
+void dfs (Graph g, Edge e) {   
+    int i;
+    Stack s = newStack();
+    StackPush (s,e);  
+    while (!StackIsEmpty(s)) {
+        e = StackPop(s);
+        if (pre[e.w] == -1) {
+           pre[e.w] = count++;
+           st[e.w] = e.v;
+           for (i = 0; i < g->nV; i++) {        
+              if ((g->edges[e.w][i] == 1)&&
+                          (pre[i] == -1)) {	              
+                  StackPush (s,mkEdge(g,e.w,i));
+              }
+           }
+        }
+     }
+}      
+</pre></td>
+<td>
+<pre class="c" style="font-family:monospace;">
+void bfs (Graph g, Edge e) {   
+    int i;
+    Queue q = newQueue();
+    QueueJoin(q,e);
+    while (!QueueIsEmpty(q)) {
+        e = QueueLeave(q);
+        if(pre[e.w] == -1){
+            pre[e.w] = count++;
+            st[e.w] = e.v;
+            for (i = 0; i < g->nV; i++){           
+                if ((g->edges[e.w][i] != 0)&&
+                             (pre[i] == -1)) {	          
+                    QueueJoin (q,mkEdge(g,e.w,i));
+               }
+            }
+         }
+     }
+}
+</pre></td></tr>
+</table>
+</center>
+<p>
+Show the results for each of the following function calls:
+</p>
+<pre>
+dfs(g,0);
+dfs(g,3);
+bfs(g,0);
+bfs(g,3);
+</pre>
+<p> For <tt>dfs(g,0)</tt>: </p>
+<pre>
+Order# ST   Pre(Visited)                                                                 Stack (top at left)
+        -         -                 -                          Push(0,0)                  {(0,0)}
+0       0         0             Pop(0,0)                       Push(0,1)                  {(0,1)}
+1       0         1             Pop(0,1)                       Push{(1,2)(1,3)(1,4)}      {(1,2)(1,3)(1,4)} 
+2       2         2             Pop(1,2)                       Push{(2,3)(2,5)}           {2,3)(2,5)(1,3)(1,4)}
+3       3         3             Pop(2,3)                       Push{(3,4)(3,5)}           {(3,4)(3,5)(2,5)(1,3)(1,4)}
+4       4         4             Pop(3,4)                       Push{(4,5)}                {(4,5)(3,5)(2,5)(1,3)(1,4)}
+5       5         5             Pop(4,5)                       Push{(5,6),(5,7)}          {(5,6)(5,7)(3,5)(2,5)(1,3)(1,4)}
+6       6         6             Pop(5,6)                       -                          {(5,7)(3,5)(2,5)(1,3)(1,4)}   
+7       6         7             Pop(5,7)                       -                          {(3,5)(2,5)(1,3)(1,4)}
+                                Pop({(3,5)(2,5)(1,3)(1,4)}}    -
+</pre>
+<p> For <tt>dfs(g,3)</tt>: </p>
+<p> For the next 3 examples, for clarity, if an edge, E(v,w) is added to stack or queue, only the destination vertex <tt>w</tt> is shown.
+The pop and push operations are similar to the above example</p>
+<pre>
+Order#  ST   Pre(Visited)           Stack (top at left)
+        -         -                 3
+0       3         3                 1 2 4 5
+1       3         1                 0 2 4 2 4 5
+2       1         0                 2 4 2 4 5
+3       1         2                 5 4 2 4 5
+4       2         5                 6 7 4 2 4 5
+5       6         6                 7 4 2 4 5
+6       6         7                 4 2 4 5
+7       4         4                 2 4 5
+                                    -            // After popping the last 3 elements of the stack - pop(2,4,5)
+</pre>
+<p> For <tt>bfs(g,0)</tt>: </p>
+<pre>
+Order#  ST     Visited(Pre)      Queue (front at left)
+        -         -                 0
+0       0         0                 1
+1       1         1                 2 3 4
+2       2         2                 3 4 3 5
+3       3         3                 4 3 5 4 5
+4       4         4                 3 5 4 5 5
+5       5         5                 4 5 5 6 7
+6       6         6                 7
+7       7         7                 -
+</pre>
+<p> For <tt>bfs(g,3)</tt>: </p>
+<pre>
+#       ST   Visited           Queue (front at left)
+        -         -                 3
+3       3         3                 1 2 4 5
+1       3         1                 2 4 5 0 2 4
+2       1         2                 4 5 0 2 4 5
+4       2         4                 5 0 2 4 5 5
+5       4         5                 0 2 4 5 5 6 7
+0       5         0                 2 4 5 5 6 7 
+6       0         6                 7
+7       6         7                 -
+</pre>
+
+<H2>Exercise 3</H2>
+<STRONG>Assignment: Cheapest Least Visited Strategy </STRONG>
+<p>
+<img src="./lab06.jpg"></img>
+
+<P>
+In what order would you visit the nodes if you started at vertex 0
+and used the cheapest least visited approach from assn2 and you had
+stamina of 100000? (Show the first 10 vertices you would visit in the
+order you would travel to them).
+
+<STRONG>Answer:</STRONG>
+
+<pre>
+0 2 0 7 1 7 6 4 3 5 3
+</pre>
+<p>
+What about if you had a stamina level of 50?
+
+
+<pre>
+0 2 2 0 0 7 7 1 7 7 6
+</pre>
+
+
+<H2>Exercise 4</H2>
+<p>
+<STRONG>Directed Graph - DFS and BFS </STRONG>
+
+<p> Directed Graph - DFS</p>
+<IMG src="./digraph1.png"> </IMG>
+<P>What order would the nodes be visited while performing a depth first search 
+ starting at node <i>d</i>. What about if we started at node <i>g</i>?
+<STRONG>Answer:</STRONG>
+
+<PRE>
+If we called dfsR with starting node <i>d</i> we would get
+d b a c g f
+We would have to call dfsR again starting at node <i>e</i> to get all nodes in graph. 
+So overall:
+d b a c g f e
+
+If we called dfsR with starting node g we would get node <i>g</i>
+We would have to call dfsR again, starting at say node <i>a</i>, then again starting at node e to visit all nodes
+So overall:
+g a d b c f e
+</PRE>
+
+<p>Directed Graph BFS</p>
+<p>What order would the nodes be visited while performing a breadth first search starting at node <i>d</i>. What about if we started at node <i>g</i>?
+
+<PRE>
+If we called bfs with starting node <i>d</i> we would get
+d b f g a c
+We would then have to call bfs with starting node <i>e</i>
+So overall:
+d b f g a c e
+
+If we called bfs with starting node <i>g</i> we would get g
+We would have to call bfs again, starting at say node <i>a</i>, then again starting at node e to visit all nodes
+So overall:
+g a d b f c e
+</PRE>
+
+<H2>Exercise 5: Additional questions - Do at home</H2>
+<p>
+<STRONG>Adjcency Matrix</STRONG>
+
+The standard adjacency matrix representation for a graph uses a full <i>V&times;V</i> matrix and stores each edge twice (at [v,w]
+and [w,v]). This consumes a lot of space, and wastes a lot of space when the graph is sparse. One simple way to improve the space
+usage would be to define the matrix elements as <tt>bool</tt> rather than <tt>int</tt>, e.g.
+</p>
+<pre>
+int **edges; // matrix of booleans (0 or 1)
+<span class="comment">... becomes ...</span>
+bool **edges; // matrix of booleans (0 or 1)
+<span class="comment">... where bool is defined as ... </span>
+typedef unsigned char bool;
+</pre>
+<p>
+We could use even less space by storing just the upper (or lower) triangular part of the matrix, as shown in the diagram below:
+</p>
+<center><img src="./adj-matrix.png"></center>
+<p>
+The <i>V&times;V</i> matrix has been replaced by a single array containing just the "useful" parts of the matrix.
+This gives a new <tt>Graph</tt> representation:
+</p>
+
+<pre>
+// Upper-triangluar adjacency matrix graph representation
+
+struct graphRep {
+    int   nV;     // #vertices
+    int   nE;     // #edges
+    bool *edges;  // array of booleans (0 or 1)
+};
+
+</pre>
+<p>
+Accessing the elements is no longer as simple as <tt>edges[v][w]</tt>.  Write a function that takes two vertices from an edge and determines
+the corresponding index in the <tt>edges</tt> array which holds the boolean value for this edge.
+Use the following function template:
+</p>
+<pre>
+int indexOf(Vertex v, Vertex w)
+{
+    assert(v != w); <span class="comment">// no self-edges</span>
+    if (v &gt; w) { Vertex tmp = v; v = w; v = tmp; }
+    ...
+}
+
+<STRONG>Answer:</STRONG>
+int indexOf(Vertex v, Vertex w)
+{
+    assert(v != w); // no self-edges
+    if (v > w) { Vertex tmp = v; v = w; v = tmp; }
+    assert(w > v);  // redundant
+    int i;  // counts the number of iterations
+    int j;  // gives the increment for eah iteration
+    int k;  // accumulates the index value
+    for (i = 0, j = nV-1, k = 0; i < v; i++, j--) {
+        k += j;
+    }
+    k += w-1;
+    return k;
+}
+</pre>
+
+<p>
+The standard implementation of the adjacency list representation
+for graphs stores each edge twice.  The edge <i>(v,w)</i> appears as a <i>w</i> stored in the
+adjacency list for <i>v</i> and as a <i>v</i> stored in the adjacency list for <i>w</i>.
+A more storage efficient representation (analgous to storing just the top-right half of the adjacency matrix), would be
+store information for each edge just once. 
+</p>
+<p>
+Re-implement the following functions from lectures to use this each-edge-stored-once variation of adjacency lists:
+</p>
+<pre>
+void insertE(Graph g, Edge e);
+void removeE(Graph g, Edge e);
+int neighbours(Graph g, Vertex x, Vertex y);
+</pre>
+<p>
+You should <em>not</em> assume that supplied <tt>Edge</tt> values will necessarily satisfy <tt>(e.v &lt; e.w)</tt>.  Assume the code for adjacency List
+given to you in the lectures and that functions <tt>insertVList</tt>, <tt>deleteVList</tt>, <tt>searchVList</tt> to add,delete and add an edge to a list exist.
+</p>
+<STRONG>Answer:</STRONG>
+<p>
+The following functions support the each-edge-stored-once variation of adjacency lists:
+</p>
+<pre class="c" style="font-family:monospace;">
+Edge normalise(Edge e)
+{
+    if (e.v > e.w) {
+        Vertex tmp = e.v; e.v = e.w; e.w = tmp; 
+    }
+    return e;
+}
+
+void insertE(Graph g, Edge e)
+{
+    assert(g != NULL);
+    assert(validV(g,e.v) && validV(g,e.w));
+    e = normalise(e);
+    int orig = length(g->edges[e.v]);
+	 g->edges[e.v] = insertVList(e.w,g->edges[e.v]);
+	 if (length(g->edges[e.v]) > orig) g->nE++;
+	 
+}
+
+void removeE(Graph g, Edge e)
+{
+    assert(g != NULL);
+    assert(validV(g,e.v) && validV(g,e.w));
+    e = normalise(e);
+    g->edges[e.v] = deleteVList(g->edges[e.v], e.w);
+    if (length(g->edges[e.v]) < orig) g->nE--;
+}
+
+int neighbours(Graph e, Vertex v, Vertex w)
+{
+    if (v > w) { Vertex t = v; v = w; w = t; }
+    return searchVList(g->edges[v], w);
+}
+	
+</body></html>
+

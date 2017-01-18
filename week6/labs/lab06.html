@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Lab Week 06 - 17x1 COMP1927</title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="../../style.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="Lab_Exercises_W07_files/print.css">
+
+<!-- css only for MSIE browsers -->
+<!--[if IE]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/~cs1921cgi/wiki-shared/htdocs/modern/css/msie.css">
+<![endif]-->
+<h1 id="head-da20fc10d9db0fff63d350f5e4ee574fb3e1aebb">Lab Week 06</h1>
+<span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><p class="line867">
+</p>
+<h2>Objectives</h2>
+<p>
+<UL>
+<LI> To become familiar with graph search algorithms
+<LI> To prepare for assignment 2
+</UL>
+</p>
+
+<h2> Assessment </h2>
+<p><b>Deadline</b>: 11:59pm Friday 27th January 2015
+<p><b>Total Marks</b>: 4
+<p> You may do this task in pairs.</p>
+
+<h2>Setup</h2>
+<p>
+Change into your lab06 directory and run the following command:
+<PRE>
+cp /home/cs1927/public_html/17x1/week06/labs/files/* .
+</PRE>
+<p>
+Note the "." at the end of the command, meaning "into the current directory".
+If you've done the above correctly, you should find the following files now in the directory: 
+
+<DIV>
+<TABLE>
+  <TBODY>
+   
+      <TR>
+    <TD> <P class=line891><STRONG>GRAPH.h</STRONG></P></TD>
+    <TD>
+      <P class=line862>A graph interface file. This should not need to be changed</P></TD>
+   
+     </td>
+     </tr>
+     <TD> <P class=line891><STRONG>GRAPH_adjlist.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A graph implementation using an adjacency list representation. You will need to implement 3 functions in this file</P></TD>
+   
+     </td>
+     </tr>
+     <TR>
+    <TD><SPAN class=anchor id=line-37></SPAN>
+      <P class=line891><STRONG>graphClient.c</STRONG></P></TD>
+    <TD>
+      <P class=line862>A graph  <STRONG>test</STRONG> program 
+that must be 
+completed to test the graph functions you implement </P></TD></TR>
+ 
+</TBODY></TABLE>
+
+<h2>Task 1: Implementing graph search functions for a Graph using an Adjacency List representation - 3 
+marks </h2>
+<p> You must implement and test the functions 
+<UL>
+<LI> <pre>void dfSearchIterative(Graph g);  // depth-first search using a Stack </pre> 
+<LI> <pre>void bfSearch(Graph g);  // breadth-first search using a Queue</pre>
+<LI> <pre>void findShortestPath(Graph g, Vertex src,Vertex dest);  // choose an appropriate search algorithm to implement shortestPath</pre>
+
+</UL>
+<P>Each function that is implemented <b> and tested </b> properly is worth 1 mark.
+<p>You must test your functions thoroughly by adding code to the graphClient.c program.
+</P>
+
+
+<h2> Task 2: Creating test data for assn2 - 1 Mark </h2>
+<p>
+Create a file with test data for assignment 2 called citiesLarge.data that contains at least 20 vertices.
+<p>Create agent files named agentsA.data and agentsB.data files that create situations where the thief gets to the getaway and where the detectives catch the thieves using a given seed and experimenting with the model solution.
+<p>Create a file name testCases.txt that documents how to run these test cases and what the result is (Note: you can use any seed you like - I have just used 0 in this example). For example
+<pre>
+~cs1927/bin/assn2Model citiesLarge.data agentsA.data 100 0
+results in the thief getting to the getaway destination in Hour 7.
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 0
+results detective 3 catching the thief in destination 6 in Hour 17.
+</pre>
+
+<p>You should also create outut files that cature the exact output of the model solution. These should be named outA.txt and outB.txt. For example you could create them in this way:
+<pre>
+~cs1927/bin/assn2Model citiesLarge.data agentsA.data 100 0 > outA.txt
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 0 > outB.txt
+</pre>
+
+For this exercises we do not want you to create tests for simple situations where the thief starts in the same location as one of the detectives. In fact, the longer you can make the game run before anyone wins, the better!
+
+<h2>Submission</h2>
+When you are happy with your work, please show it to your tutor to get it marked.
+Before you leave your lab, remember to submit your lab via the give command
+<p>
+<pre>
+1927 classrun 17x1 give lab06 GRAPH_adjlist.c graphClient.c citiesLarge.data agentsA.data agentsB.data testCases.txt outA.txt outB.txt
+</pre>
+<br>
+</div>
+</body></html>

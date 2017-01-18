@@ -90,17 +90,25 @@ Graph GRAPHcopy(Graph g){
                 cpy -> adj[v] = NEW(s -> v, cpy -> adj[v]);
             }
         }
+    } else {
+        printf("\n!!Empty NULL graph!!\n");
     }
+
     return cpy;
 }
 
 int GRAPHdegree(Graph g, Vertex v) {
-    assert(g != NULL);
     int d = 0;
-    vlink cur = g -> adj[v];
-    while (cur != NULL) {
-        d++;
-        cur = cur -> next;
+    if (g != NULL && v < g->V) {
+        vlink cur = g -> adj[v];
+        while (cur != NULL) {
+            d++;
+            cur = cur -> next;
+        }
+    } else if (g == NULL) {
+       printf("\n!!Empty NULL graph!!\n");
+    } else {
+       printf("\n!!Invalid edge!!\n");
     }
     return d;
 }

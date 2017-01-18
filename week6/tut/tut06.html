@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+
+<title>Tute06 - 17x1 COMP1927 </title>
+<script type="text/javascript" src="../StyleGuide_files/common.js"></script>
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="./style.css">
+
+<!-- css only for MSIE browsers -->
+<!--[if IE]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/~cs1921cgi/wiki-shared/htdocs/modern/css/msie.css">
+<![endif]-->
+
+
+<h1 id="head-c4ae72924d158947b2cf3b7a412be366ae799569">Tutorial  Week 06</h1>
+
+<H2>Exercise 1</H2>
+<STRONG>Graph Properties</STRONG>
+
+<p>
+In the 18th Century, the Prussian town of Konigsberg (now Kaliningrad)
+was famous for the seven bridges connecting its two central islands
+with the banks of the River Pregel, as shown in the diagram.
+</p>
+<center><img src="./bridges.png"></center>
+<ol type='a'>
+<li> Can you draw a path which crosses each bridge exactly once?
+<li> If not, which bridge would you need to remove* to ensure that you could draw such a path?
+<li> For each case, show the path.
+</ol>
+<p><small>
+(* Possible methods of "removal" include: blowing up,
+weighing down with love-locks until it collapses,
+blocking permanently with Sydney Buses, etc.)
+</small></p>
+
+<H2>Exercise 2</H2>
+<p>
+<STRONG>Graph Search - Comparing DFS and BFS</STRONG>
+
+<p> Show what would be printed by the iterative depth-first and breadth-first traversals in the functions below on the following graph: </p>
+<p> <center><img src="./graph2.png"></center> </p>
+<p>
+When choosing which neighbour to visit next, always choose the smallest unvisited neighbour. Show the state of the <tt>Stack</tt> (DFS) or
+<tt>Queue</tt> (BFS) explicitly in each step.
+</p>
+
+
+<H2>Exercise 3</H2>
+<STRONG>Assignment: Cheapest Least Visited Strategy </STRONG>
+<p>
+<img src="./lab06.jpg"></img>
+
+<P>
+In what order would you visit the nodes if you started at vertex 0
+and used the cheapest least visited approach from assn2 and you had
+stamina of 100000? (Show the first 10 vertices you would visit in the
+order you would travel to them).
+
+
+
+<H2>Exercise 4</H2>
+<p>
+<STRONG>Directed Graph - DFS and BFS </STRONG>
+
+<p> Directed Graph - DFS</p>
+<IMG src="./digraph1.png"> </IMG>
+<P>What order would the nodes be visited while performing a depth first search 
+ starting at node <i>d</i>. What about if we started at node <i>g</i>?
+
+<p>Directed Graph BFS</p>
+<p>What order would the nodes be visited while performing a breadth first search starting at node <i>d</i>. What about if we started at node <i>g</i>?
+
+
+<H2>Exercise 5: Additional questions - Do at home</H2>
+<p>
+<STRONG>Adjcency Matrix</STRONG>
+
+The standard adjacency matrix representation for a graph uses a full <i>V&times;V</i> matrix and stores each edge twice (at [v,w]
+and [w,v]). This consumes a lot of space, and wastes a lot of space when the graph is sparse. One simple way to improve the space
+usage would be to define the matrix elements as <tt>bool</tt> rather than <tt>int</tt>, e.g.
+</p>
+<pre>
+int **edges; // matrix of booleans (0 or 1)
+<span class="comment">... becomes ...</span>
+bool **edges; // matrix of booleans (0 or 1)
+<span class="comment">... where bool is defined as ... </span>
+typedef unsigned char bool;
+</pre>
+<p>
+We could use even less space by storing just the upper (or lower) triangular part of the matrix, as shown in the diagram below:
+</p>
+<center><img src="./adj-matrix.png"></center>
+<p>
+The <i>V&times;V</i> matrix has been replaced by a single array containing just the "useful" parts of the matrix.
+This gives a new <tt>Graph</tt> representation:
+</p>
+
+<pre>
+// Upper-triangluar adjacency matrix graph representation
+
+struct graphRep {
+    int   nV;     // #vertices
+    int   nE;     // #edges
+    bool *edges;  // array of booleans (0 or 1)
+};
+
+</pre>
+<p>
+Accessing the elements is no longer as simple as <tt>edges[v][w]</tt>.  Write a function that takes two vertices from an edge and determines
+the corresponding index in the <tt>edges</tt> array which holds the boolean value for this edge.
+Use the following function template:
+</p>
+<pre>
+int indexOf(Vertex v, Vertex w)
+{
+    assert(v != w); <span class="comment">// no self-edges</span>
+    if (v &gt; w) { Vertex tmp = v; v = w; v = tmp; }
+    ...
+}
+</pre>
+
+<p>
+The standard implementation of the adjacency list representation for graphs stores each edge twice.  The edge <i>(v,w)</i> appears as a <i>w</i> stored in the
+adjacency list for <i>v</i> and as a <i>v</i> stored in the adjacency list for <i>w</i>.
+A more storage efficient representation (analgous to storing just the top-right half of the adjacency matrix), would be
+store information for each edge just once. 
+</p>
+<p>
+Re-implement the following functions from lectures to use this each-edge-stored-once variation of adjacency lists:
+</p>
+<pre>
+void insertE(Graph g, Edge e);
+void removeE(Graph g, Edge e);
+int neighbours(Graph g, Vertex x, Vertex y);
+</pre>
+<p>
+You should <em>not</em> assume that supplied <tt>Edge</tt> values will necessarily satisfy <tt>(e.v &lt; e.w)</tt>.  Assume the code for adjacency List
+given to you in the lectures and that functions <tt>insertVList</tt>, <tt>deleteVList</tt>, <tt>searchVList</tt> to add,delete and add an edge to a list exist.
+</p>
+	
+</body></html>
+
