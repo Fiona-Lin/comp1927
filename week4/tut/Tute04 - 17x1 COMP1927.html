@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0058)https://www.cse.unsw.edu.au/~cs1927/17x1/week04/Tut04.html -->
+<html class="gr__cse_unsw_edu_au"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+<meta name="robots" content="noindex,nofollow">
+
+<title>Tute04 - 17x1 COMP1927 </title>
+<script type="text/javascript" src="./Tute04 - 17x1 COMP1927_files/common.js"></script>
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="./Tute04 - 17x1 COMP1927_files/style.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="./Tute04 - 17x1 COMP1927_files/print.css">
+
+<!-- css only for MSIE browsers -->
+<!--[if IE]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/~cs1921cgi/wiki-shared/htdocs/modern/css/msie.css">
+<![endif]-->
+
+</head><body data-gr-c-s-loaded="true"><h1 id="head-c4ae72924d158947b2cf3b7a412be366ae799569">Tutorial Week 04</h1>
+
+<h2> Exercise 1</h2>
+
+<b>  Heap</b>
+
+<p>
+Consider the heap-as-array ADT given in lectures:
+</p>
+<pre class="c" style="font-family:monospace;"><span style="color: #993333;">typedef</span> <span style="color: #993333;">struct</span> HeapRep <span style="color: #009900;">{</span>
+   Item <span style="color: #339933;">*</span>items<span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// array of Items</span>
+   <span style="color: #993333;">int</span>  nitems<span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// #items in array</span>
+   <span style="color: #993333;">int</span>  nslots<span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// #elements in array</span>
+<span style="color: #009900;">}</span> HeapRep<span style="color: #339933;">;</span>
+<span style="color: #993333;">typedef</span> HeapRep <span style="color: #339933;">*</span>Heap<span style="color: #339933;">;</span></pre><p>
+If a heap is created to hold up to 10 <tt>Item</tt>s, and
+<tt>Item</tt>s are integer values, and higher values have
+higher priority, show the state of the heap after each of
+the following operations:
+</p>
+<pre class="c" style="font-family:monospace;">Heap h<span style="color: #339933;">;</span>  Item it<span style="color: #339933;">;</span>
+h <span style="color: #339933;">=</span> newHeap<span style="color: #009900;">(</span><span style="color: #0000dd;">10</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">10</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">5</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">15</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">3</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">16</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">13</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">6</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+insert<span style="color: #009900;">(</span>h<span style="color: #339933;">,</span> <span style="color: #0000dd;">2</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span>
+it <span style="color: #339933;">=</span> delete<span style="color: #009900;">(</span>h<span style="color: #009900;">)</span><span style="color: #339933;">;</span></pre><div style="color:#000099;">
+
+<p>
+Repeat the above sequence of insertions an deletions, but this time
+draw the heap as a binary tree, with the highest value at the root
+and the values decreasing as you move down any branch.
+</p>
+
+<h2> Exercise 2</h2>
+<b> Balanced Trees </b>
+<p>
+Derive a formula for the minimum height of a <tt>BSTree</tt>
+containing <i>n</i> nodes.
+You might find it useful to start by considering the
+characteristics of a tree which has minimum height.
+The following diagram may help:
+</p>
+<center><img src="./Tute04 - 17x1 COMP1927_files/tree-heights.png"></center>
+
+
+<h2> Exercise 3</h2>
+<b> Balanced Trees </b>
+<p>
+Explain how we could globally balance a binary search tree using the partition function.
+
+</p><h2> Exercise 4 </h2>
+<b> 	Splay Tree4</b>
+<ul>
+
+<li>	What is the difference between splay tree insertion and root insertion? 
+</li>
+<li>	Insert items with the keys 10, 9, 8, 7, 11 
+	<ul>
+		<li>in an empty	binary search tree
+	<strong>
+   <pre>	    	10
+	      /   \ 
+	     9     11
+	   /
+	  8
+	 /
+	7
+	</pre>
+    </strong>
+			</li>
+
+<li>
+	binary search tree with root insertion
+	<strong>
+	<pre>		    	11
+		      /    
+		     7    
+		      \
+		       8
+		        \
+		         9
+		          \
+		          10
+		</pre>
+</strong>
+</li><li>
+	a splay tree
+<strong>
+				<pre>      11
+     /
+    8
+   / \
+  7   10
+     /
+    9
+				</pre>
+</strong>
+</li></ul>
+	and draw the resulting trees.
+	</li>
+<br>	
+
+</ul>
+
+
+
+
+</div></body></html>
