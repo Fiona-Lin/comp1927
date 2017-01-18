@@ -64,6 +64,11 @@ Graph GRAPHcopy(Graph g){
   return NULL;
 }
 
+int GRAPHdegree(Graph g, Vertex v) {
+  // Not implemented yet.
+  return NULL;
+}
+
 //Undirected graph. So each edge
 //is stored twice - once from v
 //and once from w
