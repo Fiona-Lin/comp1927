@@ -41,6 +41,7 @@ static VList NEW (Vertex v, VList head) {
          VList cur = head;
          VList pre = NULL;
          while (cur != NULL && cur -> v < v) {
+            printf("cur -> %d < %d", cur->v, v);
             pre = cur;
             cur = cur -> next;
          }
@@ -96,21 +97,21 @@ int adjacentVertices(Graph g, Vertex v, Vertex adj[]) {
    }
    return counter;
 }
-
-//Inserts a vertex at the beginning of the list
-//returns the new beginning ofthe list
-static VList insertVList(Vertex v,VList list) {
-   VList newNode = malloc(sizeof(struct VList));
-   newNode->v = v;
-   newNode->next = list;
-   return newNode;
-}
-
+//
+////Inserts a vertex at the beginning of the list
+////returns the new beginning ofthe list
+//static VList insertVList(Vertex v,VList list) {
+//   VList newNode = malloc(sizeof(struct VList));
+//   newNode->v = v;
+//   newNode->next = list;
+//   return newNode;
+//}
+//
 //e.v e.w //2,1
 void insertE(Graph g, Edge e) {
    assert(g != NULL && e.v < g->nV && e.w < g->nV);
-   g->edges[e.v] = insertVList(e.w,g->edges[e.v]);
-   g->edges[e.w] = insertVList(e.v,g->edges[e.w]);
+   g->edges[e.v] = NEW(e.w,g->edges[e.v]);
+   g->edges[e.w] = NEW(e.v,g->edges[e.w]);
    g->nE++;
 }
 
@@ -222,16 +223,16 @@ static void printSearch(int count) {
    printf("\n");
 
 }
-//
-//static VList getNth(VList head, int index) {
-//   int i = 0;
-//   VList res = head;
-//   while (head != NULL && i < index) {
-//      res = res -> next;
-//      i++;
-//   }
-//   return res;
-//}
+
+static VList getNth(VList head, int index) {
+   int i = 0;
+   VList res = head;
+   while (head != NULL && i < index) {
+      res = res -> next;
+      i++;
+   }
+   return res;
+}
 
 
 // dfSearch using Stack
@@ -258,9 +259,13 @@ void dfSearchIterative(Graph g) {
    StackPush(stk, mkEdge(g, 0, 0));
    while (!StackIsEmpty(stk)) {
       e = StackPop(stk);
-      for (t = g -> edges[e.w]; t != NULL; t = t -> next)
-         if (pre[t -> v] == -1)
+      printf("pop %d %d",e.v, e.w);
+      for (i = degree(g, e.w); i >= 0; i--) {
+         t = getNth(g -> edges[e.w], i);
+         if (pre[t -> v] != -1) continue;
             StackPush(stk, mkEdge(g, e.w, t -> v));
+            printf("push %d %d",e.w, t->v);
+      }
       if (pre[e.w] != -1) continue;
       st[e.w] = e.v;
       pre[e.w] = count++;
@@ -310,8 +315,41 @@ void bfSearch(Graph g) {
 }
 
 void findShortestPath(Graph g, Vertex src,Vertex dest) {
+   int i, count = 0, isFound = 0;
+   Edge e = {};
+   VList t = NULL;
+   if (g == NULL) {
+      printf("The graph g can't be NULL\n");
+      return;
+   }
+   //make a pre and st(paret) arrary;
+   pre = calloc(sizeof(int), g -> nV);
+   st = calloc(sizeof(int), g -> nV);
+   //init both arrays value -1
+   for (i = 0; i < g -> nV; i ++) {
+      pre[i] = -1;
+      st[i] = -1;
+   }
+
+   //make a stack and push the 1st edge
+   e = mkEdge(g, src, src);
+   st[e.v] = e.w;
+   Queue q = newQueue();
+   QueueJoin(q, e);
+   pre[e.w] = count++;
+   while (!QueueIsEmpty(q) && !isFound) {
+      e = QueueLeave(q);
+      for (t = g -> edges[e.w]; t != NULL; t = t -> next) {
+         st[t -> v] = e.w;
+         
+         if (pre[t -> v] != -1) continue;
+         QueueJoin(q, mkEdge(g, e.w, t -> v));
+         pre[t -> v] = count++;
+      }
+   }
+   printSearch(count);
+   free(pre);
+   free(st);
 }
 
 
-//         for (i = degree(g, e.w) - 1; i >= 0; i--)
-//         t = getNth(g -> edges[e.w], i);

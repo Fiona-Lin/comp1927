@@ -25,5 +25,4 @@ int StackIsEmpty(Stack);
 
 // display contents of stack
 void showStack(Stack);
-
 #endif
