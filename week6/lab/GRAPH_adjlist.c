@@ -118,7 +118,7 @@ Graph newGraph(int nV) {
    int i;
    Graph g = malloc(sizeof(struct GraphRep));
    assert(g != NULL);
-   g->edges = malloc(nV* sizeof(VList));
+   g->edges = malloc(nV * sizeof(VList));
    assert(g->edges != NULL);
    for(i=0; i<nV; i++) {
       g->edges[i] = NULL;
@@ -208,6 +208,7 @@ int degree(Graph g, Vertex v) {
 int * pre = NULL; //order and visited
 Vertex *st = NULL; //parent - path
 int count = 0;
+
 static void printSearch(int count) {
    int i;
    printf("\ni\t");
@@ -237,16 +238,16 @@ static VList getNth(VList head, int index) {
 // dfSearch using Stack
 //The initialisation of variables etc before we call the dfs function
 void dfSearchIterative(Graph g) {
-   int i, count = 0;
-   Edge e = {};
-   VList t = NULL;
    if (g == NULL) {
       printf("The graph g can't be NULL\n");
       return;
    }
+   int i, count = 0;
+   Edge e = {};
+   VList t = NULL;
    //make a pre and st(paret) arrary;
-   pre = calloc(sizeof(int), g -> nE);
-   st = calloc(sizeof(int), g -> nE);
+   pre = calloc(sizeof(int), g -> nV);
+   st = calloc(sizeof(int), g -> nV);
    //init both arrays value -1
    for (i = 0; i < g -> nV; i ++) {
       pre[i] = -1;
