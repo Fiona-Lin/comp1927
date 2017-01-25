@@ -207,7 +207,7 @@ int degree(Graph g, Vertex v) {
 
 int * pre = NULL; //order and visited
 Vertex *st = NULL; //parent - path
-int count=0;
+int count = 0;
 static void printSearch(int count) {
    int i;
    printf("\ni\t");
@@ -354,7 +354,6 @@ void findShortestPath(Graph g, Vertex src,Vertex dest) {
       printf("%d", src);
       printf("\n");
    }
-//   printSearch(count);
    free(pre);
    free(st);
 }
