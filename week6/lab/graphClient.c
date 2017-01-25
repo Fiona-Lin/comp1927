@@ -8,8 +8,8 @@
 
 #define MAXLINE 100
 
-void testdfs(Graph graph) ;
-void testbfs(Graph graph) ;
+void testdfs() ;
+void testbfs() ;
 void testfindshortest();
 void usage(void);
 
@@ -37,6 +37,7 @@ Graph graphScan(char * edgeFile){
    if ((in = fopen(edgeFile,"r")) == NULL) {
       fprintf(stderr,"Can't open edge file\n");
       usage();
+      fclose(in);
    }
    // first line contains #vertices
    fgets(line,MAXLINE,in);
@@ -49,6 +50,7 @@ Graph graphScan(char * edgeFile){
       else
          insertE(graph, mkEdge(graph,v1,v2));
    }
+   fclose(in);
    return graph;
 }
 
@@ -77,12 +79,12 @@ int main(int argc, char * argv[]){
 
    showGraph(graph);
    // ADD Code to test graph search algorithms
+   destroyGraph(graph);
 
    printf("\n");
-   testdfs(graph);
-   testbfs(graph);
-   testfindshortest(graph);
-   destroyGraph(graph);
+   testdfs();
+   testbfs();
+   testfindshortest();
 
    return 0;
 }
@@ -92,19 +94,19 @@ void usage() {
    exit(1);
 }
 
-void testdfs(Graph g) {
+void testdfs() {
    int v1, v2, v, i = 0;
-
+   Graph g = NULL;
    printf("------------------------------------------------------");
    printf("\n>>>>> Test void dfs(Graph) <<<<<\n");
    printf("------------------------------------------------------");
 
    // copy empty graph
    printf("\n## Test %d: empty graph\n",++i);
-   dfSearchIterative(NULL);
+   dfSearchIterative(g);
    printf("\nExpected output:\nThe graph g can't be NULL\n");
    printf("\n ## passed ##\n");
-   destroyGraph(g);
+
    v = 3;
    g = newGraph(v);
    for (v1 = 0; v1 < v/2; v1++) {
@@ -122,6 +124,7 @@ void testdfs(Graph g) {
 
    v = 6;
    g = newGraph(v);
+
    for (v1 = 0; v1 < v/2; v1++) {
       for(v2 = v-1; v2 > v1 + 2; v2--) {
          insertE(g,mkEdge(g, v1, v2));
@@ -129,21 +132,22 @@ void testdfs(Graph g) {
    }
    showGraph(g);
    dfSearchIterative(g);
+   destroyGraph(g);
    printf("\n ## passed ##\n");
 }
-void testbfs(Graph g) {
+void testbfs() {
    int v1, v2, v, i = 0;
 
+   Graph g = NULL;
    printf("------------------------------------------------------\n");
    printf(">>>>> Test void bfs(Graph) <<<<<\n");
    printf("------------------------------------------------------\n");
 
    // copy empty graph
    printf("\n## Test %d: empty graph\n",++i);
-   bfSearch(NULL);
+   bfSearch(g);
    printf("\nExpected output:\nThe graph g can't be NULL\n");
    printf("\n ## passed ##\n");
-   destroyGraph(g);
    v = 3;
    g = newGraph(v);
    for (v1 = 0; v1 < v/2; v1++) {
@@ -168,6 +172,7 @@ void testbfs(Graph g) {
    }
    showGraph(g);
    bfSearch(g);
+   destroyGraph(g);
    printf("\n ## passed ##\n");
 }
 

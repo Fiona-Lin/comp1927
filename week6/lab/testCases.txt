@@ -1,0 +1,12 @@
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 3.1415
+Results in thief getting caught by Detective 2 in Redania (17) at hour 57.
+
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 2
+Results in thief getting caught by Detective 4 in Haven (7) at hour 15.
+
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 23054
+Results in the thief getting away to Camelot (2) at hour 5.
+
+~cs1927/bin/assn2Model citiesLarge.data agentsB.data 100 52358902
+Results in the thief getting away due to a time out after 100 hours.
+
