@@ -1,0 +1,17 @@
+time ./quicksort -pn < data8
+
+real  0m0.020s
+user  0m0.004s
+sys 0m0.000s
+
+time ./quicksort -pr < data8
+
+real  0m0.017s
+user  0m0.004s
+sys 0m0.000s
+
+time ./quicksort -pm < data8
+
+real  0m0.014s
+user  0m0.004s
+sys 0m0.000s

@@ -1,0 +1,17 @@
+time ./quicksort -pn < data6
+
+real  0m0.002s
+user  0m0.000s
+sys 0m0.000s
+
+time ./quicksort -pr < data6
+
+real  0m0.002s
+user  0m0.004s
+sys 0m0.000s
+
+time ./quicksort -pm < data6
+
+real  0m0.001s
+user  0m0.000s
+sys 0m0.000s

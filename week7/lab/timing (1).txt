@@ -1,0 +1,143 @@
+time ./quicksort -pn < data4
+
+real	0m13.059s
+user	0m13.000s
+sys	0m0.000s
+
+time ./quicksort -pr < data4
+
+real	0m0.125s
+user	0m0.056s
+sys	0m0.000s
+
+time ./quicksort -pm < data4
+
+real	0m0.122s
+user	0m0.048s
+sys	0m0.004s
+
+time ./quicksort -pn < data3
+
+real	0m11.320s
+user	0m11.272s
+sys	0m0.008s
+
+time ./quicksort -pr < data3
+
+real	0m0.095s
+user	0m0.032s
+sys	0m0.004s
+
+time ./quicksort -pm < data3
+
+real	0m0.093s
+user	0m0.036s
+sys	0m0.000s
+
+time ./quicksort -pn < data2
+
+real	0m0.008s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pr < data2
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pm < data2
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pn < data1
+
+real	0m0.007s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pr < data1
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pm < data1
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pn  < data5
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pr  < data5
+
+real	0m0.001s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pm  < data5
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pn < data6
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pr < data6
+real	0m0.002s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pm < data6
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pn < data7
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pr < data7
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pm < data7
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+
+time ./quicksort -pn < data8
+
+real	0m0.020s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pr < data8
+
+real	0m0.017s
+user	0m0.004s
+sys	0m0.000s
+
+time ./quicksort -pm < data8
+
+real	0m0.014s
+user	0m0.004s
+sys	0m0.000s
+

@@ -1,0 +1,18 @@
+time ./quicksort -pn < data4
+
+real    0m13.059s
+user    0m13.000s
+sys     0m0.000s
+
+time ./quicksort -pr < data4
+
+real    0m0.125s
+user    0m0.056s
+sys     0m0.000s
+
+time ./quicksort -pm < data4
+
+real    0m0.122s
+user    0m0.048s
+sys     0m0.004s
+

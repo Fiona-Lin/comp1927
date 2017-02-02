@@ -1,0 +1,30 @@
+pn = naive pivot strategy
+pm = median of 3 partitioning
+pr = randomised pivot
+For a size of 100 000 reversed (data set 4), the naive pivot strategy was by far the most time consuming taking 13 seconds compared to 0.056s for the randomised and 0.048s for the median of 3 partitioning. This continues throughout the vast majority of data sets making the naive quicksort the poorest performing of the 3 algorithms. In some of the data sets randomised pivot was slower, meaning that the median of 3 partition pivot seemed to be the most efficient. For the worst case for each. The more randomised the approach, the better the worst case becomes. Hence these results could be predicted. The native sort is the worst as you are required to compare n times and swap n - 1 times which results in an O(n^2) complexity - and explains why it was slowest. For the randomised and median, because the pivot is not the rightmost - saves some swaps, it is not the minimum of the data set and therefore will perform better than the worst case.
+data 1 = 1000 ordered
+data 3 = 100 000 ordered
+for data 1 and data 3 set
+In Native approach:
+This group numbers are ordered, Therefore, the program is only need to compare each number with the pivot and do no swap. This complexity is only O(n-1) after this we divide the data into 2 sub-arrays, passed to the recursive call. This process will make log n calls till the array's length is 1. Thus it result O(nlogn) Because there is no swap, the partition always return the right most pivot back and this is not able to divide the array into 2 sub sets, this  makes native approach slower than other 2 approaches. This makes those optimised approaches' preformance dramatic improved for larger size data sets, because we no longer choose the right most pivot, we spread the pivot in the middle or randomly pick in the array. Therefore the sorting got speed up.
+
+data 2 = 1000 reversed
+data 4 = 100 000 reversed
+This group numbers are reversed, Therefore, the program is only need to compare each number with the pivot and do swap for every number. This complexity is only O(n-1) and swap(n-1) therefore these 2 operations in the process complexity become quadratic, O(n^2). It become the dominant of the operation, this makes us ignore the recursive call.
+Because it is reversed order, the right most is the minimum, it swap the minimum to the left most and the partition will always return the left most index back, this can not divide the array into 2 sub sets, this  makes native approach slower than other 2 approaches.This makes those optimised approaches' preformance dramatic improved for larger size data sets, because we no longer choose the right most pivot, we spread the pivot in the middle or randomly pick in the array. Therefore the sorting got speed up.
+
+
+
+For a size of 100 000 reversed (data set 4), the naive pivot strategy was by far the most time consuming taking 13 seconds compared to 0.056s for the randomised and 0.048s for the median of 3 partitioning. This continues throughout the vast majority of data sets making the naive quicksort the poorest performing of the 3 algorithms. In some of the data sets randomised pivot was slower, meaning that the median of 3 partition pivot seemed to be the most efficient. For the worst case for each. The more randomised the approach, the better the worst case becomes. Hence these results could be predicted. The native sort is the worst as you are required to compare n times and swap n - 1 times which results in an O(n^2) complexity - and explains why it was slowest. For the randomised and median, because the pivot is not the rightmost - saves some swaps, it is not the minimum of the data set and therefore will perform better than the worst case.
+
+
+data 5 = 100 randomised (w duplicates)
+data 6 = 1000 randomised (w duplicates) 1-100
+
+data 7 =  1000 randomised (w duplicates) 27-9997
+data 8 =  10 000 randomised (w duplicates) - 10000 - 10000
+
+
+With the randomised data sets, the pivot will no longer be in the left most or the right most. It got spread out, that means the pivot makes the 2 recursive call to sort 2 divided sub arrays so the sorting process complexity can be avarage at O(nlogn)
+
+
